@@ -49,7 +49,7 @@ void CMegaman::Render()
 	}
 	else if (vx == MEGAMAN_WALKING_SPEED)
 		ani = MEGAMAN_ANI_WALKING_RIGHT;
-	else if (vx == 0.1f) ani = MEGAMAN_ANI_FIGHT;
+	//else if (vx == 0.1f) ani = MEGAMAN_ANI_FIGHT;
 	else if (vx == MEGAMAN_SWIFT_SPEED) ani = MEGAMAN_ANI_SWIFT;
 	else ani = MEGAMAN_ANI_WALKING_LEFT;
 
@@ -88,13 +88,21 @@ void CMegaman::SetState(int state)
 		vx = 0.0f;
 		break;
 
-	case MEGAMAN_STATE_FIGHT:
-		vx = 0.1f;
+	case MEGAMAN_STATE_FIGHT_RIGHT:
+		vx = 0.0f;
+		break;
+	case MEGAMAN_STATE_FIGHT_LEFT:
+		vx = 0.0f;
 		break;
 
-	case MEGAMAN_STATE_SWIFT:
+	case MEGAMAN_STATE_SWIFT_RIGHT:
 		vx = MEGAMAN_SWIFT_SPEED;
 		break;
+	
+	case MEGAMAN_STATE_SWIFT_LEFT:
+		vx = -MEGAMAN_SWIFT_SPEED;
+		break;
+
 	}
 }
 

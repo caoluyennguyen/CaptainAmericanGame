@@ -51,7 +51,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	switch (KeyCode)
 	{
-	case DIK_X:     
+	case DIK_X:
 		megaman->SetState(MEGAMAN_STATE_JUMP);
 		break;
 	}
@@ -68,10 +68,25 @@ void CSampleKeyHander::KeyState(BYTE *states)
 		megaman->SetState(MEGAMAN_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		megaman->SetState(MEGAMAN_STATE_WALKING_LEFT);
+	else if (game->IsKeyDown(DIK_C))
+	{
+		if (megaman->nx == 1)
+		{
+			megaman->SetState(MEGAMAN_STATE_FIGHT_RIGHT);
+		}
+		else
+			megaman->SetState(MEGAMAN_STATE_FIGHT_LEFT);
+	}
+	else if (game->IsKeyDown(DIK_Z))
+	{
+		if (megaman->nx == 1)
+		{
+			megaman->SetState(MEGAMAN_STATE_SWIFT_RIGHT);
+		}
+		else
+			megaman->SetState(MEGAMAN_STATE_SWIFT_LEFT);
+	}
 	else megaman->SetState(MEGAMAN_STATE_IDLE);
-	if (game->IsKeyDown(DIK_UP)) megaman->SetState(MEGAMAN_STATE_FIGHT);
-
-	else if (game->IsKeyDown(DIK_Z)) megaman->SetState(MEGAMAN_STATE_SWIFT);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -94,7 +109,7 @@ void LoadResources()
 
 	CTextures * textures = CTextures::GetInstance();
 
-	textures->Add(ID_TEX_MEGAMAN, L"megaman.png", D3DCOLOR_XRGB(176, 224, 248));
+	textures->Add(ID_TEX_MEGAMAN, L"Cap2.png", D3DCOLOR_XRGB(176, 224, 248));
 	textures->Add(ID_TEX_MEGAMAN2, L"Cap.png", D3DCOLOR_XRGB(255, 255, 255));
 	//textures->Add(ID_TEX_MISC, L"misc.png", D3DCOLOR_XRGB(176, 224, 248));
 	//textures->Add(ID_TEX_BACKGROUND, L"background.png", D3DCOLOR_XRGB(255, 255, 255));
@@ -134,13 +149,14 @@ void LoadResources()
 #pragma endregion
 
 #pragma region idle right
-	sprites->Add(10014, 324*3, 16*3, 353*3, 51*3, texMega);
+	/*sprites->Add(10014, 324*3, 16*3, 353*3, 51*3, texMega);
 	sprites->Add(10015, 358*3, 16*3, 387*3, 51*3, texMega);
-	sprites->Add(10016, 392*3, 16*3, 421*3, 51*3, texMega);
+	sprites->Add(10016, 392*3, 16*3, 421*3, 51*3, texMega);*/
+	sprites->Add(10014, 357 * 3, 11 * 3, 379 * 3, 56 * 3, texMega);
 #pragma endregion
 
 #pragma region move right
-	sprites->Add(10017, 106 * 3, 106 * 3, 136 * 3, 141 * 3, texMega);
+	/*sprites->Add(10017, 106 * 3, 106 * 3, 136 * 3, 141 * 3, texMega);
 	sprites->Add(10018, 136 * 3, 106 * 3, 157 * 3, 141 * 3, texMega);
 	sprites->Add(10019, 158 * 3, 106 * 3, 180 * 3, 141 * 3, texMega);
 	sprites->Add(10020, 182 * 3, 106 * 3, 213 * 3, 141 * 3, texMega);
@@ -150,7 +166,12 @@ void LoadResources()
 	sprites->Add(10024, 299 * 3, 106 * 3, 324 * 3, 141 * 3, texMega);
 	sprites->Add(10025, 326 * 3, 106 * 3, 355 * 3, 141 * 3, texMega);
 	sprites->Add(10026, 358 * 3, 106 * 3, 390 * 3, 141 * 3, texMega);
-	sprites->Add(10027, 391 * 3, 106 * 3, 421 * 3, 141 * 3, texMega);
+	sprites->Add(10027, 391 * 3, 106 * 3, 421 * 3, 141 * 3, texMega);*/
+	sprites->Add(10017, 324 * 3, 14 * 3, 348 * 3, 56 * 3, texMega);
+	sprites->Add(10018, 292 * 3, 13 * 3, 316 * 3, 56 * 3, texMega);
+	sprites->Add(10019, 260 * 3, 14 * 3, 284 * 3, 56 * 3, texMega);
+	sprites->Add(10020, 228 * 3, 13 * 3, 252 * 3, 56 * 3, texMega);
+
 #pragma endregion
 
 #pragma region jump left
@@ -161,22 +182,29 @@ void LoadResources()
 	sprites->Add(10032, 211 * 3, 53 * 3, 238 * 3, 100 * 3, texMega2);
 	sprites->Add(10033, 182 * 3, 53 * 3, 207 * 3, 100 * 3, texMega2);
 	sprites->Add(10034, 151 * 3, 53 * 3, 181 * 3, 100 * 3, texMega2);*/
+	sprites->Add(10027, 243*3, 18*3, 265*3, 56*3, texMega2);
 	sprites->Add(10028, 275*3, 31*3, 293*3, 51*3, texMega2);
 	sprites->Add(10029, 311*3, 33*3, 331*3, 51*3, texMega2);
+	sprites->Add(10030, 243 * 3, 18 * 3, 265 * 3, 56 * 3, texMega2);
+
 #pragma endregion
 
 #pragma region jump right
-	sprites->Add(10035, 202 * 3, 53 * 3, 226 * 3, 100 * 3, texMega);
+	/*sprites->Add(10035, 202 * 3, 53 * 3, 226 * 3, 100 * 3, texMega);
 	sprites->Add(10036, 229 * 3, 53 * 3, 246 * 3, 100 * 3, texMega);
 	sprites->Add(10037, 250 * 3, 53 * 3, 271 * 3, 100 * 3, texMega);
 	sprites->Add(10038, 273 * 3, 53 * 3, 296 * 3, 100 * 3, texMega);
 	sprites->Add(10039, 297 * 3, 53 * 3, 325 * 3, 100 * 3, texMega);
 	sprites->Add(10040, 330 * 3, 53 * 3, 354 * 3, 100 * 3, texMega);
-	sprites->Add(10041, 356 * 3, 53 * 3, 385 * 3, 100 * 3, texMega);
+	sprites->Add(10041, 356 * 3, 53 * 3, 385 * 3, 100 * 3, texMega);*/
+	sprites->Add(10035, 134*3, 15*3, 156*3, 53*3, texMega);
+	sprites->Add(10036, 106*3, 28*3, 124*3, 48*3, texMega);
+	sprites->Add(10037, 68*3, 30*3, 88*3, 48*3, texMega);
+	sprites->Add(10038, 134*3, 15*3, 156*3, 53*3, texMega);
 #pragma endregion
 
 #pragma region fight
-	sprites->Add(10042, 86 * 3, 233 * 3, 119 * 3, 268 * 3, texMega);
+	/*sprites->Add(10042, 86 * 3, 233 * 3, 119 * 3, 268 * 3, texMega);
 	sprites->Add(10043, 127 * 3, 233 * 3, 160 * 3, 268 * 3, texMega);
 	sprites->Add(10044, 164 * 3, 233 * 3, 200 * 3, 268 * 3, texMega);
 	sprites->Add(10045, 203 * 3, 233 * 3, 240 * 3, 268 * 3, texMega);
@@ -184,12 +212,16 @@ void LoadResources()
 	sprites->Add(10047, 282 * 3, 233 * 3, 313 * 3, 268 * 3, texMega);
 	sprites->Add(10048, 317 * 3, 233 * 3, 347 * 3, 268 * 3, texMega);
 	sprites->Add(10049, 355 * 3, 233 * 3, 391 * 3, 268 * 3, texMega);
-	sprites->Add(10050, 395 * 3, 233 * 3, 434 * 3, 268 * 3, texMega);
+	sprites->Add(10050, 395 * 3, 233 * 3, 434 * 3, 268 * 3, texMega);*/
+	sprites->Add(10042, 257*3, 71 * 3, 295 * 3, 112 * 3, texMega);
+	sprites->Add(10043, 217 * 3, 71 * 3, 246 * 3, 112 * 3, texMega);
 #pragma endregion
 
 #pragma region swift
-	//sprites->Add(10051, 284 * 3, 157 * 3, 312 * 3, 190 * 3, texMega);
-	sprites->Add(10052, 316 * 3, 157 * 3, 355 * 3, 190 * 3, texMega);
+	/*sprites->Add(10051, 284 * 3, 157 * 3, 312 * 3, 190 * 3, texMega);
+	sprites->Add(10052, 316 * 3, 157 * 3, 355 * 3, 190 * 3, texMega);*/
+	sprites->Add(10051, 88*3, 71*3, 119*3, 112*3, texMega);
+	sprites->Add(10052, 40*3, 67*3, 79*3, 112*3, texMega);
 #pragma endregion
 
 	//box
@@ -200,14 +232,11 @@ void LoadResources()
 #pragma region CREATING ANIMATION
 	LPANIMATION ani;
 
-	ani = new CAnimation(100);		// brick
-	ani->Add(20001);
-	animations->Add(901, ani);
 
 	ani = new CAnimation(100); //idle right
 	ani->Add(10014);
-	ani->Add(10015);
-	ani->Add(10016);
+	//ani->Add(10015);
+	//ani->Add(10016);
 	animations->Add(400, ani);
 
 	ani = new CAnimation(100); //idle left
@@ -221,13 +250,13 @@ void LoadResources()
 	ani->Add(10018);
 	ani->Add(10019);
 	ani->Add(10020);
-	ani->Add(10021);
+	/*ani->Add(10021);
 	ani->Add(10022);
 	ani->Add(10023);
 	ani->Add(10024);
 	ani->Add(10025);
 	ani->Add(10026);
-	ani->Add(10027);
+	ani->Add(10027);*/
 	animations->Add(500, ani);
 
 	ani = new CAnimation(100); //move left
@@ -246,8 +275,10 @@ void LoadResources()
 	animations->Add(501, ani);
 
 	ani = new CAnimation(100); //jump left
+	ani->Add(10027);
 	ani->Add(10028);
 	ani->Add(10029);
+	ani->Add(10030);
 	/*ani->Add(10030);
 	ani->Add(10031);
 	ani->Add(10032);
@@ -260,25 +291,25 @@ void LoadResources()
 	ani->Add(10036);
 	ani->Add(10037);
 	ani->Add(10038);
-	ani->Add(10039);
+	/*ani->Add(10039);
 	ani->Add(10040);
-	ani->Add(10041);
+	ani->Add(10041);*/
 	animations->Add(600, ani);
 
 	ani = new CAnimation(30); //fight 
 	ani->Add(10042);
 	ani->Add(10043);
-	ani->Add(10044);
-	ani->Add(10045);
-	ani->Add(10046);
-	ani->Add(10047);
-	ani->Add(10048);
-	ani->Add(10049);
-	ani->Add(10050);
+	//ani->Add(10044);
+	//ani->Add(10045);
+	//ani->Add(10046);
+	//ani->Add(10047);
+	//ani->Add(10048);
+	//ani->Add(10049);
+	//ani->Add(10050);
 	animations->Add(700, ani);
 
 	ani = new CAnimation(100); //swift
-	//ani->Add(10051);
+	ani->Add(10051);
 	ani->Add(10052);
 	animations->Add(800, ani);
 #pragma endregion
@@ -308,7 +339,7 @@ void LoadResources()
 	background->SetPosition(0.0f, 0.0f);
 
 #pragma region CREATING COLLIDER
-	Collider *collider = new Collider(48, 48);
+	/*Collider *collider = new Collider(48, 48);
 	collider->SetPosition(400.0f + 48.0f, 900.0f);
 	objects.push_back(collider);
 
@@ -342,7 +373,14 @@ void LoadResources()
 
 	Collider *collider8 = new Collider(40, 340);
 	collider8->SetPosition(966, 60);
-	objects.push_back(collider8);
+	objects.push_back(collider8);*/
+	Collider* collider = new Collider(48, 48);
+	collider->SetPosition(400.0f + 48.0f, 900.0f);
+	objects.push_back(collider);
+
+	Collider* collider1 = new Collider(608 * 2,0);
+	collider1->SetPosition(0, 827*2);
+	objects.push_back(collider1);
 #pragma endregion
 	
 	objects.push_back(background);
