@@ -27,9 +27,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Megaman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,21 +48,18 @@
     <ClCompile Include="Collider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Captain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\Desktop\dang.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="megaman2.png">
-      <Filter>Source Files</Filter>
-    </Image>
     <Image Include="misc.png">
       <Filter>Source Files</Filter>
     </Image>
     <Image Include="background.png">
-      <Filter>Source Files</Filter>
-    </Image>
-    <Image Include="megaman.png">
       <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
@@ -77,9 +71,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Megaman.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Sprites.h">
@@ -101,6 +92,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Captain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

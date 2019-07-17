@@ -1,5 +1,2 @@
-﻿  Source.cpp
-E:\Github Project\HelloDirect\HelloDirect\Source.cpp(406,20): warning C4018:  '<': signed/unsigned mismatch
-E:\Github Project\HelloDirect\HelloDirect\Source.cpp(411,20): warning C4018:  '<': signed/unsigned mismatch
-E:\Github Project\HelloDirect\HelloDirect\Source.cpp(439,21): warning C4018:  '<': signed/unsigned mismatch
+﻿  Captain.cpp
   HelloDirect.vcxproj -> E:\Github Project\HelloDirect\Debug\HelloDirect.exe

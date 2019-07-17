@@ -122,11 +122,11 @@
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Captain.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="Megaman.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -134,8 +134,6 @@
   <ItemGroup>
     <Image Include="..\..\..\..\Desktop\dang.jpg" />
     <Image Include="background.png" />
-    <Image Include="megaman.png" />
-    <Image Include="megaman2.png" />
     <Image Include="misc.png" />
   </ItemGroup>
   <ItemGroup>
@@ -143,11 +141,11 @@
     <ClInclude Include="Box.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Captain.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Megaman.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
   </ItemGroup>

@@ -6,7 +6,7 @@ void CMegaman::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	// simple fall down
 
-	vy += MEGAMAN_GRAVITY_Y * dt;
+	vy += CAPTAIN_GRAVITY_Y * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -44,24 +44,29 @@ void CMegaman::Render()
 	int ani;
 	if (vx == 0)
 	{
-		if (nx > 0) ani = MEGAMAN_ANI_IDLE_RIGHT;
-		else ani = MEGAMAN_ANI_IDLE_LEFT;
+		if (nx > 0) ani = CAPTAIN_ANI_IDLE_RIGHT;
+		else ani = CAPTAIN_ANI_IDLE_LEFT;
 	}
-	else if (vx == MEGAMAN_WALKING_SPEED)
-		ani = MEGAMAN_ANI_WALKING_RIGHT;
+	
 	//else if (vx == 0.1f) ani = MEGAMAN_ANI_FIGHT;
-	else if (vx == MEGAMAN_SWIFT_SPEED) ani = MEGAMAN_ANI_SWIFT;
-	else ani = MEGAMAN_ANI_WALKING_LEFT;
+	if (vx == CAPTAIN_SWIFT_SPEED) ani = CAPTAIN_ANI_SWIFT_RIGHT;
+	else if (vx == -CAPTAIN_SWIFT_SPEED) ani = CAPTAIN_ANI_SWIFT_LEFT;
+	else if (vx == CAPTAIN_WALKING_SPEED) ani = CAPTAIN_ANI_WALKING_RIGHT;
+	else if (vx == -CAPTAIN_WALKING_SPEED) ani = CAPTAIN_ANI_WALKING_LEFT;
+	else if (vx == 0.1f) ani = CAPTAIN_ANI_FIGHT_RIGHT;
+	else if (vx == -0.1f) ani = CAPTAIN_ANI_FIGHT_LEFT;
+	else if (vx == 0.01f) ani = CAPTAIN_ANI_SHIELD_UP_RIGHT;
+	else if (vx == -0.01f) ani = CAPTAIN_ANI_SHIELD_UP_LEFT;
 
 	if (dy != 0)
 	{
 		if (nx > 0)
 		{
-			ani = MEGAMAN_ANI_JUMP_RIGHT;
+			ani = CAPTAIN_ANI_JUMP_RIGHT;
 		}
 		else
 		{
-			ani = MEGAMAN_ANI_JUMP_LEFT;
+			ani = CAPTAIN_ANI_JUMP_LEFT;
 		}
 	}
 
@@ -73,36 +78,44 @@ void CMegaman::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case MEGAMAN_STATE_WALKING_RIGHT:
-		vx = MEGAMAN_WALKING_SPEED;
+	case CAPTAIN_STATE_WALKING_RIGHT:
+		vx = CAPTAIN_WALKING_SPEED;
 		nx = 1;
 		break;
-	case MEGAMAN_STATE_WALKING_LEFT:
-		vx = -MEGAMAN_WALKING_SPEED;
+	case CAPTAIN_STATE_WALKING_LEFT:
+		vx = -CAPTAIN_WALKING_SPEED;
 		nx = -1;
 		break;
-	case MEGAMAN_STATE_JUMP:
-		vy = -MEGAMAN_JUMP_SPEED_Y;
+	case CAPTAIN_STATE_JUMP:
+		vy = -CAPTAIN_JUMP_SPEED_Y;
 
-	case MEGAMAN_STATE_IDLE:
+	case CAPTAIN_STATE_IDLE:
 		vx = 0.0f;
 		break;
 
-	case MEGAMAN_STATE_FIGHT_RIGHT:
-		vx = 0.0f;
-		break;
-	case MEGAMAN_STATE_FIGHT_LEFT:
-		vx = 0.0f;
+	case CAPTAIN_STATE_FIGHT:
+		vx = 0.1f * nx;
 		break;
 
-	case MEGAMAN_STATE_SWIFT_RIGHT:
-		vx = MEGAMAN_SWIFT_SPEED;
+	case CAPTAIN_STATE_SWIFT_RIGHT:
+		vx = CAPTAIN_SWIFT_SPEED;
+		nx = 1;
 		break;
 	
-	case MEGAMAN_STATE_SWIFT_LEFT:
-		vx = -MEGAMAN_SWIFT_SPEED;
+	case CAPTAIN_STATE_SWIFT_LEFT:
+		vx = -CAPTAIN_SWIFT_SPEED;
+		nx = -1;
 		break;
 
+	case CAPTAIN_STATE_SHIELD_RIGHT:
+		vx = 0.01f;
+		nx = 1;
+		break;
+	
+	case CAPTAIN_STATE_SHIELD_LEFT:
+		vx = -0.01f;
+		nx = -1;
+		break;	
 	}
 }
 
@@ -110,8 +123,6 @@ void CMegaman::GetBoundingBox(float &left, float &top, float &right, float &bott
 {
 	left = x;
 	top = y;
-	right = x + MEGAMAN_BBOX_WIDTH;
-	bottom = y + MEGAMAN_BBOX_HEIGHT;
+	right = x + CAPTAIN_BBOX_WIDTH;
+	bottom = y + CAPTAIN_BBOX_HEIGHT;
 }
-
-

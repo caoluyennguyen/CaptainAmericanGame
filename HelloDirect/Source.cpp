@@ -8,7 +8,7 @@
 #include "GameObject.h"
 #include "Textures.h"
 
-#include "Megaman.h"
+#include "Captain.h"
 #include "Camera.h"
 #include "Background.h"
 #include "Box.h"
@@ -23,14 +23,14 @@
 
 #define MAX_FRAME_RATE 120
 
-#define ID_TEX_MEGAMAN 0
-#define ID_TEX_MEGAMAN2 1
+#define ID_TEX_CAPTAIN 0
+#define ID_TEX_CAPTAIN2 1
 #define ID_TEX_BACKGROUND 100
 //#define ID_TEX_MISC 20
 
 
 CGame *game;
-CMegaman *megaman;
+CCaptain *captain;
 Camera *camera;
 Background *background;
 
@@ -52,7 +52,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_X:
-		megaman->SetState(MEGAMAN_STATE_JUMP);
+		captain->SetState(CAPTAIN_STATE_JUMP);
 		break;
 	}
 }
@@ -65,28 +65,32 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 void CSampleKeyHander::KeyState(BYTE *states)
 {
 	if (game->IsKeyDown(DIK_RIGHT))
-		megaman->SetState(MEGAMAN_STATE_WALKING_RIGHT);
+		captain->SetState(CAPTAIN_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		megaman->SetState(MEGAMAN_STATE_WALKING_LEFT);
+		captain->SetState(CAPTAIN_STATE_WALKING_LEFT);
 	else if (game->IsKeyDown(DIK_C))
 	{
-		if (megaman->nx == 1)
-		{
-			megaman->SetState(MEGAMAN_STATE_FIGHT_RIGHT);
-		}
-		else
-			megaman->SetState(MEGAMAN_STATE_FIGHT_LEFT);
+		captain->SetState(CAPTAIN_STATE_FIGHT);
 	}
 	else if (game->IsKeyDown(DIK_Z))
 	{
-		if (megaman->nx == 1)
+		if (captain->nx > 0)
 		{
-			megaman->SetState(MEGAMAN_STATE_SWIFT_RIGHT);
+			captain->SetState(CAPTAIN_STATE_SWIFT_RIGHT);
 		}
 		else
-			megaman->SetState(MEGAMAN_STATE_SWIFT_LEFT);
+			captain->SetState(CAPTAIN_STATE_SWIFT_LEFT);
 	}
-	else megaman->SetState(MEGAMAN_STATE_IDLE);
+	else if (game->IsKeyDown(DIK_UP))
+	{
+		if (captain->nx > 0)
+		{
+			captain->SetState(CAPTAIN_STATE_SHIELD_RIGHT);
+		}
+		else
+			captain->SetState(CAPTAIN_STATE_SHIELD_LEFT);
+	}
+	else captain->SetState(CAPTAIN_STATE_IDLE);
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -109,8 +113,8 @@ void LoadResources()
 
 	CTextures * textures = CTextures::GetInstance();
 
-	textures->Add(ID_TEX_MEGAMAN, L"Cap2.png", D3DCOLOR_XRGB(176, 224, 248));
-	textures->Add(ID_TEX_MEGAMAN2, L"Cap.png", D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_CAPTAIN, L"Cap2.png", D3DCOLOR_XRGB(176, 224, 248));
+	textures->Add(ID_TEX_CAPTAIN2, L"Cap.png", D3DCOLOR_XRGB(255, 255, 255));
 	//textures->Add(ID_TEX_MISC, L"misc.png", D3DCOLOR_XRGB(176, 224, 248));
 	//textures->Add(ID_TEX_BACKGROUND, L"background.png", D3DCOLOR_XRGB(255, 255, 255));
 
@@ -118,8 +122,8 @@ void LoadResources()
 
 	CAnimations * animations = CAnimations::GetInstance();
 
-	LPDIRECT3DTEXTURE9 texMega = textures->Get(ID_TEX_MEGAMAN);
-	LPDIRECT3DTEXTURE9 texMega2 = textures->Get(ID_TEX_MEGAMAN2);
+	LPDIRECT3DTEXTURE9 texMega = textures->Get(ID_TEX_CAPTAIN);
+	LPDIRECT3DTEXTURE9 texMega2 = textures->Get(ID_TEX_CAPTAIN2);
 
 	//LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
 	//LPDIRECT3DTEXTURE9 texBack = textures->Get(ID_TEX_BACKGROUND);
@@ -203,7 +207,7 @@ void LoadResources()
 	sprites->Add(10038, 134*3, 15*3, 156*3, 53*3, texMega);
 #pragma endregion
 
-#pragma region fight
+#pragma region fight right
 	/*sprites->Add(10042, 86 * 3, 233 * 3, 119 * 3, 268 * 3, texMega);
 	sprites->Add(10043, 127 * 3, 233 * 3, 160 * 3, 268 * 3, texMega);
 	sprites->Add(10044, 164 * 3, 233 * 3, 200 * 3, 268 * 3, texMega);
@@ -217,13 +221,30 @@ void LoadResources()
 	sprites->Add(10043, 217 * 3, 71 * 3, 246 * 3, 112 * 3, texMega);
 #pragma endregion
 
-#pragma region swift
+#pragma region swift right
 	/*sprites->Add(10051, 284 * 3, 157 * 3, 312 * 3, 190 * 3, texMega);
 	sprites->Add(10052, 316 * 3, 157 * 3, 355 * 3, 190 * 3, texMega);*/
 	sprites->Add(10051, 88*3, 71*3, 119*3, 112*3, texMega);
 	sprites->Add(10052, 40*3, 67*3, 79*3, 112*3, texMega);
 #pragma endregion
 
+#pragma region fight left
+	sprites->Add(10053, 104*3, 74*3, 142*3, 115*3, texMega2);
+	sprites->Add(10054, 153*3, 74*3, 182*3, 115*3, texMega2);
+#pragma endregion
+
+#pragma region swift left
+	sprites->Add(10055, 280*3, 86*3, 311*3, 115*3, texMega2);
+	sprites->Add(10056, 320*3, 88*3, 359*3, 111*3, texMega2);
+#pragma endregion
+
+#pragma region shield up right
+	sprites->Add(10057, 196*3, 13*3, 220*3, 56*3, texMega);
+#pragma endregion
+
+#pragma region shield up left
+	sprites->Add(10058, 180*3, 13*3, 204*3, 56*3, texMega2);
+#pragma endregion
 	//box
 	//sprites->Add(20001, 408*3, 225*3, 424*3, 241*3, texMisc);
 	//background
@@ -296,7 +317,7 @@ void LoadResources()
 	ani->Add(10041);*/
 	animations->Add(600, ani);
 
-	ani = new CAnimation(30); //fight 
+	ani = new CAnimation(200); //fight right
 	ani->Add(10042);
 	ani->Add(10043);
 	//ani->Add(10044);
@@ -308,23 +329,47 @@ void LoadResources()
 	//ani->Add(10050);
 	animations->Add(700, ani);
 
-	ani = new CAnimation(100); //swift
+	ani = new CAnimation(100); //swift right
 	ani->Add(10051);
 	ani->Add(10052);
 	animations->Add(800, ani);
+
+	ani = new CAnimation(200); //fight left
+	ani->Add(10053);
+	ani->Add(10054);
+	animations->Add(701, ani);
+
+	ani = new CAnimation(100); //swift left
+	ani->Add(10055);
+	ani->Add(10056);
+	animations->Add(801, ani);
+	
+	ani = new CAnimation(100); //shield up right
+	ani->Add(10057);
+	animations->Add(900, ani);
+
+	ani = new CAnimation(100); //shield up left
+	ani->Add(10058);
+	animations->Add(901, ani);
+
+	
 #pragma endregion
 
-	megaman = new CMegaman();
-	megaman->AddAnimation(400);		// idle right
-	megaman->AddAnimation(401);		// idle left
-	megaman->AddAnimation(500);		// move right
-	megaman->AddAnimation(501);		// move left
-	megaman->AddAnimation(600);		// jump right
-	megaman->AddAnimation(601);		// jump left
-	megaman->AddAnimation(700);		// fight
-	megaman->AddAnimation(800);		// swift
+	captain = new CCaptain();
+	captain->AddAnimation(400);		// idle right
+	captain->AddAnimation(401);		// idle left
+	captain->AddAnimation(500);		// move right
+	captain->AddAnimation(501);		// move left
+	captain->AddAnimation(600);		// jump right
+	captain->AddAnimation(601);		// jump left
+	captain->AddAnimation(700);		// fight right
+	captain->AddAnimation(800);		// swift right
+	captain->AddAnimation(701);		// fight left
+	captain->AddAnimation(801);		// swift left
+	captain->AddAnimation(900);		// shield up right
+	captain->AddAnimation(901);		// shield up left
 
-	megaman->SetPosition(90.0f, 0.0f);
+	captain->SetPosition(90.0f, 0.0f);
 
 	////ani = new CAnimation(0); //background
 	////ani->Add(20002);
@@ -384,7 +429,7 @@ void LoadResources()
 #pragma endregion
 	
 	objects.push_back(background);
-	objects.push_back(megaman);
+	objects.push_back(captain);
 }
 
 /*
@@ -397,7 +442,7 @@ void Update(DWORD dt)
 	{
 		if (!camera->IsFollowing())
 		{
-			camera->Follow(megaman);
+			camera->Follow(captain);
 		}
 
 		camera->Update();
@@ -553,7 +598,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 void Game_End(HWND hWnd)
 {
 	delete background;
-	delete megaman; 
+	delete captain;
 	delete camera;
 	delete game;
 }
