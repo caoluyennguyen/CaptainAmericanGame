@@ -60,6 +60,12 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	switch (KeyCode)
+	{
+	case DIK_X:
+		captain->dy = 0;
+		break;
+	}
 }
 
 void CSampleKeyHander::KeyState(BYTE *states)
@@ -132,7 +138,7 @@ void LoadResources()
 	/*sprites->Add(10001, 185*3, 16*3, 215*3, 51*3, texMega2);
 	sprites->Add(10002, 151*3, 16*3, 181*3, 51*3, texMega2);
 	sprites->Add(10003, 117*3, 16*3, 147*3, 51*3, texMega2);*/
-	sprites->Add(10001, 20*3, 14*3, 42*3, 59*3, texMega2);
+	sprites->Add(10001, 21*3, 11*3, 43*3, 56*3, texMega2);
 #pragma endregion
 
 #pragma region move left
@@ -146,10 +152,10 @@ void LoadResources()
 	sprites->Add(10011, 183 * 3, 106 * 3, 213 * 3, 141 * 3, texMega2);
 	sprites->Add(10012, 147 * 3, 106 * 3, 181 * 3, 141 * 3, texMega2);
 	sprites->Add(10013, 118 * 3, 106 * 3, 146 * 3, 141 * 3, texMega2);*/
-	sprites->Add(10002, 51*3, 17*3, 75*3, 59*3, texMega2);
-	sprites->Add(10003, 83*3, 16*3, 107*3, 59*3, texMega2);
-	sprites->Add(10004, 115*3, 17*3, 139*3, 59*3, texMega2);
-	sprites->Add(10005, 147*3, 16*3, 171*3, 59*3, texMega2);
+	sprites->Add(10002, 52*3, 11*3, 76*3, 56*3, texMega2);
+	sprites->Add(10003, 84*3, 11*3, 108*3, 56*3, texMega2);
+	sprites->Add(10004, 116*3, 11*3, 140*3, 56*3, texMega2);
+	sprites->Add(10005, 148*3, 11*3, 172*3, 56*3, texMega2);
 #pragma endregion
 
 #pragma region idle right
@@ -186,10 +192,10 @@ void LoadResources()
 	sprites->Add(10032, 211 * 3, 53 * 3, 238 * 3, 100 * 3, texMega2);
 	sprites->Add(10033, 182 * 3, 53 * 3, 207 * 3, 100 * 3, texMega2);
 	sprites->Add(10034, 151 * 3, 53 * 3, 181 * 3, 100 * 3, texMega2);*/
-	sprites->Add(10027, 243*3, 18*3, 265*3, 56*3, texMega2);
-	sprites->Add(10028, 275*3, 31*3, 293*3, 51*3, texMega2);
-	sprites->Add(10029, 311*3, 33*3, 331*3, 51*3, texMega2);
-	sprites->Add(10030, 243 * 3, 18 * 3, 265 * 3, 56 * 3, texMega2);
+	sprites->Add(10027, 244 * 3, 15 * 3, 266 * 3, 53 * 3, texMega2);
+	sprites->Add(10028, 276 * 3, 28 * 3, 294 * 3, 48 * 3, texMega2);
+	sprites->Add(10029, 312 * 3, 30 * 3, 332 * 3, 48 * 3, texMega2);
+	sprites->Add(10030, 244 * 3, 15 * 3, 266 * 3, 53 * 3, texMega2);
 
 #pragma endregion
 
@@ -229,13 +235,13 @@ void LoadResources()
 #pragma endregion
 
 #pragma region fight left
-	sprites->Add(10053, 104*3, 74*3, 142*3, 115*3, texMega2);
-	sprites->Add(10054, 153*3, 74*3, 182*3, 115*3, texMega2);
+	sprites->Add(10053, 105*3, 67*3, 143*3, 112*3, texMega2);
+	sprites->Add(10054, 145*3, 67*3, 183*3, 112*3, texMega2);
 #pragma endregion
 
 #pragma region swift left
-	sprites->Add(10055, 280*3, 86*3, 311*3, 115*3, texMega2);
-	sprites->Add(10056, 320*3, 88*3, 359*3, 111*3, texMega2);
+	sprites->Add(10055, 281*3, 67*3, 312*3, 112*3, texMega2);
+	sprites->Add(10056, 321*3, 67*3, 360*3, 112*3, texMega2);
 #pragma endregion
 
 #pragma region shield up right
