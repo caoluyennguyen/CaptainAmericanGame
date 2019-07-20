@@ -28,7 +28,6 @@
 #define ID_TEX_BACKGROUND 100
 //#define ID_TEX_MISC 20
 
-
 CGame *game;
 CCaptain *captain;
 Camera *camera;
@@ -51,7 +50,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	switch (KeyCode)
 	{
-	case DIK_X:
+	case DIK_Z:
 		captain->SetState(CAPTAIN_STATE_JUMP);
 		break;
 	}
@@ -62,7 +61,7 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	switch (KeyCode)
 	{
-	case DIK_X:
+	case DIK_Z:
 		captain->dy = 0;
 		break;
 	}
@@ -74,11 +73,11 @@ void CSampleKeyHander::KeyState(BYTE *states)
 		captain->SetState(CAPTAIN_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		captain->SetState(CAPTAIN_STATE_WALKING_LEFT);
-	else if (game->IsKeyDown(DIK_C))
+	else if (game->IsKeyDown(DIK_X))
 	{
 		captain->SetState(CAPTAIN_STATE_FIGHT);
 	}
-	else if (game->IsKeyDown(DIK_Z))
+	else if (game->IsKeyDown(DIK_C))
 	{
 		if (captain->nx > 0)
 		{
@@ -141,7 +140,7 @@ void LoadResources()
 	sprites->Add(10001, 21*3, 11*3, 43*3, 56*3, texMega2);
 #pragma endregion
 
-#pragma region move left
+#pragma region move lef t
 	/*sprites->Add(10004, 381 * 3, 106 * 3, 401 * 3, 141 * 3, texMega2);
 	sprites->Add(10005, 357 * 3, 106 * 3, 379 * 3, 141 * 3, texMega2);
 	sprites->Add(10006, 325 * 3, 106 * 3, 356 * 3, 141 * 3, texMega2);
@@ -241,7 +240,7 @@ void LoadResources()
 
 #pragma region swift left
 	sprites->Add(10055, 281*3, 67*3, 312*3, 112*3, texMega2);
-	sprites->Add(10056, 321*3, 67*3, 360*3, 112*3, texMega2);
+	sprites->Add(10056, 321*3, 67 *3, 360*3, 112*3, texMega2);
 #pragma endregion
 
 #pragma region shield up right
@@ -381,8 +380,8 @@ void LoadResources()
 	////ani->Add(20002);
 	////animations->Add(902, ani);
 
-	background = new Background(0, 0, 1024*2, 875*2);
-	background->Add(L"CaptainAmericaAndTheAvengers-Stage1.png", D3DCOLOR_XRGB(255, 255, 255));
+	background = new Background(0, 0, 2560*2, 477*2);
+	background->Add(L"CaptainAmericaAndTheAvengers-Stage2.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	//background = new Background();
 	//background->AddAnimation(902);
@@ -429,8 +428,8 @@ void LoadResources()
 	collider->SetPosition(400.0f + 48.0f, 900.0f);
 	objects.push_back(collider);
 
-	Collider* collider1 = new Collider(608 * 2,0);
-	collider1->SetPosition(0, 827*2);
+	Collider* collider1 = new Collider(1700 * 2,0);
+	collider1->SetPosition(0, 827);
 	objects.push_back(collider1);
 #pragma endregion
 	
