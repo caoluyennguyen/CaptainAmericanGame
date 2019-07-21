@@ -26,7 +26,6 @@
 #define ID_TEX_CAPTAIN 0
 #define ID_TEX_CAPTAIN2 1
 #define ID_TEX_BACKGROUND 100
-//#define ID_TEX_MISC 20
 
 CGame *game;
 CCaptain *captain;
@@ -374,7 +373,7 @@ void LoadResources()
 	captain->AddAnimation(900);		// shield up right
 	captain->AddAnimation(901);		// shield up left
 
-	captain->SetPosition(90.0f, 0.0f);
+	captain->SetPosition(200.0f, 0.0f);
 
 	////ani = new CAnimation(0); //background
 	////ani->Add(20002);
