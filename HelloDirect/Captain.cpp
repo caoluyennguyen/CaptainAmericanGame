@@ -1,21 +1,102 @@
-#include "Captain.h"
+﻿#include "Captain.h"
 
-void CCaptain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void Captain::LoadResources()
 {
-	CGameObject::Update(dt);
+	Textures* texture = Textures::GetInstance();
 
-	// simple fall down
+	texture->Add(ID_TEX_CAPTAIN, FILEPATH_TEX_CAP, D3DCOLOR_XRGB(255, 255, 255));
 
-	vy += CAPTAIN_GRAVITY_Y * dt;
+	Sprites* sprites = Sprites::GetInstance();
+	Animations* animations = Animations::GetInstance();
 
+	LPDIRECT3DTEXTURE9 texCap = texture->Get(ID_TEX_CAPTAIN);
+
+#pragma region idle left
+	sprites->Add(10001, 21, 11, 43, 56, texCap);
+#pragma endregion
+
+#pragma region move left
+	sprites->Add(10002, 52, 11, 76, 56, texCap);
+	sprites->Add(10003, 84, 11, 108, 56, texCap);
+	sprites->Add(10004, 116, 11, 140, 56, texCap);
+	sprites->Add(10005, 148, 11, 172, 56, texCap);
+#pragma endregion
+
+#pragma region jump left
+	sprites->Add(10027, 244, 15, 266, 53, texCap);
+	sprites->Add(10028, 276, 28, 294, 48, texCap);
+	sprites->Add(10029, 312, 30, 332, 48, texCap);
+	sprites->Add(10030, 244, 15, 266, 53, texCap);
+
+#pragma endregion
+
+#pragma region shield up left
+	sprites->Add(10058, 180, 13, 204, 56, texCap);
+#pragma endregion
+
+#pragma region CREATING ANIMATION
+
+	LPANIMATION ani;
+
+	ani = new Animation();
+	ani->Add(10001);
+	animations->Add(STAND, ani);
+
+	ani = new Animation();
+	ani->Add(10002);
+	ani->Add(10003);
+	ani->Add(10004);
+	ani->Add(10005);
+	animations->Add(WALK, ani);
+
+	ani = new Animation();
+	ani->Add(10058);
+	animations->Add(SIT, ani);
+
+	ani = new Animation();
+	ani->Add(10027);
+	ani->Add(10028);
+	ani->Add(10029);
+	ani->Add(10030);
+	animations->Add(JUMP, ani);
+
+	AddAnimation(STAND);
+	AddAnimation(WALK);
+	AddAnimation(SIT);
+	AddAnimation(JUMP);
+#pragma endregion
+
+
+	SetPosition(0.0f, 150.0f);
+}
+
+void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
+{
+	GameObject::Update(dt);
+
+	vy += CAPTAIN_GRAVITY;
+
+	/*if (y > 224)
+	{
+		vy = 0;
+		y = 224.0f;
+	}*/
+
+	if (state == HIT_SIT || state == HIT_STAND)
+	{
+		D3DXVECTOR3 simonPositon;
+		GetPosition(simonPositon.x, simonPositon.y);
+
+	}
+
+	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
 
-	CalcPotentialCollisions(coObjects, coEvents);
+	CalcPotentialCollisions(colliable_objects, coEvents);
 
-	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -23,106 +104,78 @@ void CCaptain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny = 0;
+		float min_tx, min_ty, nx = 0, ny;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		// ground
+		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			// collision of Simon and Candle -> do nothing -> update x;
+			if (dynamic_cast<Enemy*>(e->obj))
+			{
+				x -= nx * 0.4f;
+			}
+		}
 	}
 
 	// clean up collision events
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	//for (int i = 0; i < coEventsResult.size(); i++) delete coEventsResult[i];
 }
 
-void CCaptain::Render()
+void Captain::Render()
 {
-	int ani;
-	if (vx == 0)
-	{
-		if (nx > 0) ani = CAPTAIN_ANI_IDLE_RIGHT;
-		else ani = CAPTAIN_ANI_IDLE_LEFT;
-	}
 
-	//else if (vx == 0.1f) ani = MEGAMAN_ANI_FIGHT;
-	if (vx == CAPTAIN_SWIFT_SPEED) ani = CAPTAIN_ANI_SWIFT_RIGHT;
-	else if (vx == -CAPTAIN_SWIFT_SPEED) ani = CAPTAIN_ANI_SWIFT_LEFT;
-	else if (vx == CAPTAIN_WALKING_SPEED) ani = CAPTAIN_ANI_WALKING_RIGHT;
-	else if (vx == -CAPTAIN_WALKING_SPEED) ani = CAPTAIN_ANI_WALKING_LEFT;
-	else if (vx == 0.1f) ani = CAPTAIN_ANI_FIGHT_RIGHT;
-	else if (vx == -0.1f) ani = CAPTAIN_ANI_FIGHT_LEFT;
-	else if (vx == 0.01f) ani = CAPTAIN_ANI_SHIELD_UP_RIGHT;
-	else if (vx == -0.01f) ani = CAPTAIN_ANI_SHIELD_UP_LEFT;
-
-	else if (dy != 0)
-	{
-		if (nx > 0)
-		{
-			ani = CAPTAIN_ANI_JUMP_RIGHT;
-		}
-		else
-		{
-			ani = CAPTAIN_ANI_JUMP_LEFT;
-		}
-	}
-
-	animations[ani]->Render(x, y);
+	animations[state]->Render(nx, x, y);
 }
 
-void CCaptain::SetState(int state)
+void Captain::SetState(int state)
 {
-	CGameObject::SetState(state);
+	GameObject::SetState(state);
+
 	switch (state)
 	{
-	case CAPTAIN_STATE_WALKING_RIGHT:
-		vx = CAPTAIN_WALKING_SPEED;
-		nx = 1;
+	case STAND:
+		isStand = true;
+		vx = 0;
 		break;
-	case CAPTAIN_STATE_WALKING_LEFT:
-		vx = -CAPTAIN_WALKING_SPEED;
-		nx = -1;
+	case WALK:
+		if (nx > 0) vx = CAPTAIN_WALKING_SPEED;
+		else vx = -CAPTAIN_WALKING_SPEED;
 		break;
-	case CAPTAIN_STATE_JUMP:
-		vy = -CAPTAIN_JUMP_SPEED_Y;
-
-	case CAPTAIN_STATE_IDLE:
-		vx = 0.0f;
+	case JUMP:
+		isStand = true;
+		if (y == 224)
+			vy = -CAPTAIN_JUMP_SPEED_Y;
 		break;
-
-	case CAPTAIN_STATE_FIGHT:
-		vx = 0.1f * nx;
+	case UP:
+		isStand = true;
+		vx = 0;
+		vy = 0;
 		break;
-
-	case CAPTAIN_STATE_SWIFT_RIGHT:
-		vx = CAPTAIN_SWIFT_SPEED;
-		nx = 1;
-		break;
-
-	case CAPTAIN_STATE_SWIFT_LEFT:
-		vx = -CAPTAIN_SWIFT_SPEED;
-		nx = -1;
-		break;
-
-	case CAPTAIN_STATE_SHIELD_RIGHT:
-		vx = 0.01f;
-		nx = 1;
-		break;
-
-	case CAPTAIN_STATE_SHIELD_LEFT:
-		vx = -0.01f;
-		nx = -1;
+	default:
 		break;
 	}
 }
 
-void CCaptain::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void Captain::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
 	right = x + CAPTAIN_BBOX_WIDTH;
 	bottom = y + CAPTAIN_BBOX_HEIGHT;
 }
+
+
+
+
+

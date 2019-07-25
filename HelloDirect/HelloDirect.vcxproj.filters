@@ -51,17 +51,12 @@
     <ClCompile Include="Captain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\Desktop\dang.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="misc.png">
+    <ClCompile Include="Tilemap.cpp">
       <Filter>Source Files</Filter>
-    </Image>
-    <Image Include="background.png">
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
-    </Image>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -95,6 +90,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Captain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tilemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Define.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

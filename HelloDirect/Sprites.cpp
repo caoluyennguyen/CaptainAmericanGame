@@ -1,8 +1,7 @@
 #include "Sprites.h"
-#include "Game.h"
-#include "debug.h"
 
-CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
+
+Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
 	this->id = id;
 	this->left = left;
@@ -12,44 +11,48 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEX
 	this->texture = tex;
 }
 
-CSprites * CSprites::__instance = NULL;
-
-CSprites *CSprites::GetInstance()
+void Sprite::Draw(int nx, float x, float y, int alpha)
 {
-	if (__instance == NULL) __instance = new CSprites();
-	return __instance;
+	Game* game = Game::GetInstance();
+	game->Draw(nx, x, y, texture, left, top, right, bottom, alpha);
 }
 
-void CSprite::Draw(float x, float y, int alpha)
+
+Sprites* Sprites::_instance = NULL;
+
+void Sprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
-	CGame * game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom, alpha);
+	LPSPRITE sprite = new Sprite(id, left, top, right, bottom, tex);
+	sprites[id] = sprite;
 }
 
-void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
+Sprites* Sprites::GetInstance()
 {
-	LPSPRITE s = new CSprite(id, left, top, right, bottom, tex);
-	sprites[id] = s;
+	if (_instance == NULL) _instance = new Sprites();
+	return _instance;
 }
 
-LPSPRITE CSprites::Get(int id)
+
+Animation::Animation(int defaultTime)
 {
-	return sprites[id];
+	this->defaultTime = defaultTime;
+	lastFrameTime = -1;
+	currentFrame = -1;
 }
 
-void CAnimation::Add(int spriteId, DWORD time)
+void Animation::Add(int spriteID, DWORD time)
 {
-	int t = time;
-	if (time == 0) t = this->defaultTime;
+	if (time == 0) time = this->defaultTime;
 
-	LPSPRITE sprite = CSprites::GetInstance()->Get(spriteId);
-	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
+	LPSPRITE sprite = Sprites::GetInstance()->Get(spriteID);
+	LPANIMATION_FRAME frame = new AnimationFrame(sprite, time);
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y, int alpha)
+void Animation::Render(int nx, float x, float y, int alpha)
 {
 	DWORD now = GetTickCount();
+
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;
@@ -58,32 +61,31 @@ void CAnimation::Render(float x, float y, int alpha)
 	else
 	{
 		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t)
-		{
+		if (now - lastFrameTime > t) {
 			currentFrame++;
 			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
-			//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
+
+			/*if (currentFrame == frames.size() - 1)
+			{
+				isOverAnimation = true;
+			}*/
+
+			if (currentFrame >= frames.size())
+			{
+				//Reset();
+				currentFrame = 0;
+			}
 		}
-
 	}
-	frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
+
+	frames[currentFrame]->GetSprite()->Draw(nx, x, y, alpha);
 }
 
-CAnimations * CAnimations::__instance = NULL;
 
-CAnimations * CAnimations::GetInstance()
-{
-	if (__instance == NULL) __instance = new CAnimations();
-	return __instance;
-}
+Animations* Animations::_instance = NULL;
 
-void CAnimations::Add(int id, LPANIMATION ani)
+Animations* Animations::GetInstance()
 {
-	animations[id] = ani;
-}
-
-LPANIMATION CAnimations::Get(int id)
-{
-	return animations[id];
+	if (_instance == NULL) _instance = new Animations();
+	return _instance;
 }

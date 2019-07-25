@@ -1,84 +1,103 @@
 #pragma once
+
 #include <Windows.h>
 #include <d3dx9.h>
 #include <unordered_map>
 
+#include "Game.h"
+#include "Debug.h"
+
 using namespace std;
 
-class CSprite
+/*
+	A class contains id of a sprite and its position in texture.
+*/
+class Sprite
 {
-	int id;				// Sprite ID in the sprite database
-
-	int left;
-	int top;
-	int right;
-	int bottom;
+	int id;			// Sprite ID 
+	int left, top, right, bottom;
 
 	LPDIRECT3DTEXTURE9 texture;
-public:
-	CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 
-	void Draw(float x, float y, int alpha = 255);
+public:
+	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
+	void Draw(int nx, float x, float y, int alpha = 255);
 };
 
-typedef CSprite * LPSPRITE;
+typedef Sprite* LPSPRITE;
 
 /*
-	Manage sprite database
+	Sprite Manager Class
 */
-class CSprites
+class Sprites
 {
-	static CSprites * __instance;
-
-	unordered_map<int, LPSPRITE> sprites;
+	static Sprites* _instance;
+	unordered_map<int, LPSPRITE> sprites;		// list of Sprite Pointer by Id
 
 public:
 	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
-	LPSPRITE Get(int id);
+	LPSPRITE Get(int id) { return sprites[id]; }
 
-	static CSprites * GetInstance();
+	static Sprites* GetInstance();
 };
 
 /*
-	Sprite animation
+	Sprite Animation Frame
 */
-class CAnimationFrame
+class AnimationFrame
 {
 	LPSPRITE sprite;
-	DWORD time;
+	DWORD time;				// time to render a sprite
 
 public:
-	CAnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
-	DWORD GetTime() { return time; }
-	LPSPRITE GetSprite() { return sprite; }
+	AnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
+
+	LPSPRITE GetSprite() { return this->sprite; }
+	DWORD GetTime() { return this->time; }
 };
 
-typedef CAnimationFrame *LPANIMATION_FRAME;
+typedef AnimationFrame* LPANIMATION_FRAME;
 
-class CAnimation
+/*
+	Manage all frames of an animation
+*/
+class Animation
 {
+
 	DWORD lastFrameTime;
 	int defaultTime;
 	int currentFrame;
-	vector<LPANIMATION_FRAME>	frames;
+	vector<LPANIMATION_FRAME> frames;
+
+	bool isOverAnimation = false;
+
 public:
-	CAnimation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
-	void Add(int spriteId, DWORD time = 0);
-	void Render(float x, float y, int alpha = 255);
+
+	Animation(int defaultTime = 100);
+
+	bool IsOver() { return currentFrame == frames.size() - 1; }
+	void Reset() { /*isOverAnimation = false;*/ currentFrame = -1; }
+
+	int GetCurrentFrame() { return currentFrame; }
+	int GetFramesSize() { return frames.size(); }
+
+	void Add(int spriteID, DWORD time = 0);
+	void Render(int nx, float x, float y, int alpha = 255);
 };
 
-typedef CAnimation *LPANIMATION;
+typedef Animation* LPANIMATION;
 
-class CAnimations
+/*
+	Manage all animations
+*/
+class Animations
 {
-	static CAnimations * __instance;
-
+	static Animations* _instance;
 	unordered_map<int, LPANIMATION> animations;
 
 public:
-	void Add(int id, LPANIMATION ani);
-	LPANIMATION Get(int id);
+	void Add(int id, LPANIMATION ani) { animations[id] = ani; }
+	LPANIMATION Get(int id) { return animations[id]; }
 
-	static CAnimations * GetInstance();
+	static Animations* GetInstance();
 };
-

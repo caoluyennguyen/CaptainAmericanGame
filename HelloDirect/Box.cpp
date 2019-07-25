@@ -1,15 +1,39 @@
 #include "Box.h"
 
-void CBrick::Render()
+Ground::Ground() : GameObject()
 {
-	animations[0]->Render(x, y);
-	RenderBoundingBox();
+
+	Textures* texture = Textures::GetInstance();
+
+	texture->Add(ID_TEX_GROUND, FILEPATH_TEX_GROUND, D3DCOLOR_XRGB(255, 255, 255));
+
+	Sprites* sprites = Sprites::GetInstance();
+	Animations* animations = Animations::GetInstance();
+
+	LPDIRECT3DTEXTURE9 texGround = texture->Get(ID_TEX_GROUND);
+
+	sprites->Add(40001, 0, 0, 17, 17, texGround);
+
+	LPANIMATION ani;
+
+	ani = new Animation();
+	ani->Add(40001);
+	animations->Add(0, ani);
+
+	AddAnimation(0);
+
+
 }
 
-void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
+void Ground::Render()
+{
+	animations[0]->Render(-1, x, y);
+}
+
+void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + BRICK_BBOX_WIDTH;
-	b = y + BRICK_BBOX_HEIGHT;
+	r = x + GROUND_BBOX_WIDTH;
+	b = y + GROUND_BBOX_HEIGHT;
 }

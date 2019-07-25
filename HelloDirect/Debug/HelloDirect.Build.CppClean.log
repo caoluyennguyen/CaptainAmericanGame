@@ -12,12 +12,33 @@ e:\github project\hellodirect\hellodirect\debug\camera.obj
 e:\github project\hellodirect\hellodirect\debug\bullet.obj
 e:\github project\hellodirect\hellodirect\debug\box.obj
 e:\github project\hellodirect\hellodirect\debug\background.obj
+e:\github project\hellodirect\hellodirect\debug\captain.obj
+d:\hellodirect\hellodirect\debug\vc142.pdb
+d:\hellodirect\hellodirect\debug\vc142.idb
+d:\hellodirect\hellodirect\debug\tilemap.obj
+d:\hellodirect\hellodirect\debug\textures.obj
+d:\hellodirect\hellodirect\debug\sprites.obj
+d:\hellodirect\hellodirect\debug\grid.obj
+d:\hellodirect\hellodirect\debug\gameobject.obj
+d:\hellodirect\hellodirect\debug\game.obj
+d:\hellodirect\hellodirect\debug\debug.obj
+d:\hellodirect\hellodirect\debug\collider.obj
+d:\hellodirect\hellodirect\debug\camera.obj
+d:\hellodirect\hellodirect\debug\bullet.obj
+d:\hellodirect\hellodirect\debug\box.obj
+d:\hellodirect\hellodirect\debug\background.obj
+d:\hellodirect\hellodirect\debug\source.obj
+d:\hellodirect\hellodirect\debug\captain.obj
 e:\github project\hellodirect\debug\hellodirect.exe
 e:\github project\hellodirect\debug\hellodirect.ilk
 e:\github project\hellodirect\debug\hellodirect.pdb
-e:\github project\hellodirect\hellodirect\debug\hellodirect.tlog\cl.command.1.tlog
-e:\github project\hellodirect\hellodirect\debug\hellodirect.tlog\cl.read.1.tlog
-e:\github project\hellodirect\hellodirect\debug\hellodirect.tlog\cl.write.1.tlog
-e:\github project\hellodirect\hellodirect\debug\hellodirect.tlog\link.command.1.tlog
-e:\github project\hellodirect\hellodirect\debug\hellodirect.tlog\link.read.1.tlog
-e:\github project\hellodirect\hellodirect\debug\hellodirect.tlog\link.write.1.tlog
+d:\hellodirect\debug\hellodirect.exe
+d:\hellodirect\debug\hellodirect.ilk
+d:\hellodirect\debug\hellodirect.pdb
+d:\hellodirect\hellodirect\debug\megaman.obj
+d:\hellodirect\hellodirect\debug\hellodirect.tlog\cl.command.1.tlog
+d:\hellodirect\hellodirect\debug\hellodirect.tlog\cl.read.1.tlog
+d:\hellodirect\hellodirect\debug\hellodirect.tlog\cl.write.1.tlog
+d:\hellodirect\hellodirect\debug\hellodirect.tlog\link.command.1.tlog
+d:\hellodirect\hellodirect\debug\hellodirect.tlog\link.read.1.tlog
+d:\hellodirect\hellodirect\debug\hellodirect.tlog\link.write.1.tlog

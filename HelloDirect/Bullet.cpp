@@ -1,55 +1,43 @@
-//#include "Bullet.h"
-//#include "Game.h"
-//
-//Bullet::Bullet(int Left, int Top, int Right, int Bottom)
-//{
-//	left = Left;
-//	top = Top;
-//	right = Right;
-//	bottom = Bottom;
-//	vx = 3.0f;
-//}
-//
-//void Bullet::Add(LPCWSTR filePath, D3DCOLOR transparentColor)
-//{
-//	D3DXIMAGE_INFO info;
-//	HRESULT result = D3DXGetImageInfoFromFile(filePath, &info);
-//	if (result != D3D_OK)
-//	{
-//		return;
-//	}
-//
-//	LPDIRECT3DDEVICE9 d3ddv = CGame::GetInstance()->GetDirect3DDevice();
-//	LPDIRECT3DTEXTURE9 texture;
-//
-//	result = D3DXCreateTextureFromFileEx(
-//		d3ddv,								// Pointer to Direct3D device object
-//		filePath,							// Path to the image to load
-//		info.Width * 2,							// Texture width
-//		info.Height * 2,						// Texture height
-//		1,
-//		D3DUSAGE_DYNAMIC,
-//		D3DFMT_UNKNOWN,
-//		D3DPOOL_DEFAULT,
-//		D3DX_DEFAULT,
-//		D3DX_DEFAULT,
-//		transparentColor,
-//		&info,
-//		NULL,
-//		&texture);								// Created texture pointer
-//
-//	if (result != D3D_OK)
-//	{
-//		OutputDebugString(L"[ERROR] CreateTextureFromFile failed\n");
-//		return;
-//	}
-//
-//	tex = texture;
-//
-//}
-//
-//void Bullet::Render()
-//{
-//	CGame * game = CGame::GetInstance();
-//	game->Draw(x, y, tex, left, top, right, bottom);
-//}
+#include "Bullet.h"
+
+
+
+void Enemy::LoadResources()
+{
+	Textures* texture = Textures::GetInstance();
+
+	texture->Add(ID_TEX_ENEMY, FILEPATH_TEX_ENEMY, D3DCOLOR_XRGB(255, 255, 255));
+
+	Sprites* sprites = Sprites::GetInstance();
+	Animations* animations = Animations::GetInstance();
+
+	LPDIRECT3DTEXTURE9 texCandle = texture->Get(ID_TEX_ENEMY);
+
+	sprites->Add(30001, 268, 85, 298, 128, texCandle); // normal candle
+	sprites->Add(30002, 308, 85, 338, 128, texCandle);
+
+
+	LPANIMATION ani;
+
+	ani = new Animation();
+	ani->Add(30001, 150);
+	ani->Add(30002, 150);
+	animations->Add(0, ani);
+
+	AddAnimation(0);
+
+	//SetPosition(160.0f, 224.0f);
+}
+
+void Enemy::Render()
+{
+	animations[state]->Render(nx, x, y);
+}
+
+void Enemy::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	left = x;
+	top = y;
+	right = x + ENEMY_BBOX_WIDTH;
+	bottom = y + ENEMY_BBOX_HEIGHT;
+}
