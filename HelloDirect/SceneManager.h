@@ -7,27 +7,27 @@
 #include "Bullet.h"
 #include "Grid.h"
 #include "TileMap.h"
-#include "Input.h"
+//#include "Input.h"
 
 
 class SceneManager
 {
 	int IDScene;
 
-	Game* game;
-	Captain* captain;
-	Enemy* enemy;
-	Ground* ground;
+	Game * game;
+	Captain * captain;
+	Enemy * enemy;
+	Ground * ground;
 
-	TileMaps* tilemaps = TileMaps::GetInstance();
-	Textures* textures = Textures::GetInstance();
-	Sprites* sprites = Sprites::GetInstance();
-	Animations* animations = Animations::GetInstance();
+	TileMaps * tilemaps = TileMaps::GetInstance();
+	Textures * textures = Textures::GetInstance();
+	Sprites * sprites = Sprites::GetInstance();
+	Animations * animations = Animations::GetInstance();
 
 	vector<LPGAMEOBJECT> Objects;
 
 public:
-	SceneManager(Game* game, int idScene);
+	SceneManager(Game * game, int idScene);
 	~SceneManager();
 
 	void LoadResources();		// load all sprites and tilemaps
@@ -37,6 +37,6 @@ public:
 	virtual void Render();
 
 	void ChangeScene(int scene);
-	Captain* GetSimon() { return this->captain; }
+	Captain* GetCaptain() { return this->captain; }
 };
 

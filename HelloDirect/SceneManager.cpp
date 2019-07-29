@@ -41,7 +41,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 	}
 
 	captain = new Captain();
-	captain->SetPosition(50.0f, 100.0f);
+	captain->SetPosition(20.0f, 50.0f);
 	Objects.push_back(captain);
 
 	int ID_Obj;
@@ -76,7 +76,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 
 	fs.close();
 	DebugOut(L"Objects size: %d \n", Objects.size());
-}
+ }
 
 void SceneManager::Update(DWORD dt)
 {
@@ -97,6 +97,7 @@ void SceneManager::Update(DWORD dt)
 		if (Objects[i]->isEnable == false)
 			continue;
 
+
 		vector<LPGAMEOBJECT*> coObjects; // truyền con trỏ cấp 2, để trong hàm update có thể thay đổi trực tiếp đến phần tử của Objects
 
 		if (dynamic_cast<Captain*>(Objects[i]))
@@ -114,7 +115,6 @@ void SceneManager::Update(DWORD dt)
 		{
 			coObjects.push_back(&(Objects[i]));
 		}
-
 
 		Objects[i]->Update(dt, &Objects, &coObjects);
 	}

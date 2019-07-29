@@ -10,7 +10,6 @@ Captain::Captain() : GameObject()
 	AddAnimation(JUMP_ANI);
 	AddAnimation(HIT_SIT_ANI);
 	AddAnimation(HIT_STAND_ANI);
-	AddAnimation(HIT_STAND_ANI);
 	AddAnimation(UP_ANI);
 }
 
@@ -158,7 +157,6 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 
 void Captain::Render()
 {
-
 	animations[state]->Render(nx, x, y);
 }
 

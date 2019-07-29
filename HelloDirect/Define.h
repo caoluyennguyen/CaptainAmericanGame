@@ -33,11 +33,11 @@
 
 #define FILEPATH_TEX_STAGE_1		L"Textures\\stage1.png"
 #define FILEPATH_DATA_STAGE_1		L"Textures\\stage1_data.txt"
-#define FILEPATH_OBJECTS_SCENE_1	L"Scenes\\stage1_objects.txt"
+#define FILEPATH_OBJECTS_SCENE_1	L"Textures\\stage1_objects.txt"
 
 #define FILEPATH_TEX_STAGE_2		L"Textures\\stage1.png"
 #define FILEPATH_DATA_STAGE_2		L"Textures\\stage1_data.txt"
-#define FILEPATH_OBJECTS_SCENE_2	L"Scenes\\stage2_objects.txt"
+#define FILEPATH_OBJECTS_SCENE_2	L"Textures\\stage2_objects.txt"
 
 #define FILEPATH_TEX_GROUND			L"Textures\\ground.png"
 #define FILEPATH_TEX_CAP			L"Textures\\Cap.png"
