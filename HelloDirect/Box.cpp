@@ -2,15 +2,15 @@
 
 Ground::Ground() : GameObject()
 {
+	AddAnimation(GROUND_ANI_1);
 
-	Textures* texture = Textures::GetInstance();
+}
 
-	texture->Add(ID_TEX_GROUND, FILEPATH_TEX_GROUND, D3DCOLOR_XRGB(255, 255, 255));
+void Ground::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
+{
+	textures->Add(ID_TEX_GROUND, FILEPATH_TEX_GROUND, D3DCOLOR_XRGB(255, 255, 255));
 
-	Sprites* sprites = Sprites::GetInstance();
-	Animations* animations = Animations::GetInstance();
-
-	LPDIRECT3DTEXTURE9 texGround = texture->Get(ID_TEX_GROUND);
+	LPDIRECT3DTEXTURE9 texGround = textures->Get(ID_TEX_GROUND);
 
 	sprites->Add(40001, 0, 0, 17, 17, texGround);
 
@@ -18,11 +18,7 @@ Ground::Ground() : GameObject()
 
 	ani = new Animation();
 	ani->Add(40001);
-	animations->Add(0, ani);
-
-	AddAnimation(0);
-
-
+	animations->Add(GROUND_ANI_1, ani);
 }
 
 void Ground::Render()

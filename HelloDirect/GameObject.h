@@ -59,22 +59,21 @@ public:
 
 	bool isEnable;
 
-
 	vector<LPANIMATION> animations;
 
 
 	GameObject();
+	virtual void LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations) = 0;
 
 	void SetPosition(float x, float y) { this->x = x; this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx; this->vy = vy; }
 	void SetState(int state) { this->state = state; }
 	void SetOrientation(int nx) { this->nx = nx; }
-	void SetEnable(bool enable) { this->isEnable = enable; }
 
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 	int GetState() { return this->state; }
-	bool IsEnable() { return this->isEnable; }
+	int GetOrientation() { return this->nx; }
 
 	void RenderBoundingBox();
 
@@ -92,7 +91,7 @@ public:
 		float& t, float& nx, float& ny);
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
-	void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
+	void CalcPotentialCollisions(vector<LPGAMEOBJECT*>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
 	void FilterCollision(
 		vector<LPCOLLISIONEVENT>& coEvents,
 		vector<LPCOLLISIONEVENT>& coEventsResult,
@@ -104,7 +103,7 @@ public:
 	void AddAnimation(int aniID);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT*>* coObject = NULL);
 	virtual void Render() = 0;
 };
 

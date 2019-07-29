@@ -1,15 +1,26 @@
 ﻿#include "Captain.h"
 
-void Captain::LoadResources()
+Captain::Captain() : GameObject()
 {
-	Textures* texture = Textures::GetInstance();
+	SetState(STAND);
 
-	texture->Add(ID_TEX_CAPTAIN, FILEPATH_TEX_CAP, D3DCOLOR_XRGB(255, 255, 255));
+	AddAnimation(STAND_ANI);
+	AddAnimation(WALK_ANI);
+	AddAnimation(SIT_ANI);
+	AddAnimation(JUMP_ANI);
+	AddAnimation(HIT_SIT_ANI);
+	AddAnimation(HIT_STAND_ANI);
+	AddAnimation(HIT_STAND_ANI);
+	AddAnimation(UP_ANI);
+}
 
-	Sprites* sprites = Sprites::GetInstance();
-	Animations* animations = Animations::GetInstance();
+void Captain::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
+{
+	//Textures* texture = Textures::GetInstance();
 
-	LPDIRECT3DTEXTURE9 texCap = texture->Get(ID_TEX_CAPTAIN);
+	textures->Add(ID_TEX_CAPTAIN, FILEPATH_TEX_CAP, D3DCOLOR_XRGB(255, 255, 255));
+
+	LPDIRECT3DTEXTURE9 texCap = textures->Get(ID_TEX_CAPTAIN);
 
 #pragma region idle left
 	sprites->Add(10001, 21, 11, 43, 56, texCap);
@@ -40,41 +51,37 @@ void Captain::LoadResources()
 
 	ani = new Animation();
 	ani->Add(10001);
-	animations->Add(STAND, ani);
+	animations->Add(STAND_ANI, ani);
 
 	ani = new Animation();
 	ani->Add(10002);
 	ani->Add(10003);
 	ani->Add(10004);
 	ani->Add(10005);
-	animations->Add(WALK, ani);
+	animations->Add(WALK_ANI, ani);
 
 	ani = new Animation();
 	ani->Add(10058);
-	animations->Add(SIT, ani);
+	animations->Add(SIT_ANI, ani);
 
 	ani = new Animation();
 	ani->Add(10027);
 	ani->Add(10028);
 	ani->Add(10029);
 	ani->Add(10030);
-	animations->Add(JUMP, ani);
+	animations->Add(JUMP_ANI, ani);
 
-	AddAnimation(STAND);
-	AddAnimation(WALK);
-	AddAnimation(SIT);
-	AddAnimation(JUMP);
 #pragma endregion
 
-
-	SetPosition(0.0f, 150.0f);
 }
 
-void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
+void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObjects)
 {
 	GameObject::Update(dt);
 
-	vy += CAPTAIN_GRAVITY;
+	vy += CAPTAIN_GRAVITY*dt;
+
+	if (x < 0) x = 0;
 
 	/*if (y > 224)
 	{
@@ -86,7 +93,6 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	{
 		D3DXVECTOR3 simonPositon;
 		GetPosition(simonPositon.x, simonPositon.y);
-
 	}
 
 	// Check collision between Simon and other objects
@@ -95,7 +101,7 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 
 	coEvents.clear();
 
-	CalcPotentialCollisions(colliable_objects, coEvents);
+	CalcPotentialCollisions(coObjects, coEvents);
 
 	if (coEvents.size() == 0)
 	{
@@ -119,13 +125,31 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			// collision of Simon and Candle -> do nothing -> update x;
+			// collision of Simon and Candle -> do nothing -> update x, y;
 			if (dynamic_cast<Enemy*>(e->obj))
 			{
-				x -= nx * 0.4f;
+				DebugOut(L"%d %d\n", e->nx, e->ny);
+
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
+			}
+			else if (dynamic_cast<Ground*>(e->obj))
+			{
+				x += dx;
+				y += min_ty * dy + ny * 0.1f;
+
+				if (ny != 0) vy = 0;
+			}
+			else
+			{
+				x += min_tx * dx + nx * 0.1f;
+				y += min_ty * dy + ny * 0.1f;
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
 			}
 		}
 	}
+
 
 	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
@@ -154,8 +178,7 @@ void Captain::SetState(int state)
 		break;
 	case JUMP:
 		isStand = true;
-		if (y == 224)
-			vy = -CAPTAIN_JUMP_SPEED_Y;
+		vy = -CAPTAIN_JUMP_SPEED_Y;
 		break;
 	case UP:
 		isStand = true;

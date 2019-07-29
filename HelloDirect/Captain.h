@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Textures.h"
 #include "Define.h"
+#include "Box.h"
 #include "Bullet.h"
 
 using namespace std;
@@ -15,10 +16,10 @@ class Captain : public GameObject
 public:
 	bool isStand = true; 
 
-	Captain() : GameObject() {}
+	Captain();
 
-	void LoadResources();
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	virtual void LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* Objects = NULL, vector<LPGAMEOBJECT*>* coObjects = NULL);
 	void Render();
 	void SetState(int state);
 

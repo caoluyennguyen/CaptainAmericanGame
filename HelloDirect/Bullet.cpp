@@ -1,19 +1,19 @@
 #include "Bullet.h"
 
-
-
-void Enemy::LoadResources()
+Enemy::Enemy() : GameObject()
 {
-	Textures* texture = Textures::GetInstance();
+	AddAnimation(ENEMY_ANI);
 
-	texture->Add(ID_TEX_ENEMY, FILEPATH_TEX_ENEMY, D3DCOLOR_XRGB(255, 255, 255));
+	SetState(IDLE);
+}
 
-	Sprites* sprites = Sprites::GetInstance();
-	Animations* animations = Animations::GetInstance();
+void Enemy::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
+{
+	textures->Add(ID_TEX_ENEMY, FILEPATH_TEX_ENEMY, D3DCOLOR_XRGB(255, 255, 255));
 
-	LPDIRECT3DTEXTURE9 texCandle = texture->Get(ID_TEX_ENEMY);
+	LPDIRECT3DTEXTURE9 texCandle = textures->Get(ID_TEX_ENEMY);
 
-	sprites->Add(30001, 268, 85, 298, 128, texCandle); // normal candle
+	sprites->Add(30001, 268, 85, 298, 128, texCandle);
 	sprites->Add(30002, 308, 85, 338, 128, texCandle);
 
 
@@ -22,11 +22,7 @@ void Enemy::LoadResources()
 	ani = new Animation();
 	ani->Add(30001, 150);
 	ani->Add(30002, 150);
-	animations->Add(0, ani);
-
-	AddAnimation(0);
-
-	//SetPosition(160.0f, 224.0f);
+	animations->Add(ENEMY_ANI, ani);
 }
 
 void Enemy::Render()

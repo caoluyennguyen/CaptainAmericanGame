@@ -128,9 +128,9 @@ void Game::Draw(int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, 
 	spriteHandler->GetTransform(&oldTransform);
 
 	D3DXVECTOR2 center = D3DXVECTOR2(p.x + (right - left) / 2, p.y + (bottom - top) / 2);
-	D3DXVECTOR2 rotate = D3DXVECTOR2(nx > 0 ? -1 : 1, 1);
+	D3DXVECTOR2 scale = D3DXVECTOR2(nx > 0 ? -1 : 1, 1 );
 
-	D3DXMatrixTransformation2D(&newTransform, &center, 0.0f, &rotate, NULL, 0.0f, NULL);
+	D3DXMatrixTransformation2D(&newTransform, &center, 0.0f, &scale, NULL, 0.0f, NULL);
 
 	D3DXMATRIX finalTransform = newTransform * oldTransform;
 	spriteHandler->SetTransform(&finalTransform);

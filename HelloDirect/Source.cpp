@@ -8,77 +8,16 @@
 #include "Game.h"
 #include "GameObject.h"
 #include "Textures.h"
-#include "Captain.h"
-#include "Bullet.h"
+#include "Input.h"
+#include "SceneManager.h"
 #include "TileMap.h"
-#include "Box.h"
 #include "Grid.h"
 
-
 Game* game;
-Captain* captain;
-Enemy* enemy;
-TileMap* tilemap;
-Ground* ground;
+Input* input;
+SceneManager* scenes;
 Unit* unit;
 Grid* grid;
-vector<Ground*> grounds;
-//vector<LPGAMEOBJECT> coObjects;
-
-vector<Unit*> listUnits;
-vector<LPGAMEOBJECT> listObjects;
-
-vector<LPGAMEOBJECT> listStaticObjectsToRender;
-vector<LPGAMEOBJECT> listMovingObjectsToRender;
-
-class KeyHandler : public KeyEventHandler
-{
-	virtual void KeyState(BYTE* state)
-	{
-		/*if (captain->GetState() == JUMP && captain->IsTouchGround() == false)
-			return;*/
-
-		if (game->IsKeyDown(DIK_RIGHT))
-		{
-			captain->nx = 1;
-			captain->SetState(WALK);
-		}
-		else if (game->IsKeyDown(DIK_LEFT))
-		{
-			captain->nx = -1;
-			captain->SetState(WALK);
-		}
-		else if (game->IsKeyDown(DIK_UP))
-		{
-			captain->SetState(SIT);
-		}
-		else
-		{
-			captain->SetState(STAND);
-		}
-	}
-
-	virtual void OnKeyDown(int KeyCode)
-	{
-		DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-
-		switch (KeyCode)
-		{
-		case DIK_Z:
-			captain->SetState(JUMP);
-			break;
-		default:
-			break;
-		}
-	}
-
-	virtual void OnKeyUp(int KeyCode)
-	{
-		DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
-	}
-};
-
-KeyHandler* keyHandler;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -107,19 +46,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		tilemap->Draw(game->GetCameraPositon());
-
-
-		captain->Render();
-		captain->RenderBoundingBox();
-
-		/*for (int i = 0; i < coObjects.size(); i++)
-			coObjects[i]->Render();*/
-		for (auto obj : listStaticObjectsToRender)
-		{
-			obj->Render();
-			obj->RenderBoundingBox();
-		}
+		scenes->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -128,6 +55,7 @@ void Render()
 	// display back buffer content to the screen
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
+
 
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
 {
@@ -176,67 +104,41 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	return hWnd;
 }
 
-void GetObjectFromGrid()
-{
-	listUnits.clear();
-	listObjects.clear();
-	listStaticObjectsToRender.clear();
-	listMovingObjectsToRender.clear();
-
-	grid->Get(game->GetCameraPositon(), listUnits);
-
-	DebugOut(L"%d \n", listUnits.size());
-
-	for (int i = 0; i < listUnits.size(); i++)
-	{
-		LPGAMEOBJECT obj = listUnits[i]->GetObj();
-
-		if (dynamic_cast<Enemy*>(obj))
-			listStaticObjectsToRender.push_back(obj);
-
-		listObjects.push_back(obj);
-	}
-}
-
-void UpdateGrid()
-{
-	for (int i = 0; i < listUnits.size(); i++)
-	{
-		float newPos_x, newPos_y;
-		listUnits[i]->GetObj()->GetPosition(newPos_x, newPos_y);
-		listUnits[i]->Move(newPos_x, newPos_y);
-	}
-}
+//void GetObjectFromGrid()
+//{
+//	listUnits.clear();
+//	listObjects.clear();
+//	listStaticObjectsToRender.clear();
+//	listMovingObjectsToRender.clear();
+//
+//	grid->Get(game->GetCameraPositon(), listUnits);
+//
+//	DebugOut(L"%d \n", listUnits.size());
+//
+//	for (int i = 0; i < listUnits.size(); i++)
+//	{
+//		LPGAMEOBJECT obj = listUnits[i]->GetObj();
+//
+//		if (dynamic_cast<Enemy*>(obj))
+//			listStaticObjectsToRender.push_back(obj);
+//
+//		listObjects.push_back(obj);
+//	}
+//}
+//
+//void UpdateGrid()
+//{
+//	for (int i = 0; i < listUnits.size(); i++)
+//	{
+//		float newPos_x, newPos_y;
+//		listUnits[i]->GetObj()->GetPosition(newPos_x, newPos_y);
+//		listUnits[i]->Move(newPos_x, newPos_y);
+//	}
+//}
 
 void Update(DWORD dt)
 {
-	GetObjectFromGrid();
-	vector<LPGAMEOBJECT> coObjects;
-
-	for (auto obj : listObjects)
-	{
-		if (dynamic_cast<Ground*>(obj))
-		{
-			coObjects.push_back(obj);
-		}
-	}
-
-	captain->Update(dt, &coObjects);
-
-	for (UINT i = 0; i < listObjects.size(); i++)
-	{
-		LPGAMEOBJECT object = listObjects[i];
-		object->Update(dt, &listObjects);
-	}
-
-	// render camera
-	float cx, cy;
-	captain->GetPosition(cx, cy);
-
-	if (cx > SCREEN_WIDTH / 2 && cx + SCREEN_WIDTH / 2 < tilemap->GetMapWidth())
-		game->SetCameraPosition(cx - SCREEN_WIDTH / 2, 0);
-
-	UpdateGrid();
+	scenes->Update(dt);
 
 }
 
@@ -283,43 +185,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	grid = new Grid(1536, 480, DEFAULT_CELL_WIDTH, DEFAULT_CELL_HEIGHT);
-
 	game = Game::GetInstance();
 	game->Init(hWnd);
 
-	captain = new Captain();
+	scenes = new SceneManager(game, STAGE_1);
+	scenes->LoadResources();
+	scenes->LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
 
-	keyHandler = new KeyHandler();
-	game->InitKeyboard(keyHandler);
-	captain->LoadResources();
-
-	enemy = new Enemy();
-	enemy->LoadResources();
-	enemy->SetPosition(160.0f, 200.0f);
-	//coObjects.push_back(candle);
-	unit = new Unit(grid, enemy, 160.0f, 200.0f);
-
-	enemy = new Enemy();
-	enemy->LoadResources();
-	enemy->SetPosition(900.0f, 200.0f);
-	//coObjects.push_back(candle);
-	unit = new Unit(grid, enemy, 900.0f, 200.0f);
-
-	tilemap = new TileMap(0, FILEPATH_TEX_STAGE_1, FILEPATH_DATA_STAGE_1, 2048, 288, 16, 16);
-	tilemap->LoadResources();
-	tilemap->Load_MapData();
-
-	for (int i = 0; i < 48; i++)
-	{
-		ground = new Ground();
-		ground->SetPosition(17 * i, 240.0f);
-		grounds.push_back(ground);
-		unit = new Unit(grid, ground, 17 * i, 240.0f);
-	}
-
-	/*for (int i = 0; i < grounds.size(); i++)
-		coObjects.push_back(grounds[i]);*/
+	input = new Input(game, scenes->GetSimon());
+	game->InitKeyboard(input);
 
 	Run();
 

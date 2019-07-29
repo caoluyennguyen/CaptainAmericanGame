@@ -31,9 +31,15 @@
 
 #pragma region PathFile
 
-#define FILEPATH_TEX_GROUND			L"Textures\\ground.png"
 #define FILEPATH_TEX_STAGE_1		L"Textures\\stage1.png"
 #define FILEPATH_DATA_STAGE_1		L"Textures\\stage1_data.txt"
+#define FILEPATH_OBJECTS_SCENE_1	L"Scenes\\stage1_objects.txt"
+
+#define FILEPATH_TEX_STAGE_2		L"Textures\\stage1.png"
+#define FILEPATH_DATA_STAGE_2		L"Textures\\stage1_data.txt"
+#define FILEPATH_OBJECTS_SCENE_2	L"Scenes\\stage2_objects.txt"
+
+#define FILEPATH_TEX_GROUND			L"Textures\\ground.png"
 #define FILEPATH_TEX_CAP			L"Textures\\Cap.png"
 #define FILEPATH_TEX_ENEMY			L"Textures\\Enemy.png"
 
@@ -41,6 +47,10 @@
 
 
 #pragma region State
+
+// Scene
+#define STAGE_1		0
+#define STAGE_2		1
 
 // Simon
 #define STAND		0
@@ -51,10 +61,29 @@
 #define HIT_STAND	5
 #define UP			6
 
+// Enemy
+#define IDLE		0
 
 #pragma endregion
 
+#pragma region Animation ID
 
+// Captain
+#define STAND_ANI		101
+#define WALK_ANI		102
+#define SIT_ANI			103
+#define JUMP_ANI		104
+#define HIT_SIT_ANI		105
+#define HIT_STAND_ANI	106
+#define UP_ANI			107
+
+// Enemy
+#define ENEMY_ANI		301
+
+// Ground
+#define GROUND_ANI_1	401
+
+#pragma endregion
 
 #pragma region BBox Size
 
@@ -77,6 +106,12 @@
 
 #pragma endregion
 
+#pragma region ID objects to load from file
+
+#define	ENEMY		0
+#define	GROUND		1
+
+#pragma endregion
 
 
 

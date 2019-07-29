@@ -1,9 +1,11 @@
 ﻿#pragma once
 
+#include <Windows.h>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
 #include "Textures.h"
 #include "Sprites.h"
@@ -31,8 +33,7 @@ class TileMap
 public:
 	vector<vector<int>> map_Data;	// ma trận lưu dữ liệu map
 
-	Sprites* sprites;		// lưu các tile
-
+	Sprites* sprites;	// lưu các tile
 
 	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height);
 
@@ -42,6 +43,18 @@ public:
 	void Draw(int start_col, int end_col);
 
 	int GetMapWidth() { return map_Width; }
-
 };
 
+typedef TileMap* LPTILEMAP;
+
+class TileMaps
+{
+	static TileMaps* _instance;
+	unordered_map<int, LPTILEMAP> tilemaps;
+
+public:
+	void Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height);
+	LPTILEMAP Get(int ID) { return tilemaps[ID]; }
+
+	static TileMaps* GetInstance();
+};
