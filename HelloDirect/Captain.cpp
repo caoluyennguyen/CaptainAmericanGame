@@ -131,7 +131,7 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
-			}
+			}/*
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
 				x += dx;
@@ -145,7 +145,7 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 				y += min_ty * dy + ny * 0.1f;
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
-			}
+			}*/
 		}
 	}
 

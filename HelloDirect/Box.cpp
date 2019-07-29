@@ -30,6 +30,6 @@ void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + GROUND_BBOX_WIDTH + 16;
-	b = y + GROUND_BBOX_HEIGHT + 16;
+	r = x + GROUND_BBOX_WIDTH;
+	b = y + GROUND_BBOX_HEIGHT;
 }
