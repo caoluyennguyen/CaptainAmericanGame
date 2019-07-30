@@ -2,10 +2,10 @@
 
 
 
-Input::Input(Game* game, Captain* captain)
+Input::Input(Game* game, SceneManager* scene)
 {
 	this->game = game;
-	this->captain = captain;
+	this->scene = scene;
 }
 
 Input::~Input()
@@ -14,8 +14,9 @@ Input::~Input()
 
 void Input::KeyState(BYTE* state)
 {
-	/*if (captain->GetState() == JUMP && captain->IsTouchGround() == false)
-			return;*/
+	Captain* captain = scene->GetCaptain();
+	if (captain->GetState() == JUMP && captain->IsTouchGround() == false)
+		return;
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
@@ -44,7 +45,7 @@ void Input::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_Z:
-		captain->SetState(JUMP);
+		scene->GetCaptain()->SetState(JUMP);
 		break;
 	default:
 		break;
@@ -55,3 +56,41 @@ void Input::OnKeyUp(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 }
+
+//
+//void Input::Captain_Walk_Left()
+//{
+//	scene->GetCaptain()->SetOrientation(-1);
+//	scene->GetCaptain()->SetState(WALK);
+//}
+//
+//void Input::Captain_Walk_Right()
+//{
+//	scene->GetCaptain()->SetOrientation(1);
+//	scene->GetCaptain()->SetState(WALK);
+//}
+//
+//void Input::Captain_Jump()
+//{
+//	if (scene->GetCaptain()->GetState() == JUMP ||
+//		scene->GetCaptain()->GetState() == HIT_STAND ||
+//		scene->GetCaptain()->GetState() == HIT_SIT)
+//		return;
+//
+//	scene->GetCaptain()->SetState(JUMP);
+//}
+//
+//void Input::Captain_Hit()
+//{
+//	if ((scene->GetCaptain()->GetState() == HIT_STAND || scene->GetCaptain()->GetState() == HIT_SIT))
+//		return;
+//
+//	if (scene->GetCaptain()->GetState() == STAND || scene->GetCaptain()->GetState() == JUMP)
+//	{
+//		scene->GetCaptain()->SetState(HIT_STAND);
+//	}
+//	else if (scene->GetCaptain()->GetState() == SIT)
+//	{
+//		scene->GetCaptain()->SetState(HIT_SIT);
+//	}
+//}

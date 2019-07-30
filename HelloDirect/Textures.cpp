@@ -1,6 +1,6 @@
 #include "Textures.h"
 
-Textures* Textures::_instance = NULL;
+Textures * Textures::_instance = NULL;
 
 void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 {
@@ -44,7 +44,7 @@ void Textures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 	DebugOut(L"[INFO] Load texture successfully: id=%d, path=%s \n", id, filePath);
 }
 
-Textures* Textures::GetInstance()
+Textures * Textures::GetInstance()
 {
 	if (_instance == NULL) _instance = new Textures();
 	return _instance;

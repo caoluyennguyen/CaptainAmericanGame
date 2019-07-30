@@ -16,8 +16,6 @@
 Game* game;
 Input* input;
 SceneManager* scenes;
-Unit* unit;
-Grid* grid;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -55,7 +53,6 @@ void Render()
 	// display back buffer content to the screen
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
-
 
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
 {
@@ -139,7 +136,6 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 void Update(DWORD dt)
 {
 	scenes->Update(dt);
-
 }
 
 int Run()
@@ -190,9 +186,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	scenes = new SceneManager(game, STAGE_1);
 	scenes->LoadResources();
-	scenes->LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
+	scenes->ChangeScene(STAGE_1);
 
-	input = new Input(game, scenes->GetCaptain());
+	input = new Input(game, scenes);
 	game->InitKeyboard(input);
 
 	Run();

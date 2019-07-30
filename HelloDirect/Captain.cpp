@@ -11,6 +11,12 @@ Captain::Captain() : GameObject()
 	AddAnimation(HIT_SIT_ANI);
 	AddAnimation(HIT_STAND_ANI);
 	AddAnimation(UP_ANI);
+
+	score = 0;
+	item = -1;
+	energy = 99;
+	life = 3;
+	HP = 10;
 }
 
 void Captain::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -74,12 +80,19 @@ void Captain::LoadResources(Textures*& textures, Sprites*& sprites, Animations*&
 
 }
 
-void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJECT*>* coObjects)
+void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);
 
-	vy += CAPTAIN_GRAVITY*dt;
+	vy += CAPTAIN_GRAVITY * dt;
 
+	// Reset untouchable timer if untouchable time has passed
+	if (GetTickCount() - untouchable_start > CAPTAIN_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		isUntouchable = false;
+	}
+	
 	if (x < 0) x = 0;
 
 	/*if (y > 224)
@@ -93,6 +106,7 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 		D3DXVECTOR3 simonPositon;
 		GetPosition(simonPositon.x, simonPositon.y);
 	}
+
 
 	// Check collision between Simon and other objects
 	vector<LPCOLLISIONEVENT> coEvents;
@@ -124,14 +138,13 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			// collision of Simon and Candle -> do nothing -> update x, y;
-			if (dynamic_cast<Enemy*>(e->obj))
+			/*if (dynamic_cast<Enemy*>(e->obj))
 			{
 				DebugOut(L"%d %d\n", e->nx, e->ny);
 
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
-			}/*
+			}
 			else if (dynamic_cast<Ground*>(e->obj))
 			{
 				x += dx;
@@ -146,6 +159,55 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
 			}*/
+			if (dynamic_cast<Ground*>(e->obj))
+			{
+				if (ny != 0)
+				{
+					if (ny == -1)
+					{
+						vy = 0;
+						isTouchGround = true;
+					}
+					else
+					{
+						y += dy;
+						isTouchGround = false;
+					}
+				}
+			}
+			//else if (dynamic_cast<Enemy*>(e->obj))
+			//{
+			//	if (isUntouchable == false)
+			//	{
+			//		// nếu dơi tông trúng simon thì cho huỷ
+			//		if (dynamic_cast<Enemy*>(e->obj))
+			//		{
+			//			Enemy* enemy = dynamic_cast<Enemy*>(e->obj);
+			//			enemy->SetState(ENEMY_DESTROYED);
+			//		}
+
+			//		if (e->nx != 0)
+			//		{
+			//			if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
+			//			else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
+			//		}
+
+			//		SetState(DEFLECT);
+			//		StartUntouchable();
+
+			//		LoseHP(2);
+			//	}
+			//	else
+			//	{
+			//		if (e->nx != 0) x += dx;
+			//		if (e->ny != 0) y += dy;
+			//	}
+			//}
+			else
+			{
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+			}
 		}
 	}
 
@@ -157,7 +219,19 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* Objects, vector<LPGAMEOBJEC
 
 void Captain::Render()
 {
-	animations[state]->Render(nx, x, y);
+	//animations[state]->Render(nx, x, y);
+	/*if (isUntouchable) 
+	{
+		int r = rand() % 2;
+
+		if (r == 0) animations[state]->Render(1, nx, x, y);
+		else animations[state]->Render(1, nx, x, y, 100);
+	}
+	else
+	{
+		animations[state]->Render(1, nx, x, y);
+	}*/
+	animations[state]->Render(1, nx, x, y);
 }
 
 void Captain::SetState(int state)
@@ -175,8 +249,10 @@ void Captain::SetState(int state)
 		else vx = -CAPTAIN_WALKING_SPEED;
 		break;
 	case JUMP:
+		isTouchGround = false;
 		isStand = true;
 		vy = -CAPTAIN_JUMP_SPEED_Y;
+		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case UP:
 		isStand = true;
@@ -197,6 +273,58 @@ void Captain::GetBoundingBox(float& left, float& top, float& right, float& botto
 }
 
 
+void Captain::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
+}
+
+void Captain::LoseHP(int x)
+{
+	HP -= x;
+
+	if (HP < 0)
+	{
+		HP = 0;
+		life -= 1;
+	}
+}
+
+void Captain::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
+{
+	float captain_l, captain_t, captain_r, captain_b;
+
+	GetBoundingBox(captain_l, captain_t, captain_r, captain_b);
+
+	for (UINT i = 0; i < listEnemy->size(); i++)
+	{
+		LPGAMEOBJECT enemy = listEnemy->at(i);
+
+		// Không cần xét vùng active nữa khi nó đang active / destroyed
+		if (enemy->GetState() == ENEMY_ACTIVE || enemy->GetState() == ENEMY_DESTROYED)
+			continue;
+
+		float enemy_l, enemy_t, enemy_r, enemy_b;
+		enemy->GetActiveBoundingBox(enemy_l, enemy_t, enemy_r, enemy_b);
+
+		/*if (GameObject::AABB(captain_l, captain_t, captain_r, captain_b, enemy_l, enemy_t, enemy_r, enemy_b) == true)
+		{
+			D3DXVECTOR2 enemyEntryPostion = enemy->GetEntryPosition();
+
+			if (dynamic_cast<Enemy*>(enemy))
+			{
+				Enemy* enemy = dynamic_cast<Enemy*>(enemy);
+				enemy->SetState(ENEMY_ACTIVE);
+				if (enemy->IsAbleToActivate() == true)
+				{
+					if (enemyEntryPostion.x < x) enemy->SetOrientation(1);
+					else enemy->SetOrientation(-1);
+
+					enemy->SetState(ZOMBIE_ACTIVE);
+				}
+			}
+		}*/
+	}
+}
 
 
 

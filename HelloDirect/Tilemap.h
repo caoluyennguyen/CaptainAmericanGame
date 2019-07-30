@@ -15,8 +15,7 @@ using namespace std;
 
 class TileMap
 {
-	//vector<vector<int>> map_Data;	// ma trận lưu dữ liệu map
-
+	
 	int map_Width;			// chiều rộng của map
 	int map_Height;			// chiều cao của map
 
@@ -33,28 +32,36 @@ class TileMap
 public:
 	vector<vector<int>> map_Data;	// ma trận lưu dữ liệu map
 
-	Sprites* sprites;	// lưu các tile
+	vector<vector<int>> min_max_col_to_draw;
+	int index = 0; // index hiện tại của min_max_col_to_draw
 
+	int start_col_to_draw;
+	int end_col_to_draw;
+
+	Sprites * sprites;	// lưu các tile
+
+	TileMap() {}
 	TileMap(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height);
 
 	void LoadResources();	// load tất cả các block tile lưu vào sprites
 	void Load_MapData();	// load ma trận dữ liệu map 
+	void CreateZoneToDraw(); // khởi tạo vector 2 chiều min_max_col_to_draw
 	void Draw(D3DXVECTOR3 camPosition);	// vẽ tất cả các tile nằm trong camera
 	void Draw(int start_col, int end_col);
 
 	int GetMapWidth() { return map_Width; }
 };
 
-typedef TileMap* LPTILEMAP;
+typedef TileMap * LPTILEMAP;
 
 class TileMaps
 {
-	static TileMaps* _instance;
+	static TileMaps * _instance;
 	unordered_map<int, LPTILEMAP> tilemaps;
 
 public:
 	void Add(int ID, LPCWSTR filePath_tex, LPCWSTR filePath_data, int map_width, int map_height, int tile_width, int tile_height);
 	LPTILEMAP Get(int ID) { return tilemaps[ID]; }
 
-	static TileMaps* GetInstance();
+	static TileMaps * GetInstance();
 };

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3dx9.h>
@@ -21,10 +21,10 @@ class Sprite
 
 public:
 	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
-	void Draw(int nx, float x, float y, int alpha = 255);
+	void Draw(int accordingCam, int nx, float x, float y, int alpha = 255);
 };
 
-typedef Sprite* LPSPRITE;
+typedef Sprite * LPSPRITE;
 
 /*
 	Sprite Manager Class
@@ -63,36 +63,37 @@ typedef AnimationFrame* LPANIMATION_FRAME;
 */
 class Animation
 {
-
+	DWORD animStartTime;
 	DWORD lastFrameTime;
 	int defaultTime;
 	int currentFrame;
 	vector<LPANIMATION_FRAME> frames;
 
-	bool isOverAnimation = false;
-
 public:
 
 	Animation(int defaultTime = 100);
 
-	bool IsOver() { return currentFrame == frames.size() - 1; }
-	void Reset() { /*isOverAnimation = false;*/ currentFrame = -1; }
+	void SetAniStartTime(DWORD t) { animStartTime = t; }
+	bool IsOver(DWORD dt) { return GetTickCount() - animStartTime >= dt; }
+	bool IsRenderingLastFrame() { return currentFrame == frames.size() - 1; }
+	void Reset() { currentFrame = -1; }
 
 	int GetCurrentFrame() { return currentFrame; }
 	int GetFramesSize() { return frames.size(); }
 
 	void Add(int spriteID, DWORD time = 0);
-	void Render(int nx, float x, float y, int alpha = 255);
+	void Render(int accordingCam, int nx, float x, float y, int alpha = 255);
+	void RenderByID(int currentID, int nx, float x, float y, int alpha = 255);
 };
 
-typedef Animation* LPANIMATION;
+typedef Animation * LPANIMATION;
 
 /*
 	Manage all animations
 */
 class Animations
 {
-	static Animations* _instance;
+	static Animations * _instance;
 	unordered_map<int, LPANIMATION> animations;
 
 public:

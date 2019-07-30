@@ -1,6 +1,12 @@
-﻿  Captain.cpp
+﻿  SceneManager.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 D:\HelloDirect\HelloDirect\Define.h(17,1): warning C4005:  'DIRECTINPUT_VERSION': macro redefinition
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h(42): message :  see previous definition of 'DIRECTINPUT_VERSION'
-D:\HelloDirect\HelloDirect\Captain.cpp(154,20): warning C4018:  '<': signed/unsigned mismatch
+D:\HelloDirect\HelloDirect\Define.h(122,1): warning C4005:  'CAPTAIN_WALKING_SPEED': macro redefinition
+D:\HelloDirect\HelloDirect\Define.h(24): message :  see previous definition of 'CAPTAIN_WALKING_SPEED'
+D:\HelloDirect\HelloDirect\Define.h(124,1): warning C4005:  'CAPTAIN_GRAVITY': macro redefinition
+D:\HelloDirect\HelloDirect\Define.h(27): message :  see previous definition of 'CAPTAIN_GRAVITY'
+D:\HelloDirect\HelloDirect\SceneManager.cpp(87,20): warning C4018:  '<': signed/unsigned mismatch
+D:\HelloDirect\HelloDirect\SceneManager.cpp(117,20): warning C4018:  '<': signed/unsigned mismatch
+D:\HelloDirect\HelloDirect\SceneManager.cpp(143,20): warning C4018:  '<': signed/unsigned mismatch
   HelloDirect.vcxproj -> D:\HelloDirect\Debug\HelloDirect.exe

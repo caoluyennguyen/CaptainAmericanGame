@@ -16,13 +16,13 @@ using namespace std;
 */
 class Textures
 {
-	static Textures* _instance;
+	static Textures * _instance;
 	unordered_map<int, LPDIRECT3DTEXTURE9> textures;
 
 public:
 	void Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor);
 	LPDIRECT3DTEXTURE9 Get(int id) { return textures[id]; }
 
-	static Textures* GetInstance();
+	static Textures * GetInstance();
 };
 

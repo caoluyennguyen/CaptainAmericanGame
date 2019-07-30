@@ -23,7 +23,7 @@ void Ground::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& 
 
 void Ground::Render()
 {
-	animations[0]->Render(-1, x, y);
+	animations[0]->Render(1, -1, x, y);
 }
 
 void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -32,4 +32,9 @@ void Ground::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + GROUND_BBOX_WIDTH;
 	b = y + GROUND_BBOX_HEIGHT;
+}
+
+void Ground::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
+{
+	GetBoundingBox(left, top, right, bottom);
 }

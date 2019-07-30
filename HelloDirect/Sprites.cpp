@@ -11,14 +11,14 @@ Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTU
 	this->texture = tex;
 }
 
-void Sprite::Draw(int nx, float x, float y, int alpha)
+void Sprite::Draw(int accordingCam, int nx, float x, float y, int alpha)
 {
 	Game* game = Game::GetInstance();
-	game->Draw(nx, x, y, texture, left, top, right, bottom, alpha);
+	game->Draw(accordingCam, nx, x, y, texture, left, top, right, bottom, alpha);
 }
 
 
-Sprites* Sprites::_instance = NULL;
+Sprites * Sprites::_instance = NULL;
 
 void Sprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
@@ -26,7 +26,7 @@ void Sprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTE
 	sprites[id] = sprite;
 }
 
-Sprites* Sprites::GetInstance()
+Sprites * Sprites::GetInstance()
 {
 	if (_instance == NULL) _instance = new Sprites();
 	return _instance;
@@ -49,7 +49,7 @@ void Animation::Add(int spriteID, DWORD time)
 	frames.push_back(frame);
 }
 
-void Animation::Render(int nx, float x, float y, int alpha)
+void Animation::Render(int accordingCam, int nx, float x, float y, int alpha)
 {
 	DWORD now = GetTickCount();
 
@@ -61,30 +61,38 @@ void Animation::Render(int nx, float x, float y, int alpha)
 	else
 	{
 		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t) {
+		if (now - lastFrameTime >= t) {
 			currentFrame++;
 			lastFrameTime = now;
 
-			/*if (currentFrame == frames.size() - 1)
-			{
-				isOverAnimation = true;
-			}*/
-
 			if (currentFrame >= frames.size())
 			{
-				//Reset();
 				currentFrame = 0;
 			}
 		}
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(nx, x, y, alpha);
+	frames[currentFrame]->GetSprite()->Draw(accordingCam, nx, x, y, alpha);
+}
+
+void Animation::RenderByID(int currentID, int nx, float x, float y, int alpha)
+{
+	if (frames.size() <= 5) // normal whip, short chain
+	{
+		frames[currentID]->GetSprite()->Draw(1, nx, x, y, alpha);
+	}
+	else  // == 12, long chain
+	{
+		int rd = rand() % 4;
+
+		frames[currentID * 4 + rd]->GetSprite()->Draw(1, nx, x, y, alpha);
+	}
 }
 
 
-Animations* Animations::_instance = NULL;
+Animations * Animations::_instance = NULL;
 
-Animations* Animations::GetInstance()
+Animations * Animations::GetInstance()
 {
 	if (_instance == NULL) _instance = new Animations();
 	return _instance;
