@@ -15,9 +15,6 @@ public:
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode);
 
-	/*void Captain_Walk_Left();
-	void Captain_Walk_Right();
-	void Captain_Jump();
-	void Captain_Hit();*/
+	void Captain_Throw_Shield();
 };
 

@@ -29,7 +29,6 @@ void TileMap::LoadResources()
 
 	texture->Add(ID, filePath_tex, D3DCOLOR_XRGB(255, 255, 255));
 
-
 	LPDIRECT3DTEXTURE9 texTileMap = texture->Get(ID);
 
 
@@ -94,12 +93,11 @@ void TileMap::CreateZoneToDraw()
 	switch (ID)
 	{
 	case STAGE_1:
-		min_max_col_to_draw.push_back({ 0, 48 });
+		min_max_col_to_draw.push_back({ 0, 24 });
 		break;
-	case STAGE_2:
-		min_max_col_to_draw.push_back({ 0, 96 });
-		min_max_col_to_draw.push_back({ 96, 128 });
-		min_max_col_to_draw.push_back({ 128, 176 });
+	case STAGE_1_BOSS:
+		min_max_col_to_draw.push_back({ 0, 16 });
+		//min_max_col_to_draw.push_back({ 128, 176 });
 		break;
 	default:
 		break;
@@ -118,7 +116,7 @@ void TileMap::Draw(int start_col, int end_col)
 void TileMap::Draw(D3DXVECTOR3 camPosition)
 {
 	int start_col_to_draw = (int)camPosition.x / 16;
-	int end_col_to_draw = (int)(camPosition.x + SCREEN_WIDTH) / 16 - 10;
+	int end_col_to_draw = (int)(camPosition.x + SCREEN_WIDTH) / 16 - 2;
 
 	for (int i = 0; i < nums_row; i++)
 	{

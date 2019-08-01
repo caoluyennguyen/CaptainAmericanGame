@@ -7,6 +7,9 @@
 #include "Define.h"
 #include "Box.h"
 #include "Bullet.h"
+#include "Shield.h"
+#include "Shooter.h"
+#include "Rocketer.h"
 
 using namespace std;
 
@@ -22,7 +25,8 @@ class Captain : public GameObject
 	DWORD untouchable_start = 0;
 
 public:
-	bool isStand = true; 
+	bool isStand = false;
+	bool hasShield = true; 
 	bool isTouchGround = false;
 	int changeScene = -1;
 

@@ -1,6 +1,6 @@
 ﻿#include "Game.h"
 
-Game* Game::_instance = NULL;
+Game * Game::_instance = NULL;
 
 void Game::InitKeyboard(LPKEYEVENTHANDLER handler)
 {

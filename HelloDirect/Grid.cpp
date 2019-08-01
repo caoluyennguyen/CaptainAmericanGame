@@ -39,10 +39,6 @@ Grid::Grid(int map_width, int map_height, int cell_width, int cell_height)
 			cells[i][j] = NULL;
 }
 
-Grid::~Grid()
-{
-}
-
 void Grid::Add(Unit* unit)
 {
 	int row = (int)(unit->y / cell_height);
@@ -91,7 +87,7 @@ void Grid::Move(Unit* unit, float x, float y)
 void Grid::Get(D3DXVECTOR3 camPosition, vector<Unit*>& listUnits)
 {
 	int start_col = (int)(camPosition.x / cell_width);
-	int end_col = ceil((camPosition.x + SCREEN_WIDTH) / cell_width) - 1;
+	int end_col = ceil((camPosition.x + SCREEN_WIDTH) / cell_width);
 
 	for (int i = 0; i < nums_row; i++)
 	{
@@ -105,33 +101,32 @@ void Grid::Get(D3DXVECTOR3 camPosition, vector<Unit*>& listUnits)
 				{
 					listUnits.push_back(unit);
 				}
-				//listUnits.push_back(unit);
 				unit = unit->next;
 			}
 		}
 	}
 }
-
-void Grid::Out()
-{
-	for (int i = 0; i < nums_row; i++)
-	{
-		for (int j = 0; j < nums_col; j++)
-		{
-			int c = 0;
-			Unit* unit = cells[i][j];
-
-			while (unit)
-			{
-				c++;
-				unit = unit->next;
-			}
-
-			DebugOut(L"%d\t", c);
-		}
-
-		DebugOut(L"\n");
-	}
-}
+//
+//void Grid::Out()
+//{
+//	for (int i = 0; i < nums_row; i++)
+//	{
+//		for (int j = 0; j < nums_col; j++)
+//		{
+//			int c = 0;
+//			Unit* unit = cells[i][j];
+//
+//			while (unit)
+//			{
+//				c++;
+//				unit = unit->next;
+//			}
+//
+//			DebugOut(L"%d\t", c);
+//		}
+//
+//		DebugOut(L"\n");
+//	}
+//}
 
 

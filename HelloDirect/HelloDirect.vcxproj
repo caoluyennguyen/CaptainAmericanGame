@@ -128,7 +128,11 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="Rocketer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Shield.cpp" />
+    <ClCompile Include="Shooter.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -146,7 +150,11 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Rocket.h" />
+    <ClInclude Include="Rocketer.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Shield.h" />
+    <ClInclude Include="Shooter.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tilemap.h" />

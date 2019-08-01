@@ -7,25 +7,31 @@
 #include "Captain.h"
 #include "Box.h"
 #include "Bullet.h"
-//#include "Input.h"
+#include "Shield.h"
+#include "Shooter.h"
+#include "Rocketer.h"
 
 
 class SceneManager
 {
 	int IDScene;
 
-	Game * game;
-	Grid * grid;
-	Unit * unit;
+	Game* game;
+	Grid* grid;
+	Unit* unit;
 
-	Captain * captain =  new Captain();
-	Enemy * enemy = new Enemy();
-	Ground * ground = new Ground();
+	Captain* captain = new Captain();
+	//Enemy* enemy = new Enemy();
+	Shield* shield = new Shield();
+	Ground* ground = new Ground();
+	Shooter* shooter = new Shooter();
+	Rocketer* rocketer = new Rocketer();
+	Bullet* bullet = new Bullet();
 
-	TileMaps * tilemaps = TileMaps::GetInstance();
-	Textures * textures = Textures::GetInstance();
-	Sprites * sprites = Sprites::GetInstance();
-	Animations * animations = Animations::GetInstance();
+	TileMaps* tilemaps = TileMaps::GetInstance();
+	Textures* textures = Textures::GetInstance();
+	Sprites* sprites = Sprites::GetInstance();
+	Animations* animations = Animations::GetInstance();
 
 	vector<Unit*> listUnits;
 	vector<LPGAMEOBJECT> listObjects;
@@ -60,13 +66,17 @@ public:
 	int GetIDScene() { return this->IDScene; }
 
 	Captain* GetCaptain() { return this->captain; }
-	Enemy* GetBoss() { return this->enemy; }
+	//Enemy* GetBoss() { return this->enemy; }
+	Shield* GetShield() { return this->shield; }
 
 
 	bool IsUsingStopWatch() { return isUsingStopWatch; }
 	void StartStopWatch() { isUsingStopWatch = true; stopWatchCounter = GetTickCount(); }
 
 	void Captain_Update(DWORD dt);
-	void Enemy_Update(DWORD dt);
+	//void Enemy_Update(DWORD dt);
+	void Shield_Update(DWORD dt);
+	void Shooter_Update(DWORD dt, LPGAMEOBJECT& object);
+	void Rocketer_Update(DWORD dt, LPGAMEOBJECT& object);
 };
 

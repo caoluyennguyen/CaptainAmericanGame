@@ -1,76 +1,71 @@
 #include "Bullet.h"
 
-Enemy::Enemy() : GameObject()
+Bullet::Bullet()
 {
-	AddAnimation(ENEMY_ANI);
-
-	SetState(ENEMY_ACTIVE);
+	AddAnimation(BULLET_ANI);
+	SetState(BULLET);
 }
 
-void Enemy::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
+
+Bullet::~Bullet()
 {
-	textures->Add(ID_TEX_ENEMY, FILEPATH_TEX_ENEMY, D3DCOLOR_XRGB(255, 255, 255));
+}
 
-	LPDIRECT3DTEXTURE9 texCandle = textures->Get(ID_TEX_ENEMY);
+void Bullet::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
+{
+	textures->Add(ID_TEX_BULLET, FILEPATH_TEX_SMALL_ENEMY, D3DCOLOR_XRGB(255, 255, 255));
 
-	sprites->Add(30001, 268, 85, 298, 128, texCandle);
-	sprites->Add(30002, 308, 85, 338, 128, texCandle);
+	LPDIRECT3DTEXTURE9 texFireball = textures->Get(ID_TEX_BULLET);
+
+	sprites->Add(70001, 265, 33, 271, 39, texFireball);
 
 
 	LPANIMATION ani;
 
-	ani = new Animation();
-	ani->Add(30001, 150);
-	ani->Add(30002, 150);
-	animations->Add(ENEMY_ANI, ani);
+	ani = new Animation(100);
+	ani->Add(70001);
+	animations->Add(BULLET_ANI, ani);
 }
 
-void Enemy::Render()
+void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state != ENEMY_INACTIVE)
+	if (stopMovement == true)
+		return;
+
+	GameObject::Update(dt);
+	x += dx;
+}
+
+void Bullet::Render()
+{
 	animations[state]->Render(1, nx, x, y);
 }
 
-void Enemy::SetState(int state)
+void Bullet::SetState(int state)
 {
 	GameObject::SetState(state);
 
 	switch (state)
 	{
-	case ENEMY_ACTIVE:
-		break;
-	case ENEMY_DESTROYED:
-		animations[state]->SetAniStartTime(GetTickCount());
-		break;
-	case ENEMY_INACTIVE:
+	case BULLET:
+		vx = 0.15f * nx;
+		vy = 0;
 		break;
 	default:
 		break;
 	}
 }
 
-void Enemy::GetBoundingBox(float& left, float& top, float& right, float& bottom)
+void Bullet::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
-	right = x + ENEMY_BBOX_WIDTH;
-	bottom = y + ENEMY_BBOX_HEIGHT;
+	right = left + 6;
+	bottom = top + 6;
 }
 
-void Enemy::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
+void Bullet::GetActiveBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = entryPosition.x - ENEMY_ACTIVE_BBOX_WIDTH;
-	right = entryPosition.x + ENEMY_ACTIVE_BBOX_WIDTH;
-	top = entryPosition.y - ENEMY_ACTIVE_BBOX_HEIGHT;
-	bottom = entryPosition.y + ENEMY_ACTIVE_BBOX_HEIGHT;
+	GetBoundingBox(left, top, right, bottom);
 }
 
-//bool Zombie::IsAbleToActivate()
-//{
-//	DWORD now = GetTickCount();
-//
-//	if (isRespawnWaiting == true && now - respawnTime_Start >= ZOMBIE_RESPAWN_TIME)
-//		return true;
-//
-//	return false;
-//}
