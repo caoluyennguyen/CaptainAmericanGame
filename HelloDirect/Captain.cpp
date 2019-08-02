@@ -25,10 +25,8 @@ Captain::Captain() : GameObject()
 	AddAnimation(HIT_JUMP_SHIELD_ANI);
 	AddAnimation(SWIFT_SHIELD_ANI);
 
-	score = 0;
 	item = -1;
-	energy = 99;
-	life = 3;
+	life = 4;
 	HP = 10;
 }
 
@@ -337,6 +335,13 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						y += dy;
 						isTouchGround = false;
 					}
+				}
+			}
+			if (dynamic_cast<Items*>(e->obj))
+			{
+				if (e->obj->GetState() == HEART)
+				{
+					life += 1;
 				}
 			}
 			/*else if (dynamic_cast<Enemy*>(e->obj))

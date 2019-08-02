@@ -12,10 +12,12 @@
 #include "SceneManager.h"
 #include "TileMap.h"
 #include "Grid.h"
+#include "GameInfo.h"
 
 Game* game;
 Input* input;
 SceneManager* scenes;
+GameInfo* gameInfo;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -45,6 +47,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		scenes->Render();
+		gameInfo->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -136,6 +139,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 void Update(DWORD dt)
 {
 	scenes->Update(dt);
+	gameInfo->Update(dt, false);
 }
 
 int Run()
@@ -190,6 +194,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	input = new Input(game, scenes);
 	game->InitKeyboard(input);
+
+	gameInfo = new GameInfo(scenes, game);
+	gameInfo->Init();
 
 	Run();
 

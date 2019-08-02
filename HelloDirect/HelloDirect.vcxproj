@@ -126,8 +126,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameInfo.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GiftedPoint.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Items.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Rocketer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -148,8 +150,10 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GiftedPoint.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Input.h" />
+    <ClInclude Include="Items.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Rocketer.h" />
     <ClInclude Include="SceneManager.h" />

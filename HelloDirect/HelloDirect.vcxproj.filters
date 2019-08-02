@@ -75,6 +75,12 @@
     <ClCompile Include="Rocket.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Items.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="GiftedPoint.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -132,6 +138,12 @@
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Rocket.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Items.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="GiftedPoint.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>

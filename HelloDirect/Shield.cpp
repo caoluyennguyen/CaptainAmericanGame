@@ -4,6 +4,7 @@
 #include "Box.h"
 #include "Shooter.h"
 #include "Rocketer.h"
+#include "GiftedPoint.h"
 
 Shield::Shield()
 {
@@ -67,6 +68,10 @@ void Shield::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 			else if (dynamic_cast<Captain*>(e->obj))
 			{
 				this->isEnable = false;
+			}
+			else if (dynamic_cast<GiftedPoint*>(e->obj))
+			{
+				e->obj->SetState(1);
 			}
 		}
 	}

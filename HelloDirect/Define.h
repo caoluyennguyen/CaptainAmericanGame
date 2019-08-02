@@ -45,11 +45,16 @@
 #define ID_TEX_BULLET				7
 #define ID_TEX_ROCKETER				8
 #define ID_TEX_ROCKET				9
+#define ID_TEX_HP					10
+#define ID_TEX_ITEM_HEART			11
+#define ID_TEX_ITEM_STAR			12
+#define ID_TEX_GIFTED_POINT			13
 
 #pragma endregion
 
 
 #pragma region PathFile
+#define FILEPATH_FONT				L"Font\\prstart.ttf"
 
 #define FILEPATH_TEX_STAGE_1		L"Textures\\stage1.png"
 #define FILEPATH_DATA_STAGE_1		L"Textures\\stage1_data.txt"
@@ -94,6 +99,10 @@
 
 // Bullet
 #define BULLET			0
+
+// Item
+#define HEART			0
+#define STAR			1
 
 #pragma endregion
 
@@ -148,10 +157,17 @@
 // Rocket
 #define ROCKET_ANI			801
 
+// Items
+#define HEART_ANI			901
+#define STAR_ANI			902
+
+// Gifted point
+#define CLOSE_POINT_ANI		1000
+#define OPEN_POINT_ANI		1001
+
 #pragma endregion
 
 #pragma region BBox Size
-
 
 // Ground
 #define GROUND_BBOX_WIDTH			16
@@ -179,6 +195,7 @@
 #define	GROUND		1
 #define SHOOTER		2
 #define ROCKETER	3
+#define GIFTEDPOINT	4
 
 #pragma endregion
 

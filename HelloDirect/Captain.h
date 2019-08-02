@@ -10,6 +10,7 @@
 #include "Shield.h"
 #include "Shooter.h"
 #include "Rocketer.h"
+#include "Items.h"
 
 using namespace std;
 

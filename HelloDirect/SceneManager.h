@@ -10,7 +10,8 @@
 #include "Shield.h"
 #include "Shooter.h"
 #include "Rocketer.h"
-
+#include "Items.h"
+#include "GiftedPoint.h"
 
 class SceneManager
 {
@@ -27,6 +28,8 @@ class SceneManager
 	Shooter* shooter = new Shooter();
 	Rocketer* rocketer = new Rocketer();
 	Bullet* bullet = new Bullet();
+	Items* items = new Items();
+	GiftedPoint* point = new GiftedPoint();
 
 	TileMaps* tilemaps = TileMaps::GetInstance();
 	Textures* textures = Textures::GetInstance();
@@ -35,6 +38,7 @@ class SceneManager
 
 	vector<Unit*> listUnits;
 	vector<LPGAMEOBJECT> listObjects;
+	vector<LPGAMEOBJECT> listItems;
 	vector<LPGAMEOBJECT> listStaticObjectsToRender;
 	vector<LPGAMEOBJECT> listMovingObjectsToRender;
 	bool isSetSimonAutoWalk = false;

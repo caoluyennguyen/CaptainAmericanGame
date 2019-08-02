@@ -15,15 +15,16 @@ SceneManager::~SceneManager()
 void SceneManager::LoadResources()
 {
 	captain->LoadResources(textures, sprites, animations);
-	//enemy->LoadResources(textures, sprites, animations);
+	items->LoadResources(textures, sprites, animations);
 	ground->LoadResources(textures, sprites, animations);
 	shield->LoadResources(textures, sprites, animations);
 	shooter->LoadResources(textures, sprites, animations);
 	rocketer->LoadResources(textures, sprites, animations);
 	bullet->LoadResources(textures, sprites, animations);
+	point->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(STAGE_1, FILEPATH_TEX_STAGE_1, FILEPATH_DATA_STAGE_1, 2048, 288, 16, 16);
-	tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 255, 255, 16, 16);
+	//tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 255, 255, 16, 16);
 	
 	captain = new Captain();
 	shield = new Shield();
@@ -53,14 +54,6 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 
 		switch (ID_Obj)
 		{
-		/*case ENEMY:
-			enemy = new Enemy();
-			enemy->SetPosition(pos_x, pos_y);
-			enemy->SetState(state);
-			enemy->SetEnable(isEnable);
-			enemy->SetIDItem(idItem);
-			unit = new Unit(grid, enemy, pos_x, pos_y);
-			break;*/
 		case GROUND:
 			ground = new Ground();
 			ground->SetPosition(pos_x, pos_y);
@@ -68,6 +61,14 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			ground->SetEnable(isEnable);
 			ground->SetIDItem(idItem);
 			unit = new Unit(grid, ground, pos_x, pos_y);
+			break;
+		case GIFTEDPOINT:
+			point = new GiftedPoint();
+			point->SetPosition(pos_x, pos_y);
+			point->SetState(state);
+			point->SetEnable(isEnable);
+			point->SetIDItem(idItem);
+			unit = new Unit(grid, point, pos_x, pos_y);
 			break;
 		case SHOOTER:
 			shooter = new Shooter();
@@ -108,9 +109,9 @@ void SceneManager::GetObjectFromGrid()
 	{
 		LPGAMEOBJECT obj = listUnits[i]->GetObj();
 
-		/*if (dynamic_cast<Enemy*>(obj))
-			listStaticObjectsToRender.push_back(obj);*/
-		if (dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
+		if (dynamic_cast<Items*>(obj) || dynamic_cast<GiftedPoint*>(obj))
+			listStaticObjectsToRender.push_back(obj);
+		else if (dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
 			dynamic_cast<Bullet*>(obj))
 		{
 			listMovingObjectsToRender.push_back(obj);
@@ -147,12 +148,31 @@ void SceneManager::UpdateGrid()
 	}
 }
 
+void SceneManager::SetDropItems(LPGAMEOBJECT object)
+{
+	if (dynamic_cast<GiftedPoint*>(object) && object->GetState() == 1)
+	{
+		if (object->idItem != -1 && object->IsDroppedItem() == false)
+		{
+			object->SetIsDroppedItem(true);
+
+			items = new Items();
+			items->SetEnable(true);
+			items->SetPosition(object->x, object->y);
+			items->SetItem(object->idItem);
+
+			listItems.push_back(items);
+			unit = new Unit(grid, items, object->x, object->y);
+		}
+	}
+}
+
 void SceneManager::Update(DWORD dt)
 {
 	float pos_x, pos_y;
 	captain->GetPosition(pos_x, pos_y);
 
-	if (IDScene == STAGE_1 && pos_x >= 1950.0f)
+	if (IDScene == STAGE_1 && pos_x >= 1700.0f)
 	{
 		ChangeScene(STAGE_1_BOSS);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -170,6 +190,8 @@ void SceneManager::Update(DWORD dt)
 	{
 		LPGAMEOBJECT object = listObjects[i];
 
+		SetDropItems(object);
+		
 		if (dynamic_cast<Shooter*>(object))
 		{
 			Shooter_Update(dt, object);
@@ -191,7 +213,10 @@ void SceneManager::Update(DWORD dt)
 
 void SceneManager::Render()
 {
-	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
+	if (IDScene != 1)
+	{
+		tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
+	}
 
 	for (auto obj : listStaticObjectsToRender)
 	{
@@ -229,7 +254,7 @@ void SceneManager::ChangeScene(int scene)
 		game->SetCameraPosition(0.0f, 0.0f);
 		break;
 	case STAGE_1_BOSS:
-		grid = new Grid(2000, 286, 128, 128);
+		grid = new Grid(512, 320, 128, 128);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1_BOSS);
 		captain->SetPosition(0.0f, 100.0f);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -314,8 +339,8 @@ void SceneManager::Shield_Update(DWORD dt)
 	coObjects.push_back(captain);
 	for (auto obj : listObjects)
 	{
-		if ((dynamic_cast<Shooter*>(obj) &&
-			obj->IsEnable() == true))
+		if ((dynamic_cast<Shooter*>(obj) || dynamic_cast<GiftedPoint*>(obj)) &&
+			obj->IsEnable() == true)
 		{
 			coObjects.push_back(obj);
 		}
