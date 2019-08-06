@@ -81,6 +81,15 @@
     <ClCompile Include="GiftedPoint.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Skyper.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Wizard.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="MiniBoss.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -144,6 +153,15 @@
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="GiftedPoint.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Skyper.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Wizard.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniBoss.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>

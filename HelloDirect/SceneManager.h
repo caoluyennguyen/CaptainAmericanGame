@@ -10,6 +10,7 @@
 #include "Shield.h"
 #include "Shooter.h"
 #include "Rocketer.h"
+#include "Rocket.h"
 #include "Items.h"
 #include "GiftedPoint.h"
 
@@ -28,6 +29,7 @@ class SceneManager
 	Shooter* shooter = new Shooter();
 	Rocketer* rocketer = new Rocketer();
 	Bullet* bullet = new Bullet();
+	Rocket* rocket = new Rocket();
 	Items* items = new Items();
 	GiftedPoint* point = new GiftedPoint();
 

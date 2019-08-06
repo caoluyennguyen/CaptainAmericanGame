@@ -8,9 +8,9 @@ class Shooter : public GameObject
 	bool isRespawnWaiting = false;
 
 	DWORD lastTimeShoot = 0; // thời gian kể từ lúc vừa bắn xong đến lần bắn tiếp theo
-	DWORD deltaTimeToShoot = 0; // khoảng thời gian kể từ lúc fishman xuất hiện đến lúc bắn 
+	DWORD deltaTimeToShoot = 0; // khoảng thời gian kể từ lúc enemy xuất hiện đến lúc bắn 
 
-	int nxShoot = 0; // Hướng quay mặt sau khi bắn (để luôn quay mặt về phía Simon)
+	int nxShoot = 0; // Hướng quay mặt sau khi bắn (để luôn quay mặt về phía Captain)
 
 public:
 	Shooter();
@@ -20,7 +20,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);
 	void Render();
 	void SetState(int state);
-	void SetNxShoot(int x) { nxShoot = x; }
+	void SetNx(int x) { this->nx = x; }
 	void StartRespawnTimeCounter() { isRespawnWaiting = true; respawnTime_Start = GetTickCount(); }
 	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }
 	bool IsRespawnWaiting() { return isRespawnWaiting; }

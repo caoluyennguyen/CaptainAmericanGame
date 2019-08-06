@@ -130,15 +130,18 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Items.cpp" />
+    <ClCompile Include="MiniBoss.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Rocketer.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shooter.cpp" />
+    <ClCompile Include="Skyper.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Tilemap.cpp" />
+    <ClCompile Include="Wizard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
@@ -154,14 +157,17 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Items.h" />
+    <ClInclude Include="MiniBoss.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Rocketer.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shooter.h" />
+    <ClInclude Include="Skyper.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tilemap.h" />
+    <ClInclude Include="Wizard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

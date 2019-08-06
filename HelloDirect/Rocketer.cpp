@@ -5,8 +5,8 @@ Rocketer::Rocketer()
 	AddAnimation(ROCKETER_RUN_ANI);
 	AddAnimation(ROCKETER_DEAD_ANI);
 	AddAnimation(ROCKETER_SHOOT_ANI);
-	AddAnimation(ROCKETER_STOP_ANI);
 	AddAnimation(ROCKETER_SIT_ANI);
+	AddAnimation(ROCKETER_STOP_ANI);
 }
 
 void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -32,7 +32,6 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 	ani = new Animation(200);
 	ani->Add(60004);
-	//ani->Add(60005);
 	animations->Add(ROCKETER_SHOOT_ANI, ani);
 
 	ani = new Animation(200);
@@ -40,7 +39,7 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 	animations->Add(ROCKETER_DEAD_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(60005);
+	ani->Add(60004);
 	animations->Add(ROCKETER_SIT_ANI, ani);
 }
 
@@ -56,9 +55,8 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	if (stopMovement == true)
 		return;
 
-	if (state == ENEMY_SHOOT && animations[state]->IsOver(1000) == true)
+	if (state == ENEMY_SHOOT && animations[state]->IsOver(200) == true)
 	{
-		nx = nxShoot;
 		SetState(ENEMY_SIT);
 		return;
 	}
@@ -70,6 +68,8 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	}
 
 	GameObject::Update(dt);
+
+	vy += 0.002f * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -89,10 +89,35 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		x += dx;
-		y += min_ty * dy + ny * 0.1f;
+		/*x += dx;
+		y += min_ty * dy + ny * 0.1f;*/
 
-		if (ny != 0)
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (ny != 0)
+			{
+				if (ny == -1.0f)
+				{
+					vx = 0;
+					vy = 0;
+				}
+				else
+				{
+					y += dy;
+				}
+			}
+			else
+			{
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+			}
+		}
+		/*if (ny != 0)
 		{
 			if (ny == -1.0f)
 			{
@@ -102,7 +127,7 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 			{
 				y += dy;
 			}
-		}
+		}*/
 	}
 
 	// clean up collision events
@@ -132,7 +157,8 @@ void Rocketer::SetState(int state)
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case ENEMY_SHOOT:
-		vx = vy = 0;
+		vx = 0.1 * nx;
+		vy = -0.4;
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case ENEMY_STOP:
@@ -142,6 +168,7 @@ void Rocketer::SetState(int state)
 		StartRespawnTimeCounter();
 		break;
 	case ENEMY_SIT:
+		vy = 0;
 		lastTimeShoot = GetTickCount();
 		deltaTimeToShoot = 500 + rand() % 2000;
 	default:

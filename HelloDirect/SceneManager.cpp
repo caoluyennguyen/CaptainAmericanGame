@@ -22,6 +22,7 @@ void SceneManager::LoadResources()
 	rocketer->LoadResources(textures, sprites, animations);
 	bullet->LoadResources(textures, sprites, animations);
 	point->LoadResources(textures, sprites, animations);
+	rocket->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(STAGE_1, FILEPATH_TEX_STAGE_1, FILEPATH_DATA_STAGE_1, 2048, 288, 16, 16);
 	tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 256, 256, 16, 16);
@@ -114,7 +115,7 @@ void SceneManager::GetObjectFromGrid()
 		if (dynamic_cast<Items*>(obj) || dynamic_cast<GiftedPoint*>(obj))
 			listStaticObjectsToRender.push_back(obj);
 		else if (dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
-			dynamic_cast<Bullet*>(obj))
+			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocket*>(obj))
 		{
 			listMovingObjectsToRender.push_back(obj);
 		}
@@ -287,7 +288,7 @@ void SceneManager::StopedByPosition()
 			{
 				object->SetState(ENEMY_STOP);
 			}
-			else if (dynamic_cast<Bullet*>(object))
+			else if (dynamic_cast<Bullet*>(object) || dynamic_cast<Rocket*>(object))
 			{
 				object->SetEnable(false);
 			}
@@ -302,8 +303,8 @@ void SceneManager::Captain_Update(DWORD dt)
 	for (auto obj : listObjects)
 	{
 		if ((dynamic_cast<Ground*>(obj) || dynamic_cast<Shooter*>(obj) ||
-			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocketer*>(obj) &&
-			obj->GetState() != ENEMY_STOP && obj->IsEnable() == true))
+			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocketer*>(obj)) &&
+			obj->GetState() != ENEMY_STOP && obj->IsEnable() == true)
 		{
 			coObjects.push_back(obj);
 		}
@@ -338,6 +339,16 @@ void SceneManager::Shield_Update(DWORD dt)
 void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 {
 	shooter = dynamic_cast<Shooter*>(object);
+	vector<LPGAMEOBJECT> coObjects;
+
+	// Quay hướng captain
+	float cx, cy;
+	captain->GetPosition(cx, cy);
+	float sx, sy;
+	shooter->GetPosition(sx, sy);
+
+	if (sx < cx) shooter->SetNx(1);
+	else shooter->SetNx(-1);
 
 	if ((shooter->GetState() == ENEMY_RUN || shooter->GetState() == ENEMY_SIT) &&
 		GetTickCount() - shooter->GetLastTimeShoot() >= shooter->GetDeltaTimeToShoot())
@@ -345,29 +356,17 @@ void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 		shooter->SetState(ENEMY_SHOOT);
 
 		// Bắn đạn
-		float sx, sy, nx;
-		shooter->GetPosition(sx, sy);
-		nx = shooter->GetOrientation();
-
 		bullet = new Bullet();
 		bullet->SetPosition(sx + 5.0f, sy + 10.0f);
-		bullet->SetOrientation(nx);
+		bullet->SetOrientation(shooter->nx);
 		bullet->SetState(BULLET);
 		bullet->SetEnable(true);
 
 		unit = new Unit(grid, bullet, sx + 5.0f, sy + 10.0f);
-
-		// Quay hướng về phía captain
-		float cx, cy;
-		captain->GetPosition(cx, cy);
-
-		if (sx < cx) shooter->SetNxShoot(1);
-		else shooter->SetNxShoot(-1);
 	}
 	else
 	{
-		vector<LPGAMEOBJECT> coObjects;
-
+		coObjects.clear();
 		for (auto obj : listObjects)
 		{
 			if (dynamic_cast<Ground*>(obj))
@@ -375,34 +374,42 @@ void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 				coObjects.push_back(obj);
 			}
 		}
-
-		shooter->Update(dt, &coObjects);
 	}
+	shooter->Update(dt, &coObjects);
 }
 
 void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 {
 	rocketer = dynamic_cast<Rocketer*>(object);
+	vector<LPGAMEOBJECT> coObjects;
+
+	// Quay hướng captain
+	float cx, cy;
+	captain->GetPosition(cx, cy);
+	float rx, ry;
+	rocketer->GetPosition(rx, ry);
+
+	if (rx < cx) rocketer->SetNx(1);
+	else rocketer->SetNx(-1);
 
 	if ((rocketer->GetState() == ENEMY_RUN || rocketer->GetState() == ENEMY_SIT) &&
 		GetTickCount() - rocketer->GetLastTimeShoot() >= rocketer->GetDeltaTimeToShoot())
 	{
 		rocketer->SetState(ENEMY_SHOOT);
+		
+		/*
+		// Bắn đạn
+		rocket = new Rocket();
+		rocket->SetPosition(rx + 5.0f, ry + 10.0f);
+		rocket->SetOrientation(nx);
+		rocket->SetState(BULLET);
+		rocket->SetEnable(true);
 
-		float sx, sy, nx;
-		rocketer->GetPosition(sx, sy);
-		nx = rocketer->GetOrientation();
-
-		float cx, cy;
-		captain->GetPosition(cx, cy);
-
-		if (sx < cx) rocketer->SetNxShoot(1);
-		else rocketer->SetNxShoot(-1);
+		unit = new Unit(grid, rocket, rx + 5.0f, ry + 10.0f);*/
 	}
 	else
 	{
-		vector<LPGAMEOBJECT> coObjects;
-
+		coObjects.clear();
 		for (auto obj : listObjects)
 		{
 			if (dynamic_cast<Ground*>(obj))
@@ -411,6 +418,6 @@ void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 			}
 		}
 
-		rocketer->Update(dt, &coObjects);
 	}
+	rocketer->Update(dt, &coObjects);
 }

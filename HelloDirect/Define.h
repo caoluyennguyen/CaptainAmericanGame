@@ -5,7 +5,7 @@
 #define MAIN_WINDOW_TITLE		L"CaptainAmerican"
 
 #define BACKGROUND_COLOR		D3DCOLOR_XRGB(255,255,255)
-#define SCREEN_WIDTH			512
+#define SCREEN_WIDTH			256
 #define SCREEN_HEIGHT			304
 
 #define DEFAULT_CELL_WIDTH		128
@@ -49,6 +49,8 @@
 #define ID_TEX_ITEM_HEART			11
 #define ID_TEX_ITEM_STAR			12
 #define ID_TEX_GIFTED_POINT			13
+#define ID_TEX_WIZARD				14
+#define ID_TEX_MINIBOSS				15
 
 #pragma endregion
 
@@ -69,6 +71,8 @@
 #define FILEPATH_TEX_CAP_SHIELD		L"Textures\\capnamerica.png"
 #define FILEPATH_TEX_ENEMY			L"Textures\\Mini-Bosser.png"
 #define FILEPATH_TEX_SMALL_ENEMY	L"Textures\\Enemies.png"
+#define FILEPATH_TEX_WIZARD			L"Textures\\Wizard.png"
+#define FILEPATH_TEX_MINIBOSS		L"Textures\\Mini-Bosser.png"
 
 #pragma endregion
 
@@ -95,8 +99,8 @@
 #define ENEMY_RUN		0
 #define ENEMY_DESTROYED 1
 #define ENEMY_SHOOT		2
-#define ENEMY_STOP		3
-#define ENEMY_SIT		4
+#define ENEMY_SIT		3
+#define ENEMY_STOP		4
 
 // Bullet
 #define BULLET			0
@@ -168,6 +172,27 @@
 #define CLOSE_POINT_ANI		1000
 #define OPEN_POINT_ANI		1001
 
+// Skyper
+#define SKYPER_FLY_ANI		1101
+#define SKYPER_SHOOT_ANI	1102
+#define SKYPER_DEAD_ANI		1103
+#define SKYPER_SIT_ANI		1104
+#define SKYPER_STOP_ANI		1105
+
+// Wizard
+#define WIZARD_FLY_ANI		1201
+#define WIZARD_SHOOT_ANI	1202
+#define WIZARD_DEAD_ANI		1203
+#define WIZARD_SIT_ANI		1204
+#define WIZARD_STOP_ANI		1205
+
+// Mini boss
+#define MINIBOSS_RUN_ANI	1301
+#define MINIBOSS_SHOOT_ANI	1302
+#define MINIBOSS_DEAD_ANI	1303
+#define MINIBOSS_SIT_ANI	1304
+#define MINIBOSS_STOP_ANI	1305
+
 #pragma endregion
 
 #pragma region BBox Size
@@ -199,6 +224,9 @@
 #define SHOOTER		2
 #define ROCKETER	3
 #define GIFTEDPOINT	4
+#define SKYPER		5
+#define WIZARD		6
+#define MINIBOSS	7
 
 #pragma endregion
 
