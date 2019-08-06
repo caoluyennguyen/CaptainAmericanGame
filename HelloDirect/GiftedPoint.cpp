@@ -22,6 +22,7 @@ void GiftedPoint::LoadResources(Textures*& textures, Sprites*& sprites, Animatio
 	animations->Add(CLOSE_POINT_ANI, ani);
 
 	ani = new Animation();
+	ani->Add(30001, 150);
 	animations->Add(OPEN_POINT_ANI, ani);
 
 }

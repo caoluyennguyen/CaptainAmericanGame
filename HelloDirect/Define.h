@@ -6,10 +6,10 @@
 
 #define BACKGROUND_COLOR		D3DCOLOR_XRGB(255,255,255)
 #define SCREEN_WIDTH			512
-#define SCREEN_HEIGHT			320
+#define SCREEN_HEIGHT			304
 
-#define DEFAULT_CELL_WIDTH		256
-#define DEFAULT_CELL_HEIGHT		160
+#define DEFAULT_CELL_WIDTH		128
+#define DEFAULT_CELL_HEIGHT		128
 
 #define MAX_FRAME_RATE			90
 
@@ -77,7 +77,7 @@
 
 // Scene
 #define STAGE_1			0
-#define STAGE_1_BOSS			1
+#define STAGE_1_BOSS	1
 
 // Simon
 #define STAND			0
@@ -89,13 +89,14 @@
 #define SIT				6
 #define HIT_JUMP		7
 #define SWIFT			8
-#define	DEFLECT			9
+#define	INJURED			9
 
 // Enemy
-#define ENEMY_ACTIVE	0
+#define ENEMY_RUN		0
 #define ENEMY_DESTROYED 1
 #define ENEMY_SHOOT		2
-#define ENEMY_INACTIVE	3
+#define ENEMY_STOP		3
+#define ENEMY_SIT		4
 
 // Bullet
 #define BULLET			0
@@ -143,13 +144,15 @@
 #define SHOOTER_RUN_ANI			501
 #define SHOOTER_SHOOT_ANI		502
 #define SHOOTER_DEAD_ANI		503
-#define SHOOTER_INACTIVE_ANI	504
+#define SHOOTER_STOP_ANI		504
+#define SHOOTER_SIT_ANI			505
 
 // Rocketer
 #define ROCKETER_RUN_ANI		601
 #define ROCKETER_SHOOT_ANI		602
 #define ROCKETER_DEAD_ANI		603
-#define ROCKETER_INACTIVE_ANI	604
+#define ROCKETER_STOP_ANI		604
+#define ROCKETER_SIT_ANI		605
 
 // Bullet
 #define BULLET_ANI			701
@@ -184,7 +187,7 @@
 #define CAPTAIN_BBOX_HEIGHT			45
 
 #define CAPTAIN_WALKING_SPEED		0.1f
-#define CAPTAIN_JUMP_SPEED_Y		0.7f
+#define CAPTAIN_JUMP_SPEED_Y		0.4f
 #define CAPTAIN_GRAVITY				0.002f
 
 #pragma endregion

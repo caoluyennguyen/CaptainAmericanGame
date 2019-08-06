@@ -7,7 +7,6 @@ class Shooter : public GameObject
 	DWORD respawnTime_Start = 0;
 	bool isRespawnWaiting = false;
 
-	bool isSettedPosition = false;
 	DWORD lastTimeShoot = 0; // thời gian kể từ lúc vừa bắn xong đến lần bắn tiếp theo
 	DWORD deltaTimeToShoot = 0; // khoảng thời gian kể từ lúc fishman xuất hiện đến lúc bắn 
 
@@ -25,13 +24,10 @@ public:
 	void StartRespawnTimeCounter() { isRespawnWaiting = true; respawnTime_Start = GetTickCount(); }
 	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }
 	bool IsRespawnWaiting() { return isRespawnWaiting; }
-	bool IsSettedPosition() { return isSettedPosition; }
-	void SetIsSettedPosition(bool x) { isSettedPosition = x; }
 	bool IsAbleToActivate();
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
-	//bool IsAbleToActivate();
 
 	int GetLastTimeShoot() { return lastTimeShoot; }
 	int GetDeltaTimeToShoot() { return deltaTimeToShoot; }

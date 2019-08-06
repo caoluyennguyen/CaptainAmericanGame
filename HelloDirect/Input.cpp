@@ -17,15 +17,15 @@ void Input::KeyState(BYTE* state)
 	if ((captain->GetState() == JUMP || captain->GetState() == STAND )
 		&& captain->IsTouchGround() == false)
 		return;
-	if (captain->GetState() == HIT_STAND && captain->animations[HIT_STAND]->IsOver(200) == false) 
-		return;
 	if (captain->GetState() == HIT_SIT && captain->animations[HIT_SIT]->IsOver(200) == false) 
 		return;
-	if (captain->GetState() == HIT_JUMP && captain->animations[HIT_JUMP]->IsOver(200) == false) 
+	if (captain->GetState() == HIT_STAND && captain->animations[HIT_STAND]->IsOver(200) == false) 
 		return;
-	if (captain->GetState() == DEFLECT && captain->animations[DEFLECT]->IsOver(600) == false)
+	if (captain->GetState() == HIT_JUMP && captain->animations[HIT_JUMP]->IsOver(200) == false)
 		return;
 	if (captain->GetState() == SWIFT && captain->animations[SWIFT]->IsOver(200) == false)
+		return;
+	if (captain->GetState() == INJURED && captain->animations[INJURED]->IsOver(600) == false)
 		return;
 	else captain->animations[captain->GetState()]->SetAniStartTime(0);
 
@@ -65,33 +65,33 @@ void Input::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_Z:
-		if (scene->GetCaptain()->GetState() == HIT_STAND
-			|| scene->GetCaptain()->GetState() == HIT_SIT
-			|| scene->GetCaptain()->GetState() == HIT_JUMP)
+		if (captain->GetState() == HIT_STAND
+			|| captain->GetState() == HIT_SIT
+			|| captain->GetState() == HIT_JUMP)
 			return;
-		else if (scene->GetCaptain()->GetState() == STAND) {
-			scene->GetCaptain()->SetState(HIT_STAND);
-			Captain_Throw_Shield();
-			if (captain->hasShield = true)
+		else if (captain->GetState() == STAND) {
+			captain->SetState(HIT_STAND);
+			if (captain->hasShield == true)
 			{
+				Captain_Throw_Shield();
 				captain->hasShield = false;
 			}
 		}
-		else if (scene->GetCaptain()->GetState() == SIT) scene->GetCaptain()->SetState(HIT_SIT);
-		else if (scene->GetCaptain()->GetState() == JUMP) scene->GetCaptain()->SetState(HIT_JUMP);
+		else if (captain->GetState() == SIT) captain->SetState(HIT_SIT);
+		else if (captain->GetState() == JUMP) captain->SetState(HIT_JUMP);
 		break;
 	case DIK_X:
-		if (scene->GetCaptain()->GetState() == JUMP
-			|| scene->GetCaptain()->GetState() == HIT_STAND
-			|| scene->GetCaptain()->GetState() == HIT_SIT
-			|| scene->GetCaptain()->GetState() == HIT_JUMP)
+		if (captain->GetState() == JUMP
+			|| captain->GetState() == HIT_STAND
+			|| captain->GetState() == HIT_SIT
+			|| captain->GetState() == HIT_JUMP)
 			return;
-		scene->GetCaptain()->SetState(JUMP);
+		captain->SetState(JUMP);
 		break;
 	case DIK_C:
-		if (scene->GetCaptain()->GetState() == SWIFT)
+		if (captain->GetState() == SWIFT)
 			return;
-		scene->GetCaptain()->SetState(SWIFT);
+		captain->SetState(SWIFT);
 		break;
 	default:
 		break;

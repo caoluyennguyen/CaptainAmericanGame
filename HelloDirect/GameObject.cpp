@@ -28,7 +28,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	Game::GetInstance()->Draw(1, 0, l, t, bbox, 0, 0, rect.right, rect.bottom, 100);
+	Game::GetInstance()->Draw(1, 0, l, t, bbox, 0, 0, rect.right, rect.bottom, 200);
 }
 
 void GameObject::RenderActiveBoundingBox()
@@ -57,8 +57,7 @@ bool GameObject::AABB(float left_a, float top_a, float right_a, float bottom_a, 
 void GameObject::SweptAABB(
 	float ml, float mt, float mr, float mb,
 	float dx, float dy,
-	float sl, float st,
-	float sr, float sb,
+	float sl, float st, float sr, float sb,
 	float& t, float& nx, float& ny)
 {
 	float dx_entry, dx_exit, tx_entry, tx_exit;
@@ -127,7 +126,6 @@ void GameObject::SweptAABB(
 		ty_entry = dy_entry / dy;
 		ty_exit = dy_exit / dy;
 	}
-
 
 	if ((tx_entry < 0.0f && ty_entry < 0.0f) || tx_entry > 1.0f || ty_entry > 1.0f) return;
 
@@ -221,7 +219,7 @@ void GameObject::FilterCollision(vector<LPCOLLISIONEVENT>& coEvents, vector<LPCO
 	{
 		LPCOLLISIONEVENT c = coEvents[i];
 
-		if (c->t < min_tx && c->nx != 0) {			// (thời gian va chạm), (nx != 0 có va chạm theo trục x)
+		if (c->t < min_tx && c->nx != 0) {
 			min_tx = c->t; nx = c->nx; min_ix = i;
 		}
 

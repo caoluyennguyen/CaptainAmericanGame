@@ -2,12 +2,11 @@
 
 Rocketer::Rocketer()
 {
-	SetState(ENEMY_ACTIVE);
-
 	AddAnimation(ROCKETER_RUN_ANI);
 	AddAnimation(ROCKETER_DEAD_ANI);
 	AddAnimation(ROCKETER_SHOOT_ANI);
-	AddAnimation(ROCKETER_INACTIVE_ANI);
+	AddAnimation(ROCKETER_STOP_ANI);
+	AddAnimation(ROCKETER_SIT_ANI);
 }
 
 void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -33,19 +32,24 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 	ani = new Animation(200);
 	ani->Add(60004);
-	ani->Add(60005);
+	//ani->Add(60005);
 	animations->Add(ROCKETER_SHOOT_ANI, ani);
 
 	ani = new Animation(200);
 	ani->Add(60006);
 	animations->Add(ROCKETER_DEAD_ANI, ani);
+
+	ani = new Animation(200);
+	ani->Add(60005);
+	animations->Add(ROCKETER_SIT_ANI, ani);
 }
 
 void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
 	if (state == ENEMY_DESTROYED && animations[state]->IsOver(150) == true)
 	{
-		SetState(ENEMY_INACTIVE);
+		SetState(ENEMY_STOP);
+		//this->isEnable = false;
 		return;
 	}
 
@@ -55,17 +59,17 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	if (state == ENEMY_SHOOT && animations[state]->IsOver(1000) == true)
 	{
 		nx = nxShoot;
-		SetState(ENEMY_ACTIVE);
+		SetState(ENEMY_SIT);
 		return;
 	}
 
-	if (state == ENEMY_INACTIVE)
+	else if (state == ENEMY_STOP)
 	{
+		vx = 0;
 		return;
 	}
 
 	GameObject::Update(dt);
-	//vx += 0.1f * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -107,7 +111,7 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 void Rocketer::Render()
 {
-	if (state != ENEMY_INACTIVE)
+	if (state != ENEMY_STOP)
 		animations[state]->Render(1, nx, x, y);
 }
 
@@ -116,10 +120,12 @@ void Rocketer::SetState(int state)
 	GameObject::SetState(state);
 	switch (state)
 	{
-	case ENEMY_ACTIVE:
-		vx = 0.1f * nx;
+	case ENEMY_RUN:
+		//vx = 0.1f * nx;
 		lastTimeShoot = GetTickCount();
-		deltaTimeToShoot = 500 + rand() % 2000; // Random trong khoảng thời gian là 0.5 - 2s
+		deltaTimeToShoot = 500 + rand() % 2000;
+		respawnTime_Start = 0;
+		isRespawnWaiting = false;
 		break;
 	case ENEMY_DESTROYED:
 		vx = vy = 0;
@@ -129,13 +135,15 @@ void Rocketer::SetState(int state)
 		vx = vy = 0;
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
-	case ENEMY_INACTIVE:
+	case ENEMY_STOP:
 		x = entryPosition.x;
 		y = entryPosition.y;
 		vx = vy = 0;
-		isSettedPosition = false;
 		StartRespawnTimeCounter();
 		break;
+	case ENEMY_SIT:
+		lastTimeShoot = GetTickCount();
+		deltaTimeToShoot = 500 + rand() % 2000;
 	default:
 		break;
 	}
@@ -143,8 +151,8 @@ void Rocketer::SetState(int state)
 
 void Rocketer::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x; // 10,32
-	top = y;  // 60,64
+	left = x;
+	top = y; 
 	right = left + 24;
 	bottom = top + 40;
 }
@@ -154,7 +162,7 @@ void Rocketer::GetActiveBoundingBox(float& left, float& top, float& right, float
 	left = entryPosition.x - 100;
 	right = entryPosition.x + 100;
 	top = entryPosition.y - 200;
-	bottom = entryPosition.y;
+	bottom = entryPosition.y + 200;
 }
 
 bool Rocketer::IsAbleToActivate()

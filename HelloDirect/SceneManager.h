@@ -64,7 +64,7 @@ public:
 	void UpdateGrid();
 
 	void SetDropItems(LPGAMEOBJECT object);
-	void SetInactivationByPosition();
+	void StopedByPosition();
 
 	void ChangeScene(int scene);
 	int GetIDScene() { return this->IDScene; }

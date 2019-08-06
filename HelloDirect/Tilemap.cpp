@@ -93,7 +93,7 @@ void TileMap::CreateZoneToDraw()
 	switch (ID)
 	{
 	case STAGE_1:
-		min_max_col_to_draw.push_back({ 0, 24 });
+		min_max_col_to_draw.push_back({ 0, 128 });
 		break;
 	case STAGE_1_BOSS:
 		min_max_col_to_draw.push_back({ 0, 16 });
@@ -116,11 +116,11 @@ void TileMap::Draw(int start_col, int end_col)
 void TileMap::Draw(D3DXVECTOR3 camPosition)
 {
 	int start_col_to_draw = (int)camPosition.x / 16;
-	int end_col_to_draw = (int)(camPosition.x + SCREEN_WIDTH) / 16 - 2;
+	int end_col_to_draw = (int)(camPosition.x + SCREEN_WIDTH) / 16;
 
 	for (int i = 0; i < nums_row; i++)
 	{
-		for (int j = start_col_to_draw; j <= end_col_to_draw; j++)
+		for (int j = start_col_to_draw; j < end_col_to_draw; j++)
 		{
 			// +camPosition để luôn giữ camera ở chính giữa, vì hàm draw vẽ tất cả các sprite đều di chuyển theo camera...
 			// +(int)camPosition.x % 16 để giữ cho camera chuyển động mượt (thực ra giá trị này bằng vx*dt, chính là quãng đường dịch chuyển của captain)

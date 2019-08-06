@@ -24,7 +24,7 @@ void SceneManager::LoadResources()
 	point->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(STAGE_1, FILEPATH_TEX_STAGE_1, FILEPATH_DATA_STAGE_1, 2048, 288, 16, 16);
-	//tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 255, 255, 16, 16);
+	tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 256, 256, 16, 16);
 	
 	captain = new Captain();
 	shield = new Shield();
@@ -73,6 +73,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 		case SHOOTER:
 			shooter = new Shooter();
 			shooter->SetPosition(pos_x, pos_y);
+			shooter->SetEntryPosition(pos_x, pos_y);
 			shooter->SetState(state);
 			shooter->SetEnable(isEnable);
 			shooter->SetIDItem(idItem);
@@ -81,6 +82,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 		case ROCKETER:
 			rocketer = new Rocketer();
 			rocketer->SetPosition(pos_x, pos_y);
+			rocketer->SetEntryPosition(pos_x, pos_y);
 			rocketer->SetState(state);
 			rocketer->SetEnable(isEnable);
 			rocketer->SetIDItem(idItem);
@@ -116,25 +118,26 @@ void SceneManager::GetObjectFromGrid()
 		{
 			listMovingObjectsToRender.push_back(obj);
 		}
+
 		listObjects.push_back(obj);
 	}
 }
 
 void SceneManager::UpdateCameraPosition()
 {
-	if (captain->x > SCREEN_WIDTH / 2)
-		//&& captain->x + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
+	if (captain->x > SCREEN_WIDTH / 2
+		&& captain->x + SCREEN_WIDTH / 2 < tilemaps->Get(IDScene)->GetMapWidth())
 	{
-		game->SetCameraPosition(captain->x - SCREEN_WIDTH / 2, 0);
-		/*TileMap * map = tilemaps->Get(IDScene);
+		//game->SetCameraPosition(captain->x - SCREEN_WIDTH / 2, 0);
+		TileMap * map = tilemaps->Get(IDScene);
 		int min_col = map->min_max_col_to_draw[map->index][0];
 		int max_col = map->min_max_col_to_draw[map->index][1];
 
-		if (captain->x >= min_col * 32 + (SCREEN_WIDTH / 2 - 16) &&
-			captain->x <= max_col * 32 - (SCREEN_WIDTH / 2 - 16))
+		if (captain->x >= min_col * 16 + (SCREEN_WIDTH / 2 - 8) &&
+			captain->x <= max_col * 16 - (SCREEN_WIDTH / 2 - 8))
 		{
 			game->SetCameraPosition(captain->x - SCREEN_WIDTH / 2, 0);
-		}*/
+		}
 	}
 }
 
@@ -142,6 +145,10 @@ void SceneManager::UpdateGrid()
 {
 	for (int i = 0; i < listUnits.size(); i++)
 	{
+		LPGAMEOBJECT obj = listUnits[i]->GetObj();
+
+		if (obj->IsEnable() == false)
+			continue;
 		float newPos_x, newPos_y;
 		listUnits[i]->GetObj()->GetPosition(newPos_x, newPos_y);
 		listUnits[i]->Move(newPos_x, newPos_y);
@@ -172,7 +179,7 @@ void SceneManager::Update(DWORD dt)
 	float pos_x, pos_y;
 	captain->GetPosition(pos_x, pos_y);
 
-	if (IDScene == STAGE_1 && pos_x >= 1700.0f)
+	if (IDScene == STAGE_1 && pos_x >= 1955.0f)
 	{
 		ChangeScene(STAGE_1_BOSS);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -205,6 +212,8 @@ void SceneManager::Update(DWORD dt)
 			object->Update(dt, &listObjects);
 		}
 	}
+	// ra khỏi màn hình là bị xóa
+	StopedByPosition();
 	// render camera
 	UpdateCameraPosition();
 	// update grid
@@ -213,31 +222,28 @@ void SceneManager::Update(DWORD dt)
 
 void SceneManager::Render()
 {
-	if (IDScene != 1)
-	{
-		tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
-	}
+	tilemaps->Get(IDScene)->Draw(game->GetCameraPositon());
 
 	for (auto obj : listStaticObjectsToRender)
 	{
 		obj->Render();
-		obj->RenderBoundingBox();
+		//obj->RenderBoundingBox();
 	}
 
 	for (auto obj : listMovingObjectsToRender)
 	{
 		obj->Render();
 		obj->RenderBoundingBox();
-		obj->RenderActiveBoundingBox();
+		//obj->RenderActiveBoundingBox();
 	}
 
 	captain->Render();
-	captain->RenderBoundingBox();
+	//captain->RenderBoundingBox();
 
 	if (shield->IsEnable() == true)
 	{
 		shield->Render();
-		shield->RenderBoundingBox();
+		//shield->RenderBoundingBox();
 	}
 }
 
@@ -248,13 +254,13 @@ void SceneManager::ChangeScene(int scene)
 	switch (IDScene)
 	{
 	case STAGE_1:
-		grid = new Grid(2048, 480, DEFAULT_CELL_WIDTH, DEFAULT_CELL_HEIGHT);
+		grid = new Grid(2048, 606, DEFAULT_CELL_WIDTH, DEFAULT_CELL_HEIGHT);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1);
 		captain->SetPosition(0.0f, 100.0f);
 		game->SetCameraPosition(0.0f, 0.0f);
 		break;
 	case STAGE_1_BOSS:
-		grid = new Grid(512, 320, 128, 128);
+		grid = new Grid(526, 600, 128, 120);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1_BOSS);
 		captain->SetPosition(0.0f, 100.0f);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -264,8 +270,7 @@ void SceneManager::ChangeScene(int scene)
 	}
 }
 
-
-void SceneManager::SetInactivationByPosition()
+void SceneManager::StopedByPosition()
 {
 	D3DXVECTOR2 entryViewPort = game->GetCameraPositon();
 
@@ -274,40 +279,20 @@ void SceneManager::SetInactivationByPosition()
 		float x, y;
 		object->GetPosition(x, y);
 
-		if (x < entryViewPort.x || x > entryViewPort.x + SCREEN_WIDTH - 1)
+		//if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1)
+		if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1)
 		{
-			if (dynamic_cast<Shooter*>(object) || 
-				dynamic_cast<Rocketer*>(object))
+			if ((dynamic_cast<Shooter*>(object) || dynamic_cast<Rocketer*>(object)) 
+				&& object->GetState() == ENEMY_RUN)
 			{
-				object->SetState(ENEMY_INACTIVE);
+				object->SetState(ENEMY_STOP);
 			}
 			else if (dynamic_cast<Bullet*>(object))
 			{
 				object->SetEnable(false);
 			}
 		}
-		else if (dynamic_cast<Shooter*>(object) && object->GetState() != ENEMY_INACTIVE)
-		{
-			shooter = dynamic_cast<Shooter*>(object);
-
-			if (x < entryViewPort.x || x > entryViewPort.x + SCREEN_WIDTH - 1 ||
-				y < entryViewPort.y || y > shooter->GetEntryPosition().y)
-			{
-				shooter->SetState(ENEMY_INACTIVE);
-			}
-		}
-		else if (dynamic_cast<Rocketer*>(object) && object->GetState() != ENEMY_INACTIVE)
-		{
-			rocketer = dynamic_cast<Rocketer*>(object);
-
-			if (x < entryViewPort.x || x > entryViewPort.x + SCREEN_WIDTH - 1 ||
-				y < entryViewPort.y || y > rocketer->GetEntryPosition().y)
-			{
-				rocketer->SetState(ENEMY_INACTIVE);
-			}
-		}
 	}
-
 }
 
 void SceneManager::Captain_Update(DWORD dt)
@@ -318,14 +303,14 @@ void SceneManager::Captain_Update(DWORD dt)
 	{
 		if ((dynamic_cast<Ground*>(obj) || dynamic_cast<Shooter*>(obj) ||
 			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocketer*>(obj) &&
-			obj->GetState() != ENEMY_INACTIVE && obj->IsEnable() == true))
+			obj->GetState() != ENEMY_STOP && obj->IsEnable() == true))
 		{
 			coObjects.push_back(obj);
 		}
 	}
 
 	captain->Update(dt, &coObjects);
-	captain->CheckCollisionWithEnemyActiveArea(&listObjects);
+	captain->CheckCollisionWithEnemyActiveArea(&listMovingObjectsToRender);
 }
 
 void SceneManager::Shield_Update(DWORD dt)
@@ -339,8 +324,8 @@ void SceneManager::Shield_Update(DWORD dt)
 	coObjects.push_back(captain);
 	for (auto obj : listObjects)
 	{
-		if ((dynamic_cast<Shooter*>(obj) || dynamic_cast<GiftedPoint*>(obj)) &&
-			obj->IsEnable() == true)
+		if ((dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
+			dynamic_cast<GiftedPoint*>(obj)) && obj->IsEnable() == true)
 		{
 			coObjects.push_back(obj);
 		}
@@ -354,7 +339,7 @@ void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 {
 	shooter = dynamic_cast<Shooter*>(object);
 
-	if (shooter->GetState() == ENEMY_ACTIVE &&
+	if ((shooter->GetState() == ENEMY_RUN || shooter->GetState() == ENEMY_SIT) &&
 		GetTickCount() - shooter->GetLastTimeShoot() >= shooter->GetDeltaTimeToShoot())
 	{
 		shooter->SetState(ENEMY_SHOOT);
@@ -399,7 +384,7 @@ void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 {
 	rocketer = dynamic_cast<Rocketer*>(object);
 
-	if (rocketer->GetState() == ENEMY_ACTIVE &&
+	if ((rocketer->GetState() == ENEMY_RUN || rocketer->GetState() == ENEMY_SIT) &&
 		GetTickCount() - rocketer->GetLastTimeShoot() >= rocketer->GetDeltaTimeToShoot())
 	{
 		rocketer->SetState(ENEMY_SHOOT);
@@ -407,6 +392,7 @@ void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 		float sx, sy, nx;
 		rocketer->GetPosition(sx, sy);
 		nx = rocketer->GetOrientation();
+
 		float cx, cy;
 		captain->GetPosition(cx, cy);
 

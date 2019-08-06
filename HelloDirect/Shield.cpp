@@ -59,8 +59,10 @@ void Shield::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 				|| dynamic_cast<Rocketer*>(e->obj))
 			{
 				e->obj->SetState(ENEMY_DESTROYED);
+				if (e->nx != 0) x += dx;
+				if (e->ny != 0) y += dy;
 			}
-			else if (dynamic_cast<Ground*>(e->obj)) // || dynamic_cast<Enemy*>(e->obj))
+			else if (dynamic_cast<Ground*>(e->obj))
 			{
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;

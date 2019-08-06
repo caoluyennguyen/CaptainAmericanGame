@@ -27,7 +27,6 @@ Captain::Captain() : GameObject()
 
 	item = -1;
 	life = 4;
-	HP = 10;
 }
 
 void Captain::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -258,19 +257,6 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (x < 0) x = 0;
 
-	/*if (y > 224)
-	{
-		vy = 0;
-		y = 224.0f;
-	}*/
-
-	/*if (state == HIT_SIT || state == HIT_STAND)
-	{
-		D3DXVECTOR3 simonPositon;
-		GetPosition(simonPositon.x, simonPositon.y);
-	}*/
-
-
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -293,34 +279,10 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.1f;
 		y += min_ty * dy + ny * 0.1f;
 
-		/*if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;*/
-
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			/*if (dynamic_cast<Enemy*>(e->obj))
-			{
-				DebugOut(L"%d %d\n", e->nx, e->ny);
-
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-			}
-			else if (dynamic_cast<Ground*>(e->obj))
-			{
-				x += dx;
-				y += min_ty * dy + ny * 0.1f;
-
-				if (ny != 0) vy = 0;
-			}
-			else
-			{
-				x += min_tx * dx + nx * 0.1f;
-				y += min_ty * dy + ny * 0.1f;
-				if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
-			}*/
 			if (dynamic_cast<Ground*>(e->obj))
 			{
 				if (ny != 0)
@@ -337,21 +299,13 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			if (dynamic_cast<Items*>(e->obj))
+			else if (dynamic_cast<Items*>(e->obj))
 			{
 				if (e->obj->GetState() == HEART)
 				{
 					life += 1;
 				}
 			}
-			/*else if (dynamic_cast<Enemy*>(e->obj))
-			{
-				hasShield = true;
-				DebugOut(L"%d %d\n", e->nx, e->ny);
-
-				if (e->nx != 0) x += dx;
-				if (e->ny != 0) y += dy;
-			}*/
 			else if (dynamic_cast<Shield*>(e->obj))
 			{
 				hasShield = true;
@@ -360,8 +314,8 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
-			else if (dynamic_cast<Shooter*>(e->obj) ||
-						dynamic_cast<Bullet*>(e->obj))
+			else if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj) ||
+				dynamic_cast<Bullet*>(e->obj))
 			{
 				if (dynamic_cast<Bullet*>(e->obj))
 				{
@@ -376,7 +330,8 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
 					}
 
-					SetState(DEFLECT);
+					LoseHP(1);
+					SetState(INJURED);
 					StartUntouchable();
 				}
 				else
@@ -390,39 +345,6 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
 			}
-			/*else if (dynamic_cast<Enemy*>(e->obj))
-			{
-				if (isUntouchable == false)
-				{
-					// nếu dơi tông trúng simon thì cho huỷ
-					if (dynamic_cast<Enemy*>(e->obj))
-					{
-						Enemy* enemy = dynamic_cast<Enemy*>(e->obj);
-						enemy->SetState(ENEMY_DESTROYED);
-					}
-
-					if (e->nx != 0)
-					{
-						if (e->nx == 1.0f && this->nx == 1) this->nx = -1;
-						else if (e->nx == -1.0f && this->nx == -1) this->nx = 1;
-					}
-
-					SetState(DEFLECT);
-					StartUntouchable();
-
-					LoseHP(2);
-				}
-				else
-				{
-					if (e->nx != 0) x += dx;
-					if (e->ny != 0) y += dy;
-				}
-			}
-			else
-			{
-				if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
-			}*/
 		}
 	}
 
@@ -433,7 +355,6 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void Captain::Render()
 {
-	//animations[state]->Render(nx, x, y);
 	if (isUntouchable) 
 	{
 		int r = rand() % 2;
@@ -443,17 +364,12 @@ void Captain::Render()
 	}
 	else
 	{
-		if (hasShield)
+		if (hasShield && this->GetState() != INJURED)
 		{
 			animations[state + 10]->Render(1, nx, x, y);
 		}
 		else animations[state]->Render(1, nx, x, y);
 	}
-	/*if (hasShield)
-	{
-		animations[state + 10]->Render(1, nx, x, y);
-	}
-	else animations[state]->Render(1, nx, x, y);*/
 }
 
 void Captain::SetState(int state)
@@ -499,7 +415,7 @@ void Captain::SetState(int state)
 		animations[state]->Reset();
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
-	case DEFLECT:
+	case INJURED:
 		vy = -0.3f;
 		if (nx > 0) vx = -0.13f;
 		else vx = 0.13f;
@@ -527,13 +443,7 @@ void Captain::GetActiveBoundingBox(float& left, float& top, float& right, float&
 
 void Captain::LoseHP(int x)
 {
-	HP -= x;
-
-	if (HP < 0)
-	{
-		HP = 0;
-		life -= 1;
-	}
+	life -= x;
 }
 
 void Captain::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
@@ -546,8 +456,8 @@ void Captain::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 	{
 		LPGAMEOBJECT enemy = listEnemy->at(i);
 
-		// Không cần xét vùng active nữa khi nó đang active / destroyed
-		if (enemy->GetState() == ENEMY_ACTIVE || enemy->GetState() == ENEMY_DESTROYED)
+		// Khi đang chạy hoặc chết thì hủy
+		if (enemy->GetState() == ENEMY_RUN || enemy->GetState() == ENEMY_DESTROYED)
 			continue;
 
 		float enemy_l, enemy_t, enemy_r, enemy_b;
@@ -560,9 +470,17 @@ void Captain::CheckCollisionWithEnemyActiveArea(vector<LPGAMEOBJECT>* listEnemy)
 			if (dynamic_cast<Shooter*>(enemy))
 			{
 				Shooter * shooter = dynamic_cast<Shooter*>(enemy);
-				if (shooter->GetState() == ENEMY_INACTIVE && shooter->IsAbleToActivate() == true)
+				if (shooter->GetState() == ENEMY_STOP && shooter->IsAbleToActivate() == true)
 				{
-					shooter->SetState(ENEMY_ACTIVE);
+					shooter->SetState(ENEMY_RUN);
+				}
+			}
+			else if (dynamic_cast<Rocketer*>(enemy))
+			{
+				Rocketer * rocketer = dynamic_cast<Rocketer*>(enemy);
+				if (rocketer->GetState() == ENEMY_STOP && rocketer->IsAbleToActivate() == true)
+				{
+					rocketer->SetState(ENEMY_RUN);
 				}
 			}
 		}
