@@ -56,23 +56,31 @@
 
 
 #pragma region PathFile
-#define FILEPATH_FONT				L"Font\\prstart.ttf"
+#define FILEPATH_FONT					L"Font\\prstart.ttf"
 
-#define FILEPATH_TEX_STAGE_1		L"Textures\\stage1.png"
-#define FILEPATH_DATA_STAGE_1		L"Textures\\stage1_data.txt"
-#define FILEPATH_OBJECTS_SCENE_1	L"Textures\\stage1_objects.txt"
+#define FILEPATH_TEX_STAGE_1			L"Textures\\stage1.png"
+#define FILEPATH_DATA_STAGE_1			L"Textures\\stage1_data.txt"
+#define FILEPATH_OBJECTS_SCENE_1		L"Textures\\stage1_objects.txt"
 
 #define FILEPATH_TEX_STAGE_1_BOSS		L"Textures\\stage1-boss.png"
 #define FILEPATH_DATA_STAGE_1_BOSS		L"Textures\\stage1-boss_data.txt"
 #define FILEPATH_OBJECTS_SCENE_1_BOSS	L"Textures\\stage1-boss_objects.txt"
 
-#define FILEPATH_TEX_GROUND			L"Textures\\ground.png"
-#define FILEPATH_TEX_CAP			L"Textures\\Cap.png"
-#define FILEPATH_TEX_CAP_SHIELD		L"Textures\\capnamerica.png"
-#define FILEPATH_TEX_ENEMY			L"Textures\\Mini-Bosser.png"
-#define FILEPATH_TEX_SMALL_ENEMY	L"Textures\\Enemies.png"
-#define FILEPATH_TEX_WIZARD			L"Textures\\Wizard.png"
-#define FILEPATH_TEX_MINIBOSS		L"Textures\\Mini-Bosser.png"
+#define FILEPATH_TEX_STAGE_2			L"Textures\\stage2.png"
+#define FILEPATH_DATA_STAGE_2			L"Textures\\stage2_data.txt"
+#define FILEPATH_OBJECTS_SCENE_2		L"Textures\\stage2_objects.txt"
+
+#define FILEPATH_TEX_STAGE_2_BOSS		L"Textures\\stage2-boss.png"
+#define FILEPATH_DATA_STAGE_2_BOSS		L"Textures\\stage2-boss_data.txt"
+#define FILEPATH_OBJECTS_SCENE_2_BOSS	L"Textures\\stage2-boss_objects.txt"
+
+#define FILEPATH_TEX_GROUND				L"Textures\\ground.png"
+#define FILEPATH_TEX_CAP				L"Textures\\Cap.png"
+#define FILEPATH_TEX_CAP_SHIELD			L"Textures\\capnamerica.png"
+#define FILEPATH_TEX_ENEMY				L"Textures\\Mini-Bosser.png"
+#define FILEPATH_TEX_SMALL_ENEMY		L"Textures\\Enemies.png"
+#define FILEPATH_TEX_WIZARD				L"Textures\\Wizard.png"
+#define FILEPATH_TEX_MINIBOSS			L"Textures\\Mini-Bosser.png"
 
 #pragma endregion
 
@@ -82,6 +90,8 @@
 // Scene
 #define STAGE_1			0
 #define STAGE_1_BOSS	1
+#define STAGE_2			2
+#define STAGE_2_BOSS	3
 
 // Simon
 #define STAND			0

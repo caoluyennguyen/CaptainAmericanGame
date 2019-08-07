@@ -23,9 +23,14 @@ void SceneManager::LoadResources()
 	bullet->LoadResources(textures, sprites, animations);
 	point->LoadResources(textures, sprites, animations);
 	rocket->LoadResources(textures, sprites, animations);
+	skyper->LoadResources(textures, sprites, animations);
+	wizard->LoadResources(textures, sprites, animations);
+	miniboss->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(STAGE_1, FILEPATH_TEX_STAGE_1, FILEPATH_DATA_STAGE_1, 2048, 288, 16, 16);
 	tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 256, 256, 16, 16);
+	tilemaps->Add(STAGE_2, FILEPATH_TEX_STAGE_2, FILEPATH_DATA_STAGE_2, 1024, 244, 16, 16);
+	tilemaps->Add(STAGE_2_BOSS, FILEPATH_TEX_STAGE_2_BOSS, FILEPATH_DATA_STAGE_2_BOSS, 512, 480, 16, 16);
 	
 	captain = new Captain();
 	shield = new Shield();
@@ -89,6 +94,33 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			rocketer->SetIDItem(idItem);
 			unit = new Unit(grid, rocketer, pos_x, pos_y);
 			break;
+		case SKYPER:
+			skyper = new Skyper();
+			skyper->SetPosition(pos_x, pos_y);
+			skyper->SetEntryPosition(pos_x, pos_y);
+			skyper->SetState(state);
+			skyper->SetEnable(isEnable);
+			skyper->SetIDItem(idItem);
+			unit = new Unit(grid, skyper, pos_x, pos_y);
+			break;
+		case WIZARD:
+			wizard = new Wizard();
+			wizard->SetPosition(pos_x, pos_y);
+			wizard->SetEntryPosition(pos_x, pos_y);
+			wizard->SetState(state);
+			wizard->SetEnable(isEnable);
+			wizard->SetIDItem(idItem);
+			unit = new Unit(grid, wizard, pos_x, pos_y);
+			break;
+		case MINIBOSS:
+			miniboss = new MiniBoss();
+			miniboss->SetPosition(pos_x, pos_y);
+			miniboss->SetEntryPosition(pos_x, pos_y);
+			miniboss->SetState(state);
+			miniboss->SetEnable(isEnable);
+			miniboss->SetIDItem(idItem);
+			unit = new Unit(grid, miniboss, pos_x, pos_y);
+			break;
 		default:
 			break;
 		}
@@ -115,7 +147,9 @@ void SceneManager::GetObjectFromGrid()
 		if (dynamic_cast<Items*>(obj) || dynamic_cast<GiftedPoint*>(obj))
 			listStaticObjectsToRender.push_back(obj);
 		else if (dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
-			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocket*>(obj))
+			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocket*>(obj) || 
+			dynamic_cast<Wizard*>(obj) || dynamic_cast<Skyper*>(obj) ||
+			dynamic_cast<MiniBoss*>(obj))
 		{
 			listMovingObjectsToRender.push_back(obj);
 		}
@@ -186,6 +220,18 @@ void SceneManager::Update(DWORD dt)
 		game->SetCameraPosition(0.0f, 0.0f);
 		return;
 	}
+	else if (IDScene == STAGE_1_BOSS && pos_x >= 400.0f)
+	{
+		ChangeScene(STAGE_2);
+		game->SetCameraPosition(0.0f, 0.0f);
+		return;
+	}
+	else if (IDScene == STAGE_2 && pos_x >= 200.0f)
+	{
+		ChangeScene(STAGE_2_BOSS);
+		game->SetCameraPosition(0.0f, 0.0f);
+		return;
+	}
 	
 	// get object from grid by camera position
 	GetObjectFromGrid();
@@ -207,6 +253,18 @@ void SceneManager::Update(DWORD dt)
 		else if (dynamic_cast<Rocketer*>(object))
 		{
 			Rocketer_Update(dt, object);
+		}
+		else if (dynamic_cast<Skyper*>(object))
+		{
+			//Skyper_Update(dt, object);
+		}
+		else if (dynamic_cast<Wizard*>(object))
+		{
+			//Wizard_Update(dt, object);
+		}
+		else if (dynamic_cast<MiniBoss*>(object))
+		{
+			//MiniBoss_Update(dt, object);
 		}
 		else
 		{
@@ -263,6 +321,18 @@ void SceneManager::ChangeScene(int scene)
 	case STAGE_1_BOSS:
 		grid = new Grid(526, 600, 128, 120);
 		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_1_BOSS);
+		captain->SetPosition(0.0f, 100.0f);
+		game->SetCameraPosition(0.0f, 0.0f);
+		break;
+	case STAGE_2:
+		grid = new Grid(1024, 970, 128, 120);
+		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2);
+		captain->SetPosition(0.0f, 100.0f);
+		game->SetCameraPosition(0.0f, 0.0f);
+		break;
+	case STAGE_2_BOSS:
+		grid = new Grid(512, 500, 128, 120);
+		LoadObjectsFromFile(FILEPATH_OBJECTS_SCENE_2_BOSS);
 		captain->SetPosition(0.0f, 100.0f);
 		game->SetCameraPosition(0.0f, 0.0f);
 		break;

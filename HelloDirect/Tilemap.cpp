@@ -97,7 +97,12 @@ void TileMap::CreateZoneToDraw()
 		break;
 	case STAGE_1_BOSS:
 		min_max_col_to_draw.push_back({ 0, 16 });
-		//min_max_col_to_draw.push_back({ 128, 176 });
+		break;
+	case STAGE_2:
+		min_max_col_to_draw.push_back({ 0,  64});
+		break;
+	case STAGE_2_BOSS:
+		min_max_col_to_draw.push_back({ 0,  32 });
 		break;
 	default:
 		break;

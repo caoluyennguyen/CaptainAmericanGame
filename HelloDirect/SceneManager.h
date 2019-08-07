@@ -13,6 +13,9 @@
 #include "Rocket.h"
 #include "Items.h"
 #include "GiftedPoint.h"
+#include "Skyper.h"
+#include "Wizard.h"
+#include "MiniBoss.h"
 
 class SceneManager
 {
@@ -32,6 +35,9 @@ class SceneManager
 	Rocket* rocket = new Rocket();
 	Items* items = new Items();
 	GiftedPoint* point = new GiftedPoint();
+	Skyper* skyper = new Skyper();
+	Wizard* wizard = new Wizard();
+	MiniBoss* miniboss = new MiniBoss();
 
 	TileMaps* tilemaps = TileMaps::GetInstance();
 	Textures* textures = Textures::GetInstance();
@@ -84,5 +90,8 @@ public:
 	void Shield_Update(DWORD dt);
 	void Shooter_Update(DWORD dt, LPGAMEOBJECT& object);
 	void Rocketer_Update(DWORD dt, LPGAMEOBJECT& object);
+	void Skyper_Update(DWORD dt, LPGAMEOBJECT& object);
+	void Wizard_Update(DWORD dt, LPGAMEOBJECT& object);
+	void MiniBoss_Update(DWORD dt, LPGAMEOBJECT& object);
 };
 

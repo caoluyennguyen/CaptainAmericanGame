@@ -15,34 +15,39 @@ void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 	LPDIRECT3DTEXTURE9 texMiniboss = textures->Get(ID_TEX_MINIBOSS);
 
-	// idle
-	sprites->Add(120001, 48, 130, 77, 181, texMiniboss);
+	// run
+	sprites->Add(130001, 8, 33, 38, 72, texMiniboss);
+	sprites->Add(130002, 51, 33, 75, 72, texMiniboss);
+	sprites->Add(130003, 89, 33, 117, 72, texMiniboss);
 	// shoot
-	sprites->Add(120002, 66, 76, 104, 120, texMiniboss);
-	// die
-	sprites->Add(120003, 220, 37, 253, 64, texMiniboss);
-	sprites->Add(120004, 268, 44, 304, 64, texMiniboss);
-	//sprites->Add(120005, 228, 124, 252, 168, texWizard);
-	//sprites->Add(120006, 260, 124, 284, 168, texWizard);
+	sprites->Add(130004, 168, 29, 206, 72, texMiniboss);
+	// injured
+	sprites->Add(130005, 360, 24, 390, 72, texMiniboss);
+	sprites->Add(130006, 240, 29, 270, 72, texMiniboss);
+	// carry and throw
+	sprites->Add(130007, 280, 24, 306, 72, texMiniboss);
+	sprites->Add(130008, 320, 29, 352, 72, texMiniboss);
 
 	LPANIMATION ani;
 
 	ani = new Animation(200);
-	ani->Add(120001);
-	ani->Add(120002);
-	ani->Add(120003);
+	ani->Add(130001);
+	ani->Add(130002);
+	ani->Add(130003);
 	animations->Add(MINIBOSS_RUN_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(110001);
+	ani->Add(130004);
 	animations->Add(MINIBOSS_SHOOT_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(110006);
+	ani->Add(130005);
+	ani->Add(130006);
 	animations->Add(MINIBOSS_DEAD_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(110001);
+	ani->Add(130007);
+	ani->Add(130008);
 	animations->Add(MINIBOSS_SIT_ANI, ani);
 }
 

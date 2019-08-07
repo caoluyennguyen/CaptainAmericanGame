@@ -31,19 +31,19 @@ void Wizard::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& 
 	ani->Add(120001);
 	ani->Add(120002);
 	ani->Add(120003);
-	animations->Add(SKYPER_FLY_ANI, ani);
+	animations->Add(WIZARD_FLY_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(110001);
-	animations->Add(SKYPER_SHOOT_ANI, ani);
+	ani->Add(120001);
+	animations->Add(WIZARD_SHOOT_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(110006);
-	animations->Add(SKYPER_DEAD_ANI, ani);
+	ani->Add(120006);
+	animations->Add(WIZARD_DEAD_ANI, ani);
 
 	ani = new Animation(200);
-	ani->Add(110001);
-	animations->Add(SKYPER_SIT_ANI, ani);
+	ani->Add(120001);
+	animations->Add(WIZARD_SIT_ANI, ani);
 }
 
 void Wizard::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
@@ -119,37 +119,37 @@ void Wizard::Render()
 
 void Wizard::SetState(int state)
 {
-	//GameObject::SetState(state);
-	//switch (state)
-	//{
-	//case ENEMY_RUN:
-	//	//vx = 0.1f * nx;
-	//	lastTimeShoot = GetTickCount();
-	//	deltaTimeToShoot = 500 + rand() % 2000;
-	//	respawnTime_Start = 0;
-	//	isRespawnWaiting = false;
-	//	break;
-	//case ENEMY_DESTROYED:
-	//	vx = vy = 0;
-	//	animations[state]->SetAniStartTime(GetTickCount());
-	//	break;
-	//case ENEMY_SHOOT:
-	//	vx = 0.1 * nx;
-	//	vy = -0.2;
-	//	animations[state]->SetAniStartTime(GetTickCount());
-	//	break;
-	//case ENEMY_STOP:
-	//	x = entryPosition.x;
-	//	y = entryPosition.y;
-	//	vx = vy = 0;
-	//	StartRespawnTimeCounter();
-	//	break;
-	//case ENEMY_SIT:
-	//	lastTimeShoot = GetTickCount();
-	//	deltaTimeToShoot = 500 + rand() % 2000;
-	//default:
-	//	break;
-	//}
+	GameObject::SetState(state);
+	switch (state)
+	{
+	case ENEMY_RUN:
+		//vx = 0.1f * nx;
+		//lastTimeShoot = GetTickCount();
+		//deltaTimeToShoot = 500 + rand() % 2000;
+		//respawnTime_Start = 0;
+		//isRespawnWaiting = false;
+		break;
+	case ENEMY_DESTROYED:
+		vx = vy = 0;
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
+	case ENEMY_SHOOT:
+		vx = 0.1 * nx;
+		vy = -0.2;
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
+	case ENEMY_STOP:
+		x = entryPosition.x;
+		y = entryPosition.y;
+		vx = vy = 0;
+		//StartRespawnTimeCounter();
+		break;
+	case ENEMY_SIT:
+		//lastTimeShoot = GetTickCount();
+		//deltaTimeToShoot = 500 + rand() % 2000;
+	default:
+		break;
+	}
 }
 
 void Wizard::GetBoundingBox(float& left, float& top, float& right, float& bottom)
