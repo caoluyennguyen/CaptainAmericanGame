@@ -6,7 +6,7 @@ Rocketer::Rocketer()
 	AddAnimation(ROCKETER_DEAD_ANI);
 	AddAnimation(ROCKETER_SHOOT_ANI);
 	AddAnimation(ROCKETER_SIT_ANI);
-	AddAnimation(ROCKETER_STOP_ANI);
+	AddAnimation(ROCKETER_DEAD_ANI);
 }
 
 void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -34,7 +34,7 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 	ani->Add(60004);
 	animations->Add(ROCKETER_SHOOT_ANI, ani);
 
-	ani = new Animation(200);
+	ani = new Animation(400);
 	ani->Add(60006);
 	animations->Add(ROCKETER_DEAD_ANI, ani);
 
@@ -45,10 +45,10 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == ENEMY_DESTROYED && animations[state]->IsOver(150) == true)
+	if (state == ENEMY_DESTROYED && animations[state]->IsOver(200) == true)
 	{
 		SetState(ENEMY_STOP);
-		//this->isEnable = false;
+		this->isEnable = false;
 		return;
 	}
 

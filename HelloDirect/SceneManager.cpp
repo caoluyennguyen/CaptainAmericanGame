@@ -171,8 +171,12 @@ void SceneManager::UpdateCameraPosition()
 		if (captain->x >= min_col * 16 + (SCREEN_WIDTH / 2 - 8) &&
 			captain->x <= max_col * 16 - (SCREEN_WIDTH / 2 - 8))
 		{
-			game->SetCameraPosition(captain->x - SCREEN_WIDTH / 2, 0);
+			game->SetCameraPositionX(captain->x - SCREEN_WIDTH / 2);
 		}
+	}
+	if (captain->y > 300 || captain->y <= 50)
+	{
+		game->SetCameraPositionY(captain->y - 208);
 	}
 }
 
@@ -226,7 +230,7 @@ void SceneManager::Update(DWORD dt)
 		game->SetCameraPosition(0.0f, 0.0f);
 		return;
 	}
-	else if (IDScene == STAGE_2 && pos_x >= 200.0f)
+	else if (IDScene == STAGE_2 && pos_x >= 900.0f)
 	{
 		ChangeScene(STAGE_2_BOSS);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -260,7 +264,7 @@ void SceneManager::Update(DWORD dt)
 		}
 		else if (dynamic_cast<Wizard*>(object))
 		{
-			//Wizard_Update(dt, object);
+			Wizard_Update(dt, object);
 		}
 		else if (dynamic_cast<MiniBoss*>(object))
 		{
@@ -373,7 +377,9 @@ void SceneManager::Captain_Update(DWORD dt)
 	for (auto obj : listObjects)
 	{
 		if ((dynamic_cast<Ground*>(obj) || dynamic_cast<Shooter*>(obj) ||
-			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocketer*>(obj)) &&
+			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocketer*>(obj) ||
+			dynamic_cast<Skyper*>(obj) || dynamic_cast<Items*>(obj) ||
+			dynamic_cast<Wizard*>(obj) || dynamic_cast<MiniBoss*>(obj)) &&
 			obj->GetState() != ENEMY_STOP && obj->IsEnable() == true)
 		{
 			coObjects.push_back(obj);
@@ -444,8 +450,8 @@ void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 				coObjects.push_back(obj);
 			}
 		}
-	}
 	shooter->Update(dt, &coObjects);
+	}
 }
 
 void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
@@ -490,4 +496,32 @@ void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 
 	}
 	rocketer->Update(dt, &coObjects);
+}
+
+void SceneManager::Wizard_Update(DWORD dt, LPGAMEOBJECT& object)
+{
+	if (object->GetState() == ENEMY_STOP)
+		return;
+
+	wizard = dynamic_cast<Wizard*>(object);
+
+	float sx, sy;
+	captain->GetPosition(sx, sy);
+	wizard->SetSimonPosition(sx, sy);
+	wizard->SetOrientation(-captain->nx);
+	wizard->Update(dt);
+}
+
+void SceneManager::MiniBoss_Update(DWORD dt, LPGAMEOBJECT& object)
+{
+	if (object->GetState() == ENEMY_STOP)
+		return;
+
+	miniboss = dynamic_cast<MiniBoss*>(object);
+
+	float sx, sy;
+	captain->GetPosition(sx, sy);
+	miniboss->SetSimonPosition(sx, sy);
+	miniboss->SetOrientation(-captain->nx);
+	miniboss->Update(dt);
 }

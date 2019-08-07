@@ -53,10 +53,10 @@ void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == ENEMY_DESTROYED && animations[state]->IsOver(150) == true)
+	if (state == ENEMY_DESTROYED && animations[state]->IsOver(200) == true)
 	{
 		SetState(ENEMY_STOP);
-		//this->isEnable = false;
+		this->isEnable = false;
 		return;
 	}
 
@@ -65,7 +65,6 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 	if (state == ENEMY_SHOOT && animations[state]->IsOver(200) == true)
 	{
-		//nx = nxShoot;
 		SetState(ENEMY_SIT);
 		return;
 	}
@@ -77,6 +76,8 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	}
 
 	GameObject::Update(dt);
+
+	vy += 0.002f * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -96,65 +97,69 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		x += dx;
-		y += min_ty * dy + ny * 0.1f;
+		/*x += dx;
+		y += min_ty * dy + ny * 0.1f;*/
 
-		if (ny != 0)
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
-			if (ny == -1.0f)
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (ny != 0)
 			{
-				vy = 0;
+				if (ny == -1.0f)
+				{
+					vx = 0;
+					vy = 0;
+				}
+				else
+				{
+					y += dy;
+				}
 			}
 			else
 			{
-				y += dy;
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
 			}
 		}
 	}
 
-	// clean up collision events
 	for (int i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void MiniBoss::Render()
 {
-	if (state != ENEMY_STOP)
-		animations[state]->Render(1, nx, x, y);
+	animations[state]->Render(1, nx, x, y);
 }
 
 void MiniBoss::SetState(int state)
 {
-	//GameObject::SetState(state);
-	//switch (state)
-	//{
-	//case ENEMY_RUN:
-	//	//vx = 0.1f * nx;
-	//	lastTimeShoot = GetTickCount();
-	//	deltaTimeToShoot = 500 + rand() % 2000;
-	//	respawnTime_Start = 0;
-	//	isRespawnWaiting = false;
-	//	break;
-	//case ENEMY_DESTROYED:
-	//	vx = vy = 0;
-	//	animations[state]->SetAniStartTime(GetTickCount());
-	//	break;
-	//case ENEMY_SHOOT:
-	//	vx = 0.1 * nx;
-	//	vy = -0.2;
-	//	animations[state]->SetAniStartTime(GetTickCount());
-	//	break;
-	//case ENEMY_STOP:
-	//	x = entryPosition.x;
-	//	y = entryPosition.y;
-	//	vx = vy = 0;
-	//	StartRespawnTimeCounter();
-	//	break;
-	//case ENEMY_SIT:
-	//	lastTimeShoot = GetTickCount();
-	//	deltaTimeToShoot = 500 + rand() % 2000;
-	//default:
-	//	break;
-	//}
+	GameObject::SetState(state);
+	switch (state)
+	{
+	case ENEMY_RUN:
+		//vx = 0.1f * nx;
+		break;
+	case ENEMY_DESTROYED:
+		vx = vy = 0;
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
+	case ENEMY_SHOOT:
+		vx = 0.1 * nx;
+		vy = -0.2;
+		animations[state]->SetAniStartTime(GetTickCount());
+		break;
+	case ENEMY_STOP:
+		x = entryPosition.x;
+		y = entryPosition.y;
+		vx = vy = 0;
+		break;
+	default:
+		break;
+	}
 }
 
 void MiniBoss::GetBoundingBox(float& left, float& top, float& right, float& bottom)

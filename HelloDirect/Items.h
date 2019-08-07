@@ -4,6 +4,7 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "Box.h"
+#include "Captain.h"
 
 class Items : public GameObject
 {

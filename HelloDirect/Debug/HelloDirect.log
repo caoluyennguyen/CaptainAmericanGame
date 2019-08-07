@@ -1,10 +1,6 @@
-﻿  MiniBoss.cpp
-  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-D:\HelloDirect\HelloDirect\Define.h(17,1): warning C4005:  'DIRECTINPUT_VERSION': macro redefinition
-C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h(42): message :  see previous definition of 'DIRECTINPUT_VERSION'
+﻿  Source.cpp
 D:\HelloDirect\HelloDirect\Define.h(224,1): warning C4005:  'CAPTAIN_WALKING_SPEED': macro redefinition
 D:\HelloDirect\HelloDirect\Define.h(24): message :  see previous definition of 'CAPTAIN_WALKING_SPEED'
 D:\HelloDirect\HelloDirect\Define.h(225,1): warning C4005:  'CAPTAIN_JUMP_SPEED_Y': macro redefinition
 D:\HelloDirect\HelloDirect\Define.h(26): message :  see previous definition of 'CAPTAIN_JUMP_SPEED_Y'
-D:\HelloDirect\HelloDirect\MiniBoss.cpp(116,20): warning C4018:  '<': signed/unsigned mismatch
   HelloDirect.vcxproj -> D:\HelloDirect\Debug\HelloDirect.exe

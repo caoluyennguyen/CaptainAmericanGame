@@ -6,7 +6,7 @@ Shooter::Shooter()
 	AddAnimation(SHOOTER_DEAD_ANI);
 	AddAnimation(SHOOTER_SHOOT_ANI);
 	AddAnimation(SHOOTER_SIT_ANI);
-	AddAnimation(SHOOTER_STOP_ANI);
+	AddAnimation(SHOOTER_DEAD_ANI);
 }
 
 void Shooter::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -46,10 +46,15 @@ void Shooter::LoadResources(Textures*& textures, Sprites*& sprites, Animations*&
 
 void Shooter::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == ENEMY_DESTROYED && animations[state]->IsOver(150) == true)
+	if (state == ENEMY_DESTROYED)
 	{
-		SetState(ENEMY_STOP);
-		return;
+		if (animations[state]->IsOver(200) == true)
+		{
+
+			SetState(ENEMY_STOP);
+			this->isEnable = false;
+			return;
+		}
 	}
 
 	if (stopMovement == true)
@@ -111,7 +116,7 @@ void Shooter::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 void Shooter::Render()
 {
 	if (state != ENEMY_STOP)
-	animations[state]->Render(1, nx, x, y);
+		animations[state]->Render(1, nx, x, y);
 }
 
 void Shooter::SetState(int state)

@@ -304,6 +304,11 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->obj->GetState() == HEART)
 				{
 					life += 1;
+					e->obj->isEnable = false;
+				}
+				else if (e->obj->GetState() == STAR)
+				{
+					e->obj->isEnable = false;
 				}
 			}
 			else if (dynamic_cast<Shield*>(e->obj))

@@ -222,6 +222,16 @@ void Game::SetCameraPosition(float x, float y)
 	this->cameraPosition.y = y;
 }
 
+void Game::SetCameraPositionX(float x)
+{
+	this->cameraPosition.x = x;
+}
+
+void Game::SetCameraPositionY(float y)
+{
+	this->cameraPosition.y = y;
+}
+
 Game::~Game()
 {
 	if (spriteHandler != NULL) spriteHandler->Release();

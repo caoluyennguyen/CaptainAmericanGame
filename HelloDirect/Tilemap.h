@@ -19,8 +19,8 @@ class TileMap
 	int map_Width;			// chiều rộng của map
 	int map_Height;			// chiều cao của map
 
-	int nums_row;			// số hàng của map
-	int nums_col;			// số cột của map
+	int nums_row = 0;			// số hàng của map
+	int nums_col = 0;			// số cột của map
 
 	int tile_Width;			// chiều rộng một tile
 	int tile_Height;		// chiều cao một tile
