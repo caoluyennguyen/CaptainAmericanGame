@@ -18,7 +18,7 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject = NULL, bool stopMovement = false);
 	void Render();
 	void SetState(int state);
-	void SetNx(int x) { this->nx = x; }
+	//void SetNx(int x) { this->nx = x; }
 	void StartRespawnTimeCounter() { isRespawnWaiting = true; respawnTime_Start = GetTickCount(); }
 	void SetIsRespawnWaiting(bool x) { isRespawnWaiting = x; }
 	bool IsRespawnWaiting() { return isRespawnWaiting; }

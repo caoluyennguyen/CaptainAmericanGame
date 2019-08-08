@@ -11,6 +11,7 @@
 #include "Shooter.h"
 #include "Rocketer.h"
 #include "Items.h"
+#include "Laser.h"
 
 using namespace std;
 

@@ -320,11 +320,22 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny != 0) y += dy;
 			}
 			else if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj) ||
-				dynamic_cast<Bullet*>(e->obj))
+				dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Laser*>(e->obj))
 			{
-				if (dynamic_cast<Bullet*>(e->obj))
+				if (dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Laser*>(e->obj))
 				{
 					e->obj->SetEnable(false);
+				}
+				if (dynamic_cast<Laser*>(e->obj))
+				{
+					if (e->ny != 0 && this->GetState() == UP)
+					{
+						e->obj->SetEnable(false);
+					}
+					else
+					{
+						e->obj->SetEnable(false);
+					}
 				}
 
 				if (isUntouchable == false)

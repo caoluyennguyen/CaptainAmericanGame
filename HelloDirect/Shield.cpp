@@ -5,6 +5,9 @@
 #include "Shooter.h"
 #include "Rocketer.h"
 #include "GiftedPoint.h"
+#include "Skyper.h"
+#include "MiniBoss.h"
+#include "Wizard.h"
 
 Shield::Shield()
 {
@@ -55,8 +58,9 @@ void Shield::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<Shooter*>(e->obj)
-				|| dynamic_cast<Rocketer*>(e->obj))
+			if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj) ||
+				dynamic_cast<Skyper*>(e->obj) || dynamic_cast<Wizard*>(e->obj) ||
+				dynamic_cast<MiniBoss*>(e->obj))
 			{
 				e->obj->SetState(ENEMY_DESTROYED);
 				if (e->nx != 0) x += dx;

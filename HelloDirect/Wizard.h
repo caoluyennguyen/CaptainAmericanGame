@@ -1,21 +1,23 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
+#include "Box.h"
 
 class Wizard :
 	public GameObject
 {
 	int HP = 3;//BOSS_HP; 
 
-	bool isFlyToTarget = false;
-	bool isFlyToCap = false;
-
 	D3DXVECTOR2 capPostion;
-	D3DXVECTOR2 target;
+	DWORD lastTimeShoot = 0; // thời gian kể từ lúc vừa bắn xong đến lần bắn tiếp theo
+	DWORD lastTimeFly = 0; // thời gian kể từ lúc vừa bắn xong đến lần bắn tiếp theo
+	DWORD deltaTime = 0;
 
-	int idTarget = 0;
+	int rollBack = 1;
 
 	int startTimeWaiting = 0;
 	bool isStopWaiting = false;
+	bool isFlying = true;
+	bool isShooting = true;
 
 	bool dropItem = false;
 public:
@@ -29,16 +31,17 @@ public:
 	void FlyToTarget(DWORD dt);
 	void GetVelocity();
 
-	void StartStopTimeCounter() { isStopWaiting = true; startTimeWaiting = GetTickCount(); }
+	void FlyAroundScreen(DWORD dt);
+	void IsShooting();
 
+	void StartStopTimeCounter() { isStopWaiting = true; startTimeWaiting = GetTickCount(); }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
+	void SetCapPosition(float sx, float sy) { capPostion.x = sx; capPostion.y = sy; }
 
-	void SetSimonPosition(float sx, float sy) { capPostion.x = sx; capPostion.y = sy; }
-
-	int GetIdTarget() { return idTarget; }
-
-	bool DropItem() { return dropItem; }
+	int GetLastTimeShoot() { return lastTimeShoot; }
+	int GetLastTimeFly() { return lastTimeFly; }
+	int GetDeltaTime() { return deltaTime; }
 
 	void LoseHP(int x);
 	int GetHP() { return HP; }

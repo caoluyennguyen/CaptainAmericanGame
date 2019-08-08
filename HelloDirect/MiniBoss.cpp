@@ -1,4 +1,4 @@
-#include "MiniBoss.h"
+﻿#include "MiniBoss.h"
 
 MiniBoss::MiniBoss()
 {
@@ -6,7 +6,8 @@ MiniBoss::MiniBoss()
 	AddAnimation(MINIBOSS_DEAD_ANI);
 	AddAnimation(MINIBOSS_SHOOT_ANI);
 	AddAnimation(MINIBOSS_SIT_ANI);
-	AddAnimation(MINIBOSS_STOP_ANI);
+	AddAnimation(MINIBOSS_SIT_ANI);
+	AddAnimation(MINIBOSS_THROW_ANI);
 }
 
 void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& animations)
@@ -27,6 +28,8 @@ void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 	// carry and throw
 	sprites->Add(130007, 280, 24, 306, 72, texMiniboss);
 	sprites->Add(130008, 320, 29, 352, 72, texMiniboss);
+	// idle
+	sprites->Add(130009, 240, 29, 270, 72, texMiniboss);
 
 	LPANIMATION ani;
 
@@ -46,29 +49,29 @@ void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 	animations->Add(MINIBOSS_DEAD_ANI, ani);
 
 	ani = new Animation(200);
+	ani->Add(130009);
+	animations->Add(MINIBOSS_SIT_ANI, ani);
+
+	ani = new Animation(200);
 	ani->Add(130007);
 	ani->Add(130008);
-	animations->Add(MINIBOSS_SIT_ANI, ani);
+	animations->Add(MINIBOSS_THROW_ANI, ani);
 }
 
 void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == ENEMY_DESTROYED && animations[state]->IsOver(200) == true)
+	if (state == ENEMY_DESTROYED && this->animations[state]->IsOver(200) == false)
 	{
-		SetState(ENEMY_STOP);
-		this->isEnable = false;
-		return;
+		HP--;
 	}
 
 	if (stopMovement == true)
 		return;
 
-	if (state == ENEMY_SHOOT && animations[state]->IsOver(200) == true)
+	if (HP == 0)
 	{
-		SetState(ENEMY_SIT);
-		return;
+		state = ENEMY_STOP;
 	}
-
 	else if (state == ENEMY_STOP)
 	{
 		vx = 0;
@@ -77,7 +80,7 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 	GameObject::Update(dt);
 
-	vy += 0.002f * dt;
+	vy += 0.001f * dt;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -97,9 +100,6 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
-		/*x += dx;
-		y += min_ty * dy + ny * 0.1f;*/
-
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
@@ -107,17 +107,18 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (ny != 0)
+			if (dynamic_cast<Ground*>(e->obj))
 			{
-				if (ny == -1.0f)
+				if (ny != 0)
 				{
-					vx = 0;
 					vy = 0;
 				}
 				else
-				{
 					y += dy;
-				}
+			}
+			else if (dynamic_cast<Shield*>(e->obj))
+			{
+				HP--;
 			}
 			else
 			{
@@ -141,22 +142,36 @@ void MiniBoss::SetState(int state)
 	switch (state)
 	{
 	case ENEMY_RUN:
-		//vx = 0.1f * nx;
+		vx = 0.05f * nx;
+		vy = 0;
+		lastTimeThrow = GetTickCount();
+		deltaTime = 500 + rand() % 2000; // Random trong khoảng thời gian là 0.5 - 2s
 		break;
 	case ENEMY_DESTROYED:
 		vx = vy = 0;
-		animations[state]->SetAniStartTime(GetTickCount());
+		lastTimeThrow = GetTickCount();
+		deltaTime = 2000;
+		//animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case ENEMY_SHOOT:
-		vx = 0.1 * nx;
-		vy = -0.2;
+		vx = vy = 0;
+		lastTimeRun = GetTickCount();
+		deltaTime = 500 + rand() % 2000;
 		animations[state]->SetAniStartTime(GetTickCount());
 		break;
 	case ENEMY_STOP:
-		x = entryPosition.x;
-		y = entryPosition.y;
 		vx = vy = 0;
 		break;
+	case ENEMY_SIT:
+		vx = vy = 0;
+		lastTimeThrow = GetTickCount();
+		deltaTime = 500 + rand() % 2000;
+		animations[state]->SetAniStartTime(GetTickCount());
+
+	case ENEMY_THROW:
+		vx = vy = 0;
+		lastTimeShoot = GetTickCount();
+		deltaTime = 500 + rand() % 2000;
 	default:
 		break;
 	}
@@ -166,7 +181,7 @@ void MiniBoss::GetBoundingBox(float& left, float& top, float& right, float& bott
 {
 	left = x;
 	top = y;
-	right = left + 24;
+	right = left + 30;
 	bottom = top + 40;
 }
 

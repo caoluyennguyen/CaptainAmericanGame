@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Barrel.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Items.cpp" />
+    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="MiniBoss.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Rocketer.cpp" />
@@ -144,6 +146,7 @@
     <ClCompile Include="Wizard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Barrel.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
@@ -157,6 +160,7 @@
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Items.h" />
+    <ClInclude Include="Laser.h" />
     <ClInclude Include="MiniBoss.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Rocketer.h" />

@@ -26,6 +26,8 @@ void SceneManager::LoadResources()
 	skyper->LoadResources(textures, sprites, animations);
 	wizard->LoadResources(textures, sprites, animations);
 	miniboss->LoadResources(textures, sprites, animations);
+	laser->LoadResources(textures, sprites, animations);
+	barrel->LoadResources(textures, sprites, animations);
 
 	tilemaps->Add(STAGE_1, FILEPATH_TEX_STAGE_1, FILEPATH_DATA_STAGE_1, 2048, 288, 16, 16);
 	tilemaps->Add(STAGE_1_BOSS, FILEPATH_TEX_STAGE_1_BOSS, FILEPATH_DATA_STAGE_1_BOSS, 256, 256, 16, 16);
@@ -149,7 +151,8 @@ void SceneManager::GetObjectFromGrid()
 		else if (dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
 			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocket*>(obj) || 
 			dynamic_cast<Wizard*>(obj) || dynamic_cast<Skyper*>(obj) ||
-			dynamic_cast<MiniBoss*>(obj))
+			dynamic_cast<MiniBoss*>(obj) || dynamic_cast<Laser*>(obj) ||
+			dynamic_cast<Barrel*>(obj))
 		{
 			listMovingObjectsToRender.push_back(obj);
 		}
@@ -268,7 +271,7 @@ void SceneManager::Update(DWORD dt)
 		}
 		else if (dynamic_cast<MiniBoss*>(object))
 		{
-			//MiniBoss_Update(dt, object);
+			MiniBoss_Update(dt, object);
 		}
 		else
 		{
@@ -355,14 +358,16 @@ void SceneManager::StopedByPosition()
 		object->GetPosition(x, y);
 
 		//if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1)
-		if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1)
+		if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1 ||
+			y > entryViewPort.y + SCREEN_HEIGHT - 1)
 		{
 			if ((dynamic_cast<Shooter*>(object) || dynamic_cast<Rocketer*>(object)) 
 				&& object->GetState() == ENEMY_RUN)
 			{
 				object->SetState(ENEMY_STOP);
 			}
-			else if (dynamic_cast<Bullet*>(object) || dynamic_cast<Rocket*>(object))
+			else if (dynamic_cast<Bullet*>(object) || dynamic_cast<Rocket*>(object) || 
+				dynamic_cast<Laser*>(object) || dynamic_cast<Barrel*>(object))
 			{
 				object->SetEnable(false);
 			}
@@ -379,7 +384,8 @@ void SceneManager::Captain_Update(DWORD dt)
 		if ((dynamic_cast<Ground*>(obj) || dynamic_cast<Shooter*>(obj) ||
 			dynamic_cast<Bullet*>(obj) || dynamic_cast<Rocketer*>(obj) ||
 			dynamic_cast<Skyper*>(obj) || dynamic_cast<Items*>(obj) ||
-			dynamic_cast<Wizard*>(obj) || dynamic_cast<MiniBoss*>(obj)) &&
+			dynamic_cast<Wizard*>(obj) || dynamic_cast<MiniBoss*>(obj) ||
+			dynamic_cast<Laser*>(obj) || dynamic_cast<Barrel*>(obj)) &&
 			obj->GetState() != ENEMY_STOP && obj->IsEnable() == true)
 		{
 			coObjects.push_back(obj);
@@ -402,7 +408,9 @@ void SceneManager::Shield_Update(DWORD dt)
 	for (auto obj : listObjects)
 	{
 		if ((dynamic_cast<Shooter*>(obj) || dynamic_cast<Rocketer*>(obj) ||
-			dynamic_cast<GiftedPoint*>(obj)) && obj->IsEnable() == true)
+			dynamic_cast<GiftedPoint*>(obj) || dynamic_cast<Skyper*>(obj) ||
+			dynamic_cast<Wizard*>(obj) || dynamic_cast<MiniBoss*>(obj)) 
+			&& obj->IsEnable() == true)
 		{
 			coObjects.push_back(obj);
 		}
@@ -423,8 +431,8 @@ void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 	float sx, sy;
 	shooter->GetPosition(sx, sy);
 
-	if (sx < cx) shooter->SetNx(1);
-	else shooter->SetNx(-1);
+	if (sx < cx) shooter->SetOrientation(1);
+	else shooter->SetOrientation(-1);
 
 	if ((shooter->GetState() == ENEMY_RUN || shooter->GetState() == ENEMY_SIT) &&
 		GetTickCount() - shooter->GetLastTimeShoot() >= shooter->GetDeltaTimeToShoot())
@@ -465,8 +473,8 @@ void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 	float rx, ry;
 	rocketer->GetPosition(rx, ry);
 
-	if (rx < cx) rocketer->SetNx(1);
-	else rocketer->SetNx(-1);
+	if (rx < cx) rocketer->SetOrientation(1);
+	else rocketer->SetOrientation(-1);
 
 	if ((rocketer->GetState() == ENEMY_RUN || rocketer->GetState() == ENEMY_SIT) &&
 		GetTickCount() - rocketer->GetLastTimeShoot() >= rocketer->GetDeltaTimeToShoot())
@@ -502,26 +510,133 @@ void SceneManager::Wizard_Update(DWORD dt, LPGAMEOBJECT& object)
 {
 	if (object->GetState() == ENEMY_STOP)
 		return;
+	vector<LPGAMEOBJECT> coObjects;
 
 	wizard = dynamic_cast<Wizard*>(object);
 
-	float sx, sy;
-	captain->GetPosition(sx, sy);
-	wizard->SetSimonPosition(sx, sy);
-	wizard->SetOrientation(-captain->nx);
-	wizard->Update(dt);
+	// Quay hướng captain
+	float cx, cy;
+	captain->GetPosition(cx, cy);
+	float wx, wy;
+	wizard->GetPosition(wx, wy);
+	if (wx < cx) wizard->SetOrientation(1);
+	else wizard->SetOrientation(-1);
+	wizard->SetCapPosition(cx, cy);
+
+	/*if ((wizard->GetState() == WIZARD_FLY_UP) &&
+		GetTickCount() - wizard->GetLastTimeShoot() >= wizard->GetDeltaTime())
+	{
+		wizard->SetState(WIZARD_SHOOT);
+	}
+	else if ((wizard->GetState() == WIZARD_SHOOT || wizard->GetState() == WIZARD_IDLE) &&
+		GetTickCount() - wizard->GetLastTimeFly() >= wizard->GetDeltaTime())
+	{
+		wizard->SetState(WIZARD_FLY_UP);
+	}*/
+
+	if (wizard->GetState() == WIZARD_FLY_SHOOT)
+	{
+		if (countLaser)
+		{
+			// Bắn đạn
+			laser = new Laser();
+			laser->SetPosition(wx, wy + 20.0f);
+			laser->SetState(LASER_DOWN);
+			laser->SetEnable(true);
+			countLaser--;
+
+			unit = new Unit(grid, laser, wx, wy + 20.0f);
+		}
+	}
+	//else if (wizard->GetState() == WIZARD_SHOOT)
+	//{
+	//	if (countLaser)
+	//	{
+	//		// Bắn đạn
+	//		laser = new Laser();
+	//		laser->SetPosition(wx, wy + 20.0f);
+	//		laser->SetState(LASER_ASIDE);
+	//		laser->SetEnable(true);
+	//		countLaser--;
+	//		unit = new Unit(grid, laser, wx, wy + 20.0f);
+	//	}
+	//}
+	else
+	{
+		countLaser = 1;
+		coObjects.clear();
+		for (auto obj : listObjects)
+		{
+			if (dynamic_cast<Ground*>(obj))
+			{
+				coObjects.push_back(obj);
+			}
+		}
+	}
+	wizard->Update(dt, &coObjects);
 }
 
 void SceneManager::MiniBoss_Update(DWORD dt, LPGAMEOBJECT& object)
 {
 	if (object->GetState() == ENEMY_STOP)
 		return;
+	vector<LPGAMEOBJECT> coObjects;
 
 	miniboss = dynamic_cast<MiniBoss*>(object);
 
-	float sx, sy;
-	captain->GetPosition(sx, sy);
-	miniboss->SetSimonPosition(sx, sy);
-	miniboss->SetOrientation(-captain->nx);
-	miniboss->Update(dt);
+	// Quay hướng captain
+	float cx, cy;
+	captain->GetPosition(cx, cy);
+	float mx, my;
+	miniboss->GetPosition(mx, my);
+	miniboss->SetCapPosition(cx, cy);
+	if (mx < cx) miniboss->SetOrientation(1);
+	else miniboss->SetOrientation(-1);
+
+	if ((miniboss->GetState() == ENEMY_THROW) &&
+		GetTickCount() - miniboss->GetLastTimeShoot() >= miniboss->GetDeltaTime())
+	{
+		miniboss->SetState(ENEMY_SHOOT);
+
+		// Bắn đạn
+		laser = new Laser();
+		laser->SetPosition(mx + 5.0f, my + 10.0f);
+		laser->SetOrientation(miniboss->nx);
+		laser->SetState(BIG_LASER);
+		laser->SetEnable(true);
+
+		unit = new Unit(grid, laser, mx + 5.0f, my + 10.0f);
+	}
+	else if ((miniboss->GetState() == ENEMY_SHOOT) &&
+		GetTickCount() - miniboss->GetLastTimeRun() >= miniboss->GetDeltaTime())
+	{
+		miniboss->SetState(ENEMY_RUN);
+	}
+	else if ((miniboss->GetState() == ENEMY_RUN || miniboss->GetState() == ENEMY_SIT || miniboss->GetState() == ENEMY_DESTROYED) &&
+		GetTickCount() - miniboss->GetLastTimeThrow() >= miniboss->GetDeltaTime())
+	{
+		miniboss->SetState(ENEMY_THROW);
+
+		// Ném thùng
+		barrel = new Barrel();
+		barrel->SetPosition(mx + 5.0f, my - 10.0f);
+		barrel->SetOrientation(miniboss->nx);
+		barrel->SetState(BULLET);
+		barrel->SetEnable(true);
+
+		unit = new Unit(grid, barrel, mx + 5.0f, my - 10.0f);
+	}
+	else
+	{
+		coObjects.clear();
+		for (auto obj : listObjects)
+		{
+			if (dynamic_cast<Ground*>(obj))
+			{
+				coObjects.push_back(obj);
+			}
+		}
+
+	}
+	miniboss->Update(dt, &coObjects);
 }

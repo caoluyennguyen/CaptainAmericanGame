@@ -51,6 +51,9 @@
 #define ID_TEX_GIFTED_POINT			13
 #define ID_TEX_WIZARD				14
 #define ID_TEX_MINIBOSS				15
+#define ID_TEX_LASER				16
+#define ID_TEX_BARREL				17
+#define ID_TEX_BIG_LASER			18
 
 #pragma endregion
 
@@ -111,6 +114,7 @@
 #define ENEMY_SHOOT		2
 #define ENEMY_SIT		3
 #define ENEMY_STOP		4
+#define ENEMY_THROW		5
 
 // Bullet
 #define BULLET			0
@@ -118,6 +122,21 @@
 // Item
 #define HEART			0
 #define STAR			1
+
+// Wizard
+#define WIZARD_FLY_UP		0
+#define WIZARD_SHOOT		1
+#define WIZARD_DESTROYED	2
+#define WIZARD_IDLE			3
+#define WIZARD_STOP			4
+#define WIZARD_FLY_DOWN		5
+#define WIZARD_FLY_ASIDE	6
+#define WIZARD_FLY_SHOOT	7
+
+// Laser
+#define LASER_DOWN			0
+#define LASER_ASIDE			1
+#define BIG_LASER			2
 
 #pragma endregion
 
@@ -190,18 +209,29 @@
 #define SKYPER_STOP_ANI		1105
 
 // Wizard
-#define WIZARD_FLY_ANI		1201
-#define WIZARD_SHOOT_ANI	1202
-#define WIZARD_DEAD_ANI		1203
-#define WIZARD_SIT_ANI		1204
-#define WIZARD_STOP_ANI		1205
+#define WIZARD_FLY_UP_ANI		1201
+#define WIZARD_SHOOT_ANI		1202
+#define WIZARD_DEAD_ANI			1203
+#define WIZARD_IDLE_ANI			1204
+#define WIZARD_STOP_ANI			1205
+#define WIZARD_FLY_SHOOT_ANI	1206
 
 // Mini boss
 #define MINIBOSS_RUN_ANI	1301
 #define MINIBOSS_SHOOT_ANI	1302
 #define MINIBOSS_DEAD_ANI	1303
 #define MINIBOSS_SIT_ANI	1304
-#define MINIBOSS_STOP_ANI	1305
+#define MINIBOSS_THROW_ANI	1305
+
+// Laser
+#define LASER_DOWN_ANI		1401
+#define LASER_ASIDE_ANI		1402
+
+// Barrel
+#define BARREL_ANI			1501
+
+// Big Laser
+#define BIG_LASER_ANI		1601
 
 #pragma endregion
 

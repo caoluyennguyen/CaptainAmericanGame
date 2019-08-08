@@ -16,6 +16,8 @@
 #include "Skyper.h"
 #include "Wizard.h"
 #include "MiniBoss.h"
+#include "Laser.h"
+#include "Barrel.h"
 
 class SceneManager
 {
@@ -38,6 +40,8 @@ class SceneManager
 	Skyper* skyper = new Skyper();
 	Wizard* wizard = new Wizard();
 	MiniBoss* miniboss = new MiniBoss();
+	Laser* laser = new Laser();
+	Barrel* barrel = new Barrel();
 
 	TileMaps* tilemaps = TileMaps::GetInstance();
 	Textures* textures = Textures::GetInstance();
@@ -52,6 +56,7 @@ class SceneManager
 	bool isSetSimonAutoWalk = false;
 	bool isMovingCamera = false;
 	int countDxCamera = 0;
+	int countLaser = 1;
 
 	bool isUsingStopWatch = false;
 	int stopWatchCounter = 0;

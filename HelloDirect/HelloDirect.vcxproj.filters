@@ -90,6 +90,12 @@
     <ClCompile Include="MiniBoss.cpp">
       <Filter>GameObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Barrel.cpp">
+      <Filter>GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="debug.h">
@@ -162,6 +168,12 @@
       <Filter>GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="MiniBoss.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Barrel.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
   </ItemGroup>

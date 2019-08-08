@@ -188,9 +188,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game = Game::GetInstance();
 	game->Init(hWnd);
 
-	scenes = new SceneManager(game, STAGE_1_BOSS);
+	scenes = new SceneManager(game, STAGE_1);
 	scenes->LoadResources();
-	scenes->ChangeScene(STAGE_1_BOSS);
+	scenes->ChangeScene(STAGE_1);
 
 	input = new Input(game, scenes);
 	game->InitKeyboard(input);

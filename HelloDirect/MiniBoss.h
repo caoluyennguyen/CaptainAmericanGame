@@ -1,13 +1,17 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
+#include "Box.h"
+#include "Shield.h"
 
 class MiniBoss : 
 	public GameObject
 {
-	int HP = 3;//BOSS_HP; 
+	int HP = 3;
 
-	bool isFlyToTarget = false;
-	bool isFlyToCap = false;
+	DWORD lastTimeShoot = 0; 
+	DWORD lastTimeRun = 0;
+	DWORD lastTimeThrow = 0;
+	DWORD deltaTime = 0;
 
 	D3DXVECTOR2 capPostion;
 	D3DXVECTOR2 target;
@@ -34,11 +38,12 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	void GetActiveBoundingBox(float& left, float& top, float& right, float& bottom);
 
-	void SetSimonPosition(float sx, float sy) { capPostion.x = sx; capPostion.y = sy; }
+	void SetCapPosition(float sx, float sy) { capPostion.x = sx; capPostion.y = sy; }
 
-	int GetIdTarget() { return idTarget; }
-
-	bool DropItem() { return dropItem; }
+	int GetLastTimeShoot() { return lastTimeShoot; }
+	int GetLastTimeRun() { return lastTimeRun; }
+	int GetLastTimeThrow() { return lastTimeThrow; }
+	int GetDeltaTime() { return deltaTime; }
 
 	void LoseHP(int x);
 	int GetHP() { return HP; }
