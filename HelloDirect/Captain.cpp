@@ -319,22 +319,45 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0) x += dx;
 				if (e->ny != 0) y += dy;
 			}
-			else if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj) ||
-				dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Laser*>(e->obj))
+			else if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj) || dynamic_cast<Skyper*>(e->obj) ||
+				dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Laser*>(e->obj) || dynamic_cast<Barrel*>(e->obj) ||
+				dynamic_cast<Wizard*>(e->obj) || dynamic_cast<MiniBoss*>(e->obj))
 			{
-				if (dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Laser*>(e->obj))
+				if (dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Barrel*>(e->obj))
 				{
-					e->obj->SetEnable(false);
-				}
-				if (dynamic_cast<Laser*>(e->obj))
-				{
-					if (e->ny != 0 && this->GetState() == UP)
+					if (this->hasShield == true && e->nx != this->nx)
 					{
 						e->obj->SetEnable(false);
+						return;
+					}
+					else e->obj->SetEnable(false);
+				}
+				else if (dynamic_cast<Laser*>(e->obj))
+				{
+					if (e->ny != 0 && e->obj->state == LASER_DOWN &&
+						this->GetState() == UP && this->hasShield == true)
+					{
+						e->obj->SetEnable(false);
+						return;
+					}
+					else if (e->nx != this->nx && e->obj->state == LASER_ASIDE &&
+						this->hasShield == true)
+					{
+						e->obj->SetEnable(false);
+						return;
 					}
 					else
 					{
 						e->obj->SetEnable(false);
+					}
+				}
+				else if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj))
+				{
+					if ((this->state == HIT_JUMP || this->state == HIT_SIT || this->state == HIT_STAND ) &&
+						e->nx != this->nx)
+					{
+						e->obj->SetEnable(false);
+						return;
 					}
 				}
 

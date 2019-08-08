@@ -139,6 +139,7 @@
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="Shooter.cpp" />
     <ClCompile Include="Skyper.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Shield.h" />
     <ClInclude Include="Shooter.h" />
     <ClInclude Include="Skyper.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Tilemap.h" />

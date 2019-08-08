@@ -12,6 +12,10 @@
 #include "Rocketer.h"
 #include "Items.h"
 #include "Laser.h"
+#include "Barrel.h"
+#include "Wizard.h"
+#include "MiniBoss.h"
+#include "Skyper.h"
 
 using namespace std;
 

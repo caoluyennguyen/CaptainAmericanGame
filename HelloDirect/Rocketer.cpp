@@ -2,10 +2,10 @@
 
 Rocketer::Rocketer()
 {
-	AddAnimation(ROCKETER_RUN_ANI);
+	AddAnimation(ROCKETER_SIT_ANI);
 	AddAnimation(ROCKETER_DEAD_ANI);
 	AddAnimation(ROCKETER_SHOOT_ANI);
-	AddAnimation(ROCKETER_SIT_ANI);
+	AddAnimation(ROCKETER_RUN_ANI);
 	AddAnimation(ROCKETER_DEAD_ANI);
 }
 
@@ -24,7 +24,7 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 	LPANIMATION ani;
 
-	ani = new Animation(200);
+	ani = new Animation(100);
 	ani->Add(60001);
 	ani->Add(60002);
 	ani->Add(60003);
@@ -32,13 +32,14 @@ void Rocketer::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 	ani = new Animation(200);
 	ani->Add(60004);
+	ani->Add(60005);
 	animations->Add(ROCKETER_SHOOT_ANI, ani);
 
 	ani = new Animation(400);
 	ani->Add(60006);
 	animations->Add(ROCKETER_DEAD_ANI, ani);
 
-	ani = new Animation(200);
+	ani = new Animation(400);
 	ani->Add(60004);
 	animations->Add(ROCKETER_SIT_ANI, ani);
 }
@@ -58,7 +59,7 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	if (state == ENEMY_SHOOT && animations[state]->IsOver(200) == true)
 	{
 		SetState(ENEMY_SIT);
-		return;
+		//return;
 	}
 
 	else if (state == ENEMY_STOP)
@@ -103,7 +104,6 @@ void Rocketer::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 			{
 				if (ny == -1.0f)
 				{
-					vx = 0;
 					vy = 0;
 				}
 				else
@@ -146,9 +146,9 @@ void Rocketer::SetState(int state)
 	switch (state)
 	{
 	case ENEMY_RUN:
-		//vx = 0.1f * nx;
+		vx = 0.05f * nx;
 		lastTimeShoot = GetTickCount();
-		deltaTimeToShoot = 500 + rand() % 2000;
+		deltaTimeToShoot = 1000;
 		respawnTime_Start = 0;
 		isRespawnWaiting = false;
 		break;
@@ -168,7 +168,7 @@ void Rocketer::SetState(int state)
 		StartRespawnTimeCounter();
 		break;
 	case ENEMY_SIT:
-		vy = 0;
+		vx = 0.05f * nx;
 		lastTimeShoot = GetTickCount();
 		deltaTimeToShoot = 500 + rand() % 2000;
 	default:

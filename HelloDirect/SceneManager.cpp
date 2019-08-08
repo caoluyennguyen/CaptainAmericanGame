@@ -34,6 +34,9 @@ void SceneManager::LoadResources()
 	tilemaps->Add(STAGE_2, FILEPATH_TEX_STAGE_2, FILEPATH_DATA_STAGE_2, 1024, 244, 16, 16);
 	tilemaps->Add(STAGE_2_BOSS, FILEPATH_TEX_STAGE_2_BOSS, FILEPATH_DATA_STAGE_2_BOSS, 512, 480, 16, 16);
 	
+	Sound::getInstance(game->hWnd)->loadSound("Sound/man1.wav", "cap");
+	Sound::getInstance(game->hWnd)->play("cap", true, 0);
+
 	captain = new Captain();
 	shield = new Shield();
 	shield->SetEnable(false);
@@ -85,6 +88,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			shooter->SetState(state);
 			shooter->SetEnable(isEnable);
 			shooter->SetIDItem(idItem);
+			shooter->SetOrientation(-1);
 			unit = new Unit(grid, shooter, pos_x, pos_y);
 			break;
 		case ROCKETER:
@@ -94,6 +98,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			rocketer->SetState(state);
 			rocketer->SetEnable(isEnable);
 			rocketer->SetIDItem(idItem);
+			rocketer->SetOrientation(-1);
 			unit = new Unit(grid, rocketer, pos_x, pos_y);
 			break;
 		case SKYPER:
@@ -112,6 +117,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			wizard->SetState(state);
 			wizard->SetEnable(isEnable);
 			wizard->SetIDItem(idItem);
+			wizard->SetOrientation(-1);
 			unit = new Unit(grid, wizard, pos_x, pos_y);
 			break;
 		case MINIBOSS:
@@ -121,6 +127,7 @@ void SceneManager::LoadObjectsFromFile(LPCWSTR FilePath)
 			miniboss->SetState(state);
 			miniboss->SetEnable(isEnable);
 			miniboss->SetIDItem(idItem);
+			miniboss->SetOrientation(-1);
 			unit = new Unit(grid, miniboss, pos_x, pos_y);
 			break;
 		default:
@@ -417,7 +424,10 @@ void SceneManager::Shield_Update(DWORD dt)
 	}
 
 	shield->Update(dt, &coObjects);
-	shield->vy = 0.02f * (captain->y - shield->y);
+	if (abs(shield->vx) > 0.3f)
+	{
+		shield->vy = 0.02f * (captain->y - shield->y);
+	}
 }
 
 void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
@@ -458,7 +468,7 @@ void SceneManager::Shooter_Update(DWORD dt, LPGAMEOBJECT& object)
 				coObjects.push_back(obj);
 			}
 		}
-	shooter->Update(dt, &coObjects);
+		shooter->Update(dt, &coObjects);
 	}
 }
 
@@ -501,9 +511,8 @@ void SceneManager::Rocketer_Update(DWORD dt, LPGAMEOBJECT& object)
 				coObjects.push_back(obj);
 			}
 		}
-
+		rocketer->Update(dt, &coObjects);
 	}
-	rocketer->Update(dt, &coObjects);
 }
 
 void SceneManager::Wizard_Update(DWORD dt, LPGAMEOBJECT& object)

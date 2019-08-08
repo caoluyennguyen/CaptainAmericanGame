@@ -27,7 +27,6 @@ public:
 class Game
 {
 	static Game* _instance;
-	HWND hWnd;							// window handle
 
 	LPDIRECT3D9 d3d = NULL;				// Direct3D handle
 	LPDIRECT3DDEVICE9 d3ddv = NULL;		// Direct3d device object handle
@@ -46,6 +45,8 @@ class Game
 	D3DXVECTOR3 cameraPosition;			// camera position for viewing
 
 public:
+	HWND hWnd;							// window handle
+
 	void InitKeyboard(LPKEYEVENTHANDLER handler);
 	void Init(HWND hWnd);
 	void Draw(int accordingCam, int nx, float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);

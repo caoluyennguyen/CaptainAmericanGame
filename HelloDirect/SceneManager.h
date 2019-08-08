@@ -18,6 +18,7 @@
 #include "MiniBoss.h"
 #include "Laser.h"
 #include "Barrel.h"
+#include "Sound.h"
 
 class SceneManager
 {

@@ -37,6 +37,8 @@ void Shooter::LoadResources(Textures*& textures, Sprites*& sprites, Animations*&
 
 	ani = new Animation(200);
 	ani->Add(50006);
+	ani->Add(50006);
+	ani->Add(50006);
 	animations->Add(SHOOTER_DEAD_ANI, ani);
 
 	ani = new Animation(200);
@@ -46,15 +48,11 @@ void Shooter::LoadResources(Textures*& textures, Sprites*& sprites, Animations*&
 
 void Shooter::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == ENEMY_DESTROYED)
+	if (state == ENEMY_DESTROYED && animations[state]->IsOver(200) == true)
 	{
-		if (animations[state]->IsOver(200) == true)
-		{
-
-			SetState(ENEMY_STOP);
-			this->isEnable = false;
-			return;
-		}
+		SetState(ENEMY_STOP);
+		this->isEnable = false;
+		return;
 	}
 
 	if (stopMovement == true)
@@ -62,9 +60,16 @@ void Shooter::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement
 
 	if (state == ENEMY_SHOOT && animations[state]->IsOver(1000) == true)
 	{
-		//nx = nxShoot;
-		SetState(ENEMY_SIT);
-		return;
+		if (y > 150)
+		{
+			SetState(ENEMY_RUN);
+			return;
+		}
+		else
+		{
+			SetState(ENEMY_SIT);
+			return;
+		}
 	}
 	else if (state == ENEMY_STOP)
 	{
@@ -125,7 +130,7 @@ void Shooter::SetState(int state)
 	switch (state)
 	{
 	case ENEMY_RUN:
-		//vx = 0.1f * nx;
+		vx = 0.05f * nx;
 		lastTimeShoot = GetTickCount();
 		deltaTimeToShoot = 500 + rand() % 2000; // Random trong khoảng thời gian là 0.5 - 2s
 		respawnTime_Start = 0;
