@@ -52,7 +52,7 @@ void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 	ani->Add(130009);
 	animations->Add(MINIBOSS_SIT_ANI, ani);
 
-	ani = new Animation(200);
+	ani = new Animation(400);
 	ani->Add(130007);
 	ani->Add(130008);
 	animations->Add(MINIBOSS_THROW_ANI, ani);
@@ -60,8 +60,9 @@ void MiniBoss::LoadResources(Textures*& textures, Sprites*& sprites, Animations*
 
 void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 {
-	if (state == ENEMY_DESTROYED && this->animations[state]->IsOver(200) == false)
+	if (state == ENEMY_DESTROYED && animations[state]->IsOver(150) == true)
 	{
+		SetState(ENEMY_THROW);
 		HP--;
 	}
 
@@ -72,9 +73,8 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	{
 		state = ENEMY_STOP;
 	}
-	else if (state == ENEMY_STOP)
+	else if (state == ENEMY_THROW && this->animations[state]->IsOver(1000) == false)
 	{
-		vx = 0;
 		return;
 	}
 
@@ -133,7 +133,10 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 
 void MiniBoss::Render()
 {
-	animations[state]->Render(1, nx, x, y);
+	if (state != ENEMY_STOP)
+	{
+		animations[state]->Render(1, nx, x, y);
+	}
 }
 
 void MiniBoss::SetState(int state)
@@ -150,8 +153,9 @@ void MiniBoss::SetState(int state)
 	case ENEMY_DESTROYED:
 		vx = vy = 0;
 		lastTimeThrow = GetTickCount();
-		deltaTime = 2000;
-		//animations[state]->SetAniStartTime(GetTickCount());
+		deltaTime = 10000;
+		animations[state]->SetAniStartTime(GetTickCount());
+		HP--;
 		break;
 	case ENEMY_SHOOT:
 		vx = vy = 0;

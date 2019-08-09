@@ -34,8 +34,8 @@ void SceneManager::LoadResources()
 	tilemaps->Add(STAGE_2, FILEPATH_TEX_STAGE_2, FILEPATH_DATA_STAGE_2, 1024, 244, 16, 16);
 	tilemaps->Add(STAGE_2_BOSS, FILEPATH_TEX_STAGE_2_BOSS, FILEPATH_DATA_STAGE_2_BOSS, 512, 480, 16, 16);
 	
-	Sound::getInstance(game->hWnd)->loadSound("Sound/man1.wav", "cap");
-	Sound::getInstance(game->hWnd)->play("cap", true, 0);
+	//Sound::getInstance(game->hWnd)->loadSound("Sound/man1.wav", "cap");
+	//Sound::getInstance(game->hWnd)->play("cap", true, 0);
 
 	captain = new Captain();
 	shield = new Shield();
@@ -234,7 +234,7 @@ void SceneManager::Update(DWORD dt)
 		game->SetCameraPosition(0.0f, 0.0f);
 		return;
 	}
-	else if (IDScene == STAGE_1_BOSS && pos_x >= 400.0f)
+	else if (IDScene == STAGE_1_BOSS && pos_x >= 250.0f)
 	{
 		ChangeScene(STAGE_2);
 		game->SetCameraPosition(0.0f, 0.0f);
@@ -621,11 +621,11 @@ void SceneManager::MiniBoss_Update(DWORD dt, LPGAMEOBJECT& object)
 	{
 		miniboss->SetState(ENEMY_RUN);
 	}
-	else if ((miniboss->GetState() == ENEMY_RUN || miniboss->GetState() == ENEMY_SIT || miniboss->GetState() == ENEMY_DESTROYED) &&
+	else if ((miniboss->GetState() == ENEMY_RUN || miniboss->GetState() == ENEMY_SIT) &&
+	//else if (miniboss->GetState() == ENEMY_DESTROYED &&
 		GetTickCount() - miniboss->GetLastTimeThrow() >= miniboss->GetDeltaTime())
 	{
 		miniboss->SetState(ENEMY_THROW);
-
 		// Ném thùng
 		barrel = new Barrel();
 		barrel->SetPosition(mx + 5.0f, my - 10.0f);

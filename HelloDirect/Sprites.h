@@ -74,7 +74,7 @@ public:
 	Animation(int defaultTime = 100);
 
 	void SetAniStartTime(DWORD t) { animStartTime = t; }
-	bool IsOver(DWORD dt) { return GetTickCount() - animStartTime >= dt; }
+	bool IsOver(DWORD dt = 200) { return GetTickCount() - animStartTime >= dt; }
 	bool IsRenderingLastFrame() { return currentFrame == frames.size() - 1; }
 	void Reset() { currentFrame = -1; }
 

@@ -340,7 +340,7 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						e->obj->SetEnable(false);
 						return;
 					}
-					else if (e->nx != this->nx && e->obj->state == LASER_ASIDE &&
+					else if (e->nx != this->nx && (e->obj->state == BIG_LASER || e->obj->state == LASER_ASIDE) &&
 						this->hasShield == true)
 					{
 						e->obj->SetEnable(false);
