@@ -323,14 +323,18 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Laser*>(e->obj) || dynamic_cast<Barrel*>(e->obj) ||
 				dynamic_cast<Wizard*>(e->obj) || dynamic_cast<MiniBoss*>(e->obj))
 			{
-				if (dynamic_cast<Bullet*>(e->obj) || dynamic_cast<Barrel*>(e->obj))
+				if (dynamic_cast<Bullet*>(e->obj)) 
 				{
 					if (this->hasShield == true && e->nx != this->nx)
 					{
-						e->obj->SetEnable(false);
+						e->obj->SetSpeed(0, -0.15f);
 						return;
 					}
 					else e->obj->SetEnable(false);
+				}
+				else if (dynamic_cast<Barrel*>(e->obj))
+				{
+					e->obj->SetEnable(false);
 				}
 				else if (dynamic_cast<Laser*>(e->obj))
 				{
@@ -353,7 +357,8 @@ void Captain::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 				else if (dynamic_cast<Shooter*>(e->obj) || dynamic_cast<Rocketer*>(e->obj))
 				{
-					if ((this->state == HIT_JUMP || this->state == HIT_SIT || this->state == HIT_STAND ) &&
+					if ((this->state == HIT_JUMP || this->state == HIT_SIT || 
+						this->state == HIT_STAND || this->state == SWIFT) &&
 						e->nx != this->nx)
 					{
 						e->obj->SetEnable(false);

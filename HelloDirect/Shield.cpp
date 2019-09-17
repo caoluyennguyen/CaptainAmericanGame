@@ -20,7 +20,7 @@ void Shield::LoadResources(Textures*& textures, Sprites*& sprites, Animations*& 
 	textures->Add(ID_TEX_SHIELD, FILEPATH_TEX_CAP, D3DCOLOR_XRGB(255, 255, 255));
 	LPDIRECT3DTEXTURE9 tex = textures->Get(ID_TEX_SHIELD);
 
-	sprites->Add(20001, 116, 272, 131, 288, tex);
+	sprites->Add(20001, 140, 274, 156, 283, tex);
 
 	LPANIMATION ani;
 

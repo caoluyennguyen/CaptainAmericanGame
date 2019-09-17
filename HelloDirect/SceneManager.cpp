@@ -34,8 +34,8 @@ void SceneManager::LoadResources()
 	tilemaps->Add(STAGE_2, FILEPATH_TEX_STAGE_2, FILEPATH_DATA_STAGE_2, 1024, 244, 16, 16);
 	tilemaps->Add(STAGE_2_BOSS, FILEPATH_TEX_STAGE_2_BOSS, FILEPATH_DATA_STAGE_2_BOSS, 512, 480, 16, 16);
 	
-	//Sound::getInstance(game->hWnd)->loadSound("Sound/man1.wav", "cap");
-	//Sound::getInstance(game->hWnd)->play("cap", true, 0);
+	Sound::getInstance(game->hWnd)->loadSound("Sound/man1.wav", "cap");
+	Sound::getInstance(game->hWnd)->play("cap", true, 0);
 
 	captain = new Captain();
 	shield = new Shield();
@@ -366,7 +366,7 @@ void SceneManager::StopedByPosition()
 
 		//if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1)
 		if (x < entryViewPort.x ||  x > entryViewPort.x + SCREEN_WIDTH - 1 ||
-			y > entryViewPort.y + SCREEN_HEIGHT - 1)
+			y < entryViewPort.y || y > entryViewPort.y + SCREEN_HEIGHT - 1)
 		{
 			if ((dynamic_cast<Shooter*>(object) || dynamic_cast<Rocketer*>(object)) 
 				&& object->GetState() == ENEMY_RUN)

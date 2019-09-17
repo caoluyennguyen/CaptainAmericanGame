@@ -35,9 +35,7 @@ void Shooter::LoadResources(Textures*& textures, Sprites*& sprites, Animations*&
 	//ani->Add(50005);
 	animations->Add(SHOOTER_SHOOT_ANI, ani);
 
-	ani = new Animation(200);
-	ani->Add(50006);
-	ani->Add(50006);
+	ani = new Animation(100);
 	ani->Add(50006);
 	animations->Add(SHOOTER_DEAD_ANI, ani);
 

@@ -3,6 +3,7 @@
 Bullet::Bullet()
 {
 	AddAnimation(BULLET_ANI);
+	AddAnimation(BULLET_ANI);
 	SetState(BULLET);
 }
 
@@ -34,6 +35,7 @@ void Bullet::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovement)
 
 	GameObject::Update(dt);
 	x += dx;
+	y += dy;
 }
 
 void Bullet::Render()

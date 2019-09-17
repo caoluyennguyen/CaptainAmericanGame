@@ -69,7 +69,7 @@ void MiniBoss::Update(DWORD dt, vector<LPGAMEOBJECT>* coObject, bool stopMovemen
 	if (stopMovement == true)
 		return;
 
-	if (HP == 0)
+	if (HP < 0)
 	{
 		state = ENEMY_STOP;
 	}
